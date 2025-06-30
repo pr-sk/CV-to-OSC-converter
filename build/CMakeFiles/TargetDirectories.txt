@@ -1,0 +1,7 @@
+/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles/cv_to_osc_converter.dir
+/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles/edit_cache.dir
+/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles/rebuild_cache.dir
+/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles/list_install_components.dir
+/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles/install.dir
+/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles/install/local.dir
+/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles/install/strip.dir
