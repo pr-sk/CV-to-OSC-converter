@@ -15,6 +15,38 @@ A C++ application that converts Control Voltage (CV) signals from audio interfac
 - **Compiler optimizations** for maximum performance
 - **Cross-platform support** (macOS, Linux, Windows)
 
+## TODO
+
+1. User Interface:
+- **Implement a graphical interface or command-line options for improved usability.
+2. Audio Device Management:
+- **List and select available audio devices interactively.
+- **Add real-time monitoring of device connectivity.
+3. Advanced Error Handling:
+- **More descriptive error messages and guidance.
+- **Automatic recovery or retries for non-critical failures.
+4. Performance Optimization:
+- **Profile the application for bottlenecks.
+- **Utilize multi-threading more effectively.
+5. OSC Enhancements:
+- **Allow custom OSC message formatting.
+- **Support additional OSC types besides float (e.g., integers, strings).
+6. Extended Configuration:
+- **In-app configuration editing.
+- **Support for multiple configuration profiles.
+7. Extensive Testing:
+- **Add more nuanced test cases for edge scenarios.
+- **Include performance and stress testing.
+8. Cross-Platform Support:
+- **Ensure compatibility with Windows.
+- **Develop a Docker image for easy deployment.
+9. Documentation:
+- **Add detailed in-code comments and docstrings.
+- **Improve user guide and FAQ section.
+10. Security Features:
+- **Validate and sanitize OSC input/output.
+- **Consider encryption for sensitive OSC messages.
+
 ## Dependencies
 
 ### macOS (via Homebrew)
