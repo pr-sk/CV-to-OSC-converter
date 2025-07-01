@@ -192,6 +192,43 @@ The application uses a `config.json` file for configuration. If the file doesn't
    - Start real-time CV to OSC conversion
 6. **Press Enter** to stop the converter
 
+## OPTIONS
+
+1. **Run HELP
+```bash
+./cv_to_osc_converter -h                       
+
+Convert Control Voltage signals to Open Sound Control messages
+
+Usage:
+  cv_to_osc_converter [OPTIONS]
+
+Options:
+  -h, --help              Show this help message
+  -v, --version           Show version information
+  -i, --interactive       Run in interactive mode
+  -l, --list-devices      List available audio devices
+  -d, --daemon            Run as daemon (background mode)
+  -c, --config FILE       Use specific config file (default: config.json)
+  --verbose               Enable verbose output
+  -q, --quiet             Suppress non-essential output
+
+Configuration Overrides:
+  --osc-host HOST         Override OSC target host
+  --osc-port PORT         Override OSC target port
+  --audio-device NAME     Override audio device
+  --update-interval MS    Override update interval (milliseconds)
+  --log-level LEVEL       Set log level (debug, info, warn, error)
+
+Examples:
+  ./cv_to_osc_converter                     # Run with default settings
+  ./cv_to_osc_converter -i                  # Run in interactive mode
+  ./cv_to_osc_converter -l                  # List audio devices
+  ./cv_to_osc_converter --osc-host 192.168.1.100 --osc-port 8000
+  ./cv_to_osc_converter -c my_config.json   # Use custom config file
+  ./cv_to_osc_converter -d --quiet          # Run as quiet daemon
+```
+
 ### First Run Example
 ```
 CV to OSC Converter v1.0
