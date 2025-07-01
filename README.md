@@ -15,11 +15,25 @@ A C++ application that converts Control Voltage (CV) signals from audio interfac
 - **Compiler optimizations** for maximum performance
 - **Cross-platform support** (macOS, Linux, Windows)
 
+- **--list-devices - List available audio devices
+- **--list-devices --verbose - Detailed device information
+
+- **Interactive device menu with:
+•  List all devices or input-only devices
+•  Show detailed device specifications
+•  Test device availability and format support
+•  Search devices by name
+•  Real-time device list refresh
+•  Device status reports
+•  Device compatibility testing for different channel counts and sample rates
+•  Real-time availability detection
+•  Automatic default device identification
+
 ## TODO
 
-1. User Interface:
+1. ✅ User Interface:
 - **Implement a graphical interface or command-line options for improved usability.
-2. Audio Device Management:
+2. ✅ Audio Device Management:
 - **List and select available audio devices interactively.
 - **Add real-time monitoring of device connectivity.
 3. Advanced Error Handling:
@@ -234,6 +248,7 @@ The converter sends OSC messages with the following format:
 - Ensure the interface can handle the voltage levels from your CV sources
 - Some interfaces may require attenuation for high CV voltages
 - DC coupling is preferred for accurate CV representation
+
 
 ## Testing
 
