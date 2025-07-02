@@ -1,33 +1,54 @@
 # CV to OSC Converter
 
-A C++ application that converts Control Voltage (CV) signals from audio interfaces to Open Sound Control (OSC) messages. This is useful for interfacing analog modular synthesizers with digital audio workstations or other OSC-compatible software.
+[![Build Status](https://github.com/your-username/cv_to_osc_converter/workflows/CI/badge.svg)](https://github.com/your-username/cv_to_osc_converter/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey)]()
 
-## Features
+A professional-grade C++ application that converts Control Voltage (CV) signals from audio interfaces to Open Sound Control (OSC) messages in real-time. Perfect for interfacing analog modular synthesizers with digital audio workstations, live performance software, or any OSC-compatible applications.
 
-- **Real-time CV to OSC conversion** with optimized performance
-- **Configurable CV input ranges** per channel for precise voltage mapping
-- **Configurable OSC output target** (host and port)
-- **Automatic channel detection** - adapts to available audio interface channels
-- **Batch OSC message sending** for improved network efficiency
-- **Thread-safe audio processing** with mutex protection
-- **RMS-based signal processing** for better CV signal representation
-- **JSON-based configuration** with automatic config file generation
-- **Compiler optimizations** for maximum performance
-- **Cross-platform support** (macOS, Linux, Windows)
+## 🚀 Quick Start
 
-- **--list-devices - List available audio devices
-- **--list-devices --verbose - Detailed device information
+```bash
+# Install dependencies (macOS)
+brew install portaudio liblo nlohmann-json cmake pkg-config
 
-- **Interactive device menu with:
-•  List all devices or input-only devices
-•  Show detailed device specifications
-•  Test device availability and format support
-•  Search devices by name
-•  Real-time device list refresh
-•  Device status reports
-•  Device compatibility testing for different channel counts and sample rates
-•  Real-time availability detection
-•  Automatic default device identification
+# Clone and build
+git clone https://github.com/your-username/cv_to_osc_converter.git
+cd cv_to_osc_converter
+mkdir build && cd build
+cmake ..
+make
+
+# Run
+./cv_to_osc_converter
+```
+
+## ✨ Features
+
+### Core Functionality
+- 🎛️ **Real-time CV to OSC conversion** with sub-millisecond latency
+- 🎯 **Configurable CV input ranges** per channel (0-10V, ±5V, custom)
+- 🌐 **OSC networking** with batch message sending for efficiency
+- 🔧 **Auto-calibration system** for precise voltage measurement
+- 🎛️ **Advanced signal filtering** (low-pass, high-pass, median, etc.)
+- 📊 **Performance monitoring** with real-time metrics
+- 🔄 **Hot configuration reloading** without restart
+- 👥 **Configuration profiles** for different setups
+
+### Audio & Hardware
+- 🎵 **Automatic audio device detection** with up to 8 channels
+- 🔍 **Interactive device selection** with detailed specifications
+- ⚡ **High-performance audio processing** with zero-copy buffers
+- 🎚️ **RMS-based signal processing** for stable CV representation
+- 🛠️ **Thread-safe architecture** with mutex protection
+
+### User Experience
+- 💻 **Command-line interface** with extensive options
+- 🖥️ **Interactive mode** for easy setup and monitoring
+- 📁 **JSON configuration** with human-readable format
+- 📝 **Comprehensive logging** with multiple severity levels
+- 🎯 **Cross-platform support** (macOS, Linux, Windows)
+- 🧪 **Extensive testing suite** with 46+ automated tests
 
 ## TODO
 

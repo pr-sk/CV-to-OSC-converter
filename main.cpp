@@ -10,22 +10,39 @@
 #include "CommandLineInterface.h"
 #include "AudioDeviceManager.h"
 #include "ErrorHandler.h"
+#include "PerformanceMonitor.h"
+#include "ConfigWatcher.h"
+#include "Version.h"
 
 class CVToOSCConverter {
 private:
     std::unique_ptr<CVReader> cvReader;
     std::unique_ptr<OSCSender> oscSender;
+    std::unique_ptr<PerformanceMonitor> performanceMonitor;
+    std::unique_ptr<ConfigWatcher> configWatcher;
     std::atomic<bool> running;
     Config config;
+    std::string configFile;
     std::vector<float> cvBuffer;  // Reusable buffer
     std::vector<float> normalizedBuffer;  // Normalized values buffer
     std::vector<std::string> oscAddresses;  // Pre-computed OSC addresses
 
 public:
-    CVToOSCConverter(const std::string& configFile = "config.json", const CLIOptions* cliOptions = nullptr) : running(false) {
+    CVToOSCConverter(const std::string& configFile = "config.json", const CLIOptions* cliOptions = nullptr) 
+        : running(false), configFile(configFile) {
         // Load configuration
         config.loadFromFile(configFile);
         
+        // Initialize performance monitor
+        performanceMonitor = std::make_unique<PerformanceMonitor>();
+        performanceMonitor->setConfig(MonitorConfigFactory::createHighPerformanceConfig());
+
+        // Initialize config watcher
+        configWatcher = std::make_unique<ConfigWatcher>(configFile);
+        configWatcher->start([this](const Config& newConfig) {
+            onConfigChanged(newConfig);
+        });
+
         // Configure error handling based on CLI options
         if (cliOptions) {
             ErrorHandler& errorHandler = ErrorHandler::getInstance();
@@ -76,6 +93,10 @@ public:
 
     void start() {
         running = true;
+        
+        // Start performance monitoring
+        performanceMonitor->start();
+        
         ErrorHandler::getInstance().logInfo("Starting CV to OSC converter", 
                                            "OSC target: " + config.getOSCHost() + ":" + config.getOSCPort());
         std::cout << "Starting CV to OSC converter..." << std::endl;
@@ -101,6 +122,8 @@ public:
         
         while (running) {
             try {
+                performanceMonitor->recordCycleStart();
+                
                 // Read CV values from audio interface (zero-copy version)
                 cvReader->readChannels(cvBuffer);
                 
@@ -111,11 +134,19 @@ public:
                 }
                 
                 // Send all OSC messages in a batch for better performance
-                if (!oscSender->sendFloatBatch(oscAddresses, normalizedBuffer)) {
-                    // Network error occurred, but continue trying
-                    PERFORMANCE_WARNING("OSC transmission failed", 
-                                       "Some CV data may be lost", 
-                                       "Check network connectivity");
+                {
+                    auto networkStart = std::chrono::steady_clock::now();
+                    if (!oscSender->sendFloatBatch(oscAddresses, normalizedBuffer)) {
+                        performanceMonitor->recordOSCMessageFailed();
+                        PERFORMANCE_WARNING("OSC transmission failed", 
+                                           "Some CV data may be lost", 
+                                           "Check network connectivity");
+                    } else {
+                        performanceMonitor->recordOSCMessageSent();
+                    }
+                    auto networkEnd = std::chrono::steady_clock::now();
+                    auto networkLatency = std::chrono::duration_cast<std::chrono::nanoseconds>(networkEnd - networkStart);
+                    performanceMonitor->recordNetworkLatency(networkLatency);
                 }
                 
                 // Performance monitoring
@@ -144,6 +175,7 @@ public:
                     std::this_thread::sleep_for(updateInterval - elapsed);
                 }
                 lastUpdateTime = std::chrono::steady_clock::now();
+                performanceMonitor->recordCycleEnd();
                 
             } catch (const std::exception& e) {
                 ERROR_ERROR("Exception in main conversion loop", e.what(), 
@@ -159,8 +191,30 @@ public:
         ErrorHandler::getInstance().removeAllCallbacks();
         std::cout << "Stopping CV to OSC converter..." << std::endl;
     }
+    
+    Config& getConfig() { return config; }
+    const Config& getConfig() const { return config; }
 
 private:
+    void onConfigChanged(const Config& newConfig) {
+        std::cout << "Configuration changed - hot reloading..." << std::endl;
+        
+        // Update internal config
+        config = newConfig;
+        
+        // Update OSC sender target if changed
+        if (oscSender) {
+            oscSender->setTarget(config.getOSCHost(), config.getOSCPort());
+        }
+        
+        // Apply new CV ranges (already handled by config)
+        std::cout << "Configuration reloaded successfully" << std::endl;
+        
+        // Log the change
+        ErrorHandler::getInstance().logInfo("Configuration hot-reloaded", 
+                                          "New OSC target: " + config.getOSCHost() + ":" + config.getOSCPort());
+    }
+    
     float normalizeCV(float cvValue, int channel) {
         // Convert CV range to normalized 0-1 range
         // Assuming CV input range is configurable per channel
@@ -239,13 +293,36 @@ int main(int argc, char* argv[]) {
     
     // Print header unless in quiet mode
     if (!options.quiet) {
-        std::cout << "CV to OSC Converter v1.0" << std::endl;
-        std::cout << "=========================" << std::endl;
+        std::cout << Version::getAppTitle() << std::endl;
+        std::cout << std::string(Version::getAppTitle().length(), '=') << std::endl;
+        if (Version::isDevelopment()) {
+            std::cout << "⚠️  Development Build" << std::endl;
+        }
     }
 
     try {
         CVToOSCConverter converter(options.configFile, &options);
         
+        // Profile management
+        if (!options.quiet) {
+            std::cout << "Available Profiles:" << std::endl;
+            for (const auto& profileName : converter.getConfig().getProfileNames()) {
+                std::cout << "  " << profileName << (profileName == converter.getConfig().getActiveProfileName() ? " (active)" : "") << std::endl;
+            }
+
+            std::string newProfile;
+            std::cout << "Enter profile to activate or press Enter to continue: ";
+            std::getline(std::cin, newProfile);
+            if (!newProfile.empty()) {
+                if (!converter.getConfig().setActiveProfile(newProfile)) {
+                    std::cout << "Profile not found. Continuing with current profile." << std::endl;
+                } else {
+                    std::cout << "Profile switched to " << converter.getConfig().getActiveProfileName() << std::endl;
+                    converter.getConfig().saveToFile("config.json");
+                }
+            }
+        }
+
         if (options.daemon) {
             // Daemon mode - run without user interaction
             if (!options.quiet) {
@@ -263,11 +340,11 @@ int main(int argc, char* argv[]) {
                 std::cout << "Press Enter to stop..." << std::endl;
             }
             std::cin.get();
-            
+
             converter.stop();
             converterThread.join();
         }
-        
+
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
         return 1;

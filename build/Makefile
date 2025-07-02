@@ -198,6 +198,30 @@ AudioDeviceManager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/AudioDeviceManager.cpp.s
 .PHONY : AudioDeviceManager.cpp.s
 
+CVCalibrator.o: CVCalibrator.cpp.o
+.PHONY : CVCalibrator.o
+
+# target to build an object file
+CVCalibrator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.o
+.PHONY : CVCalibrator.cpp.o
+
+CVCalibrator.i: CVCalibrator.cpp.i
+.PHONY : CVCalibrator.i
+
+# target to preprocess a source file
+CVCalibrator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.i
+.PHONY : CVCalibrator.cpp.i
+
+CVCalibrator.s: CVCalibrator.cpp.s
+.PHONY : CVCalibrator.s
+
+# target to generate assembly for a file
+CVCalibrator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.s
+.PHONY : CVCalibrator.cpp.s
+
 CVReader.o: CVReader.cpp.o
 .PHONY : CVReader.o
 
@@ -270,6 +294,30 @@ OSCSender.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/OSCSender.cpp.s
 .PHONY : OSCSender.cpp.s
 
+PerformanceMonitor.o: PerformanceMonitor.cpp.o
+.PHONY : PerformanceMonitor.o
+
+# target to build an object file
+PerformanceMonitor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.o
+.PHONY : PerformanceMonitor.cpp.o
+
+PerformanceMonitor.i: PerformanceMonitor.cpp.i
+.PHONY : PerformanceMonitor.i
+
+# target to preprocess a source file
+PerformanceMonitor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.i
+.PHONY : PerformanceMonitor.cpp.i
+
+PerformanceMonitor.s: PerformanceMonitor.cpp.s
+.PHONY : PerformanceMonitor.s
+
+# target to generate assembly for a file
+PerformanceMonitor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.s
+.PHONY : PerformanceMonitor.cpp.s
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -310,6 +358,9 @@ help:
 	@echo "... AudioDeviceManager.o"
 	@echo "... AudioDeviceManager.i"
 	@echo "... AudioDeviceManager.s"
+	@echo "... CVCalibrator.o"
+	@echo "... CVCalibrator.i"
+	@echo "... CVCalibrator.s"
 	@echo "... CVReader.o"
 	@echo "... CVReader.i"
 	@echo "... CVReader.s"
@@ -319,6 +370,9 @@ help:
 	@echo "... OSCSender.o"
 	@echo "... OSCSender.i"
 	@echo "... OSCSender.s"
+	@echo "... PerformanceMonitor.o"
+	@echo "... PerformanceMonitor.i"
+	@echo "... PerformanceMonitor.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

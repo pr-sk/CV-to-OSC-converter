@@ -2,6 +2,7 @@
 #include "Config.h"
 #include "CVReader.h"
 #include "AudioDeviceManager.h"
+#include "Version.h"
 #include <algorithm>
 #include <iomanip>
 #include <cstdlib>
@@ -114,7 +115,7 @@ bool CommandLineInterface::parseArguments() {
 }
 
 void CommandLineInterface::printHelp() const {
-    std::cout << Colors::BOLD << "CV to OSC Converter v1.0" << Colors::RESET << std::endl;
+    std::cout << Colors::BOLD << Version::getAppTitle() << Colors::RESET << std::endl;
     std::cout << "Convert Control Voltage signals to Open Sound Control messages" << std::endl;
     std::cout << std::endl;
     
@@ -149,9 +150,10 @@ void CommandLineInterface::printHelp() const {
 }
 
 void CommandLineInterface::printVersion() const {
-    std::cout << Colors::BOLD << "CV to OSC Converter" << Colors::RESET << std::endl;
-    std::cout << "Version: 1.0.0" << std::endl;
-    std::cout << "Build: " << __DATE__ << " " << __TIME__ << std::endl;
+    std::cout << Colors::BOLD << Version::getAppTitle() << Colors::RESET << std::endl;
+    std::cout << std::endl;
+    std::cout << "Version: " << Version::getVersionWithGit() << std::endl;
+    std::cout << "Build: " << Version::getBuildInfo() << std::endl;
     std::cout << "Platform: ";
 #ifdef __APPLE__
     std::cout << "macOS";
@@ -164,6 +166,12 @@ void CommandLineInterface::printVersion() const {
 #endif
     std::cout << std::endl;
     std::cout << "Compiler: " << __VERSION__ << std::endl;
+    
+    if (Version::isDevelopment()) {
+        std::cout << std::endl;
+        std::cout << Colors::YELLOW << "⚠️  Development Build" << Colors::RESET << std::endl;
+        std::cout << "This is a development version and may contain bugs." << std::endl;
+    }
 }
 
 void CommandLineInterface::printUsage() const {

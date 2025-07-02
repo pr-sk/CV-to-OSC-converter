@@ -85,12 +85,12 @@ clean: CMakeFiles/cv_to_osc_converter.dir/clean
 CMakeFiles/cv_to_osc_converter.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target cv_to_osc_converter"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8 "Built target cv_to_osc_converter"
 .PHONY : CMakeFiles/cv_to_osc_converter.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/cv_to_osc_converter.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/prubtsov/cv_to_osc_converter/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/prubtsov/cv_to_osc_converter/build/CMakeFiles 8
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/cv_to_osc_converter.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/prubtsov/cv_to_osc_converter/build/CMakeFiles 0
 .PHONY : CMakeFiles/cv_to_osc_converter.dir/rule
@@ -102,7 +102,7 @@ cv_to_osc_converter: CMakeFiles/cv_to_osc_converter.dir/rule
 # codegen rule for target.
 CMakeFiles/cv_to_osc_converter.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Finished codegen for target cv_to_osc_converter"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8 "Finished codegen for target cv_to_osc_converter"
 .PHONY : CMakeFiles/cv_to_osc_converter.dir/codegen
 
 # clean rule for target.

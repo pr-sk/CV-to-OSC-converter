@@ -142,13 +142,43 @@ CMakeFiles/cv_to_osc_converter.dir/AudioDeviceManager.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/cv_to_osc_converter.dir/AudioDeviceManager.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/prubtsov/cv_to_osc_converter/AudioDeviceManager.cpp -o CMakeFiles/cv_to_osc_converter.dir/AudioDeviceManager.cpp.s
 
+CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.o: CMakeFiles/cv_to_osc_converter.dir/flags.make
+CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.o: /Users/prubtsov/cv_to_osc_converter/CVCalibrator.cpp
+CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.o: CMakeFiles/cv_to_osc_converter.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.o -MF CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.o.d -o CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.o -c /Users/prubtsov/cv_to_osc_converter/CVCalibrator.cpp
+
+CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/prubtsov/cv_to_osc_converter/CVCalibrator.cpp > CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.i
+
+CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/prubtsov/cv_to_osc_converter/CVCalibrator.cpp -o CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.s
+
+CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.o: CMakeFiles/cv_to_osc_converter.dir/flags.make
+CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.o: /Users/prubtsov/cv_to_osc_converter/PerformanceMonitor.cpp
+CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.o: CMakeFiles/cv_to_osc_converter.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.o -MF CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.o.d -o CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.o -c /Users/prubtsov/cv_to_osc_converter/PerformanceMonitor.cpp
+
+CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/prubtsov/cv_to_osc_converter/PerformanceMonitor.cpp > CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.i
+
+CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/prubtsov/cv_to_osc_converter/PerformanceMonitor.cpp -o CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.s
+
 # Object files for target cv_to_osc_converter
 cv_to_osc_converter_OBJECTS = \
 "CMakeFiles/cv_to_osc_converter.dir/main.cpp.o" \
 "CMakeFiles/cv_to_osc_converter.dir/CVReader.cpp.o" \
 "CMakeFiles/cv_to_osc_converter.dir/OSCSender.cpp.o" \
 "CMakeFiles/cv_to_osc_converter.dir/CommandLineInterface.cpp.o" \
-"CMakeFiles/cv_to_osc_converter.dir/AudioDeviceManager.cpp.o"
+"CMakeFiles/cv_to_osc_converter.dir/AudioDeviceManager.cpp.o" \
+"CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.o" \
+"CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.o"
 
 # External object files for target cv_to_osc_converter
 cv_to_osc_converter_EXTERNAL_OBJECTS =
@@ -158,9 +188,11 @@ cv_to_osc_converter: CMakeFiles/cv_to_osc_converter.dir/CVReader.cpp.o
 cv_to_osc_converter: CMakeFiles/cv_to_osc_converter.dir/OSCSender.cpp.o
 cv_to_osc_converter: CMakeFiles/cv_to_osc_converter.dir/CommandLineInterface.cpp.o
 cv_to_osc_converter: CMakeFiles/cv_to_osc_converter.dir/AudioDeviceManager.cpp.o
+cv_to_osc_converter: CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.o
+cv_to_osc_converter: CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.o
 cv_to_osc_converter: CMakeFiles/cv_to_osc_converter.dir/build.make
 cv_to_osc_converter: CMakeFiles/cv_to_osc_converter.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable cv_to_osc_converter"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable cv_to_osc_converter"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/cv_to_osc_converter.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
