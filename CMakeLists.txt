@@ -119,9 +119,15 @@ add_executable(cv_to_osc_converter
 target_include_directories(cv_to_osc_converter PRIVATE
     ${PORTAUDIO_INCLUDE_DIRS}
     ${LIBLO_INCLUDE_DIRS}
-    /usr/local/Cellar/nlohmann-json/3.12.0/include
-    /opt/homebrew/include
 )
+
+# Add macOS-specific include paths only on macOS
+if(APPLE)
+    target_include_directories(cv_to_osc_converter PRIVATE
+        /usr/local/Cellar/nlohmann-json/3.12.0/include
+        /opt/homebrew/include
+    )
+endif()
 
 # Link libraries
 if(APPLE)

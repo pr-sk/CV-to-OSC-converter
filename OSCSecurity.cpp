@@ -3,6 +3,9 @@
 #include <algorithm>
 #include <sstream>
 #include <cctype>
+#include <regex>
+#include <cmath>
+#include <chrono>
 
 bool OSCSecurity::isAddressValid(const std::string& address) const {
     if (!config.enableValidation) return true;
