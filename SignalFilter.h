@@ -313,7 +313,7 @@ public:
         auto chain = std::make_unique<FilterChain>(FilterType::LowPass);
         chain->addFilter(std::make_unique<MedianFilter>(3));  // Remove spikes
         chain->addFilter(std::make_unique<LowPassFilter>(50.0f, 44100.0f));  // Remove high freq noise
-        return std::move(chain);
+        return chain;
     }
     
     // Create a filter for audio-rate signals
@@ -321,7 +321,7 @@ public:
         auto chain = std::make_unique<FilterChain>(FilterType::LowPass);
         chain->addFilter(std::make_unique<HighPassFilter>(20.0f, 44100.0f));  // Remove DC
         chain->addFilter(std::make_unique<LowPassFilter>(20000.0f, 44100.0f));  // Anti-aliasing
-        return std::move(chain);
+        return chain;
     }
     
     // Create a gentle smoothing filter
@@ -335,7 +335,7 @@ public:
         chain->addFilter(std::make_unique<MedianFilter>(5));
         chain->addFilter(std::make_unique<MovingAverageFilter>(8));
         chain->addFilter(std::make_unique<LowPassFilter>(100.0f, 44100.0f));
-        return std::move(chain);
+        return chain;
     }
     
     // Create a filter based on type and parameters
