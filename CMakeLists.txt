@@ -66,7 +66,7 @@ else()
 endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 
-# macOS specific settings
+# Platform-specific settings
 if(APPLE)
     # Only build for current architecture to avoid linking issues
     # set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64")
@@ -81,6 +81,20 @@ if(APPLE)
     
     if(CMAKE_OSX_SYSROOT)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -isysroot ${CMAKE_OSX_SYSROOT}")
+    endif()
+elseif(WIN32)
+    # Windows-specific settings
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWIN32_LEAN_AND_MEAN -DNOMINMAX")
+    
+    # Enable Unicode support
+    add_definitions(-DUNICODE -D_UNICODE)
+    
+    # Set Windows version for API compatibility
+    add_definitions(-D_WIN32_WINNT=0x0601)  # Windows 7 and later
+    
+    # Suppress common Windows warnings
+    if(MSVC)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4996 /wd4267 /wd4244")
     endif()
 endif()
 

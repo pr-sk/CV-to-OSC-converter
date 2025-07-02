@@ -16,6 +16,14 @@
 #include <sys/resource.h>
 #include <fstream>
 #include <sstream>
+#elif _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <pdh.h>
+#include <psapi.h>
+#include <winbase.h>
+#pragma comment(lib, "pdh.lib")
+#pragma comment(lib, "psapi.lib")
 #endif
 
 PerformanceMonitor::PerformanceMonitor() {
@@ -609,6 +617,92 @@ double PerformanceMonitor::getSystemLoadImpl() const {
     double load;
     file >> load;
     return load;
+}
+
+#elif _WIN32
+// Windows-specific implementations
+double PerformanceMonitor::getCPUUsageImpl() const {
+    static FILETIME lastIdleTime, lastKernelTime, lastUserTime;
+    static bool firstCall = true;
+    
+    FILETIME idleTime, kernelTime, userTime;
+    
+    if (!GetSystemTimes(&idleTime, &kernelTime, &userTime)) {
+        return 0.0;
+    }
+    
+    if (firstCall) {
+        lastIdleTime = idleTime;
+        lastKernelTime = kernelTime;
+        lastUserTime = userTime;
+        firstCall = false;
+        return 0.0; // Cannot calculate on first call
+    }
+    
+    auto fileTimeToInt64 = [](const FILETIME& ft) -> ULONGLONG {
+        ULARGE_INTEGER uli;
+        uli.LowPart = ft.dwLowDateTime;
+        uli.HighPart = ft.dwHighDateTime;
+        return uli.QuadPart;
+    };
+    
+    ULONGLONG idle = fileTimeToInt64(idleTime) - fileTimeToInt64(lastIdleTime);
+    ULONGLONG kernel = fileTimeToInt64(kernelTime) - fileTimeToInt64(lastKernelTime);
+    ULONGLONG user = fileTimeToInt64(userTime) - fileTimeToInt64(lastUserTime);
+    
+    ULONGLONG total = kernel + user;
+    
+    lastIdleTime = idleTime;
+    lastKernelTime = kernelTime;
+    lastUserTime = userTime;
+    
+    if (total == 0) {
+        return 0.0;
+    }
+    
+    return 100.0 * (1.0 - (double)idle / total);
+}
+
+size_t PerformanceMonitor::getMemoryUsageImpl() const {
+    PROCESS_MEMORY_COUNTERS pmc;
+    if (GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc))) {
+        return pmc.WorkingSetSize / (1024 * 1024); // Convert to MB
+    }
+    return 0;
+}
+
+double PerformanceMonitor::getSystemLoadImpl() const {
+    // Windows doesn't have a direct equivalent to Unix load average
+    // We'll approximate it using CPU usage over the last minute
+    static std::deque<double> cpuHistory;
+    static auto lastUpdate = std::chrono::steady_clock::now();
+    
+    auto now = std::chrono::steady_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - lastUpdate);
+    
+    if (elapsed.count() >= 1) { // Update every second
+        double currentCpu = getCPUUsageImpl();
+        cpuHistory.push_back(currentCpu);
+        
+        // Keep only last 60 seconds of data
+        while (cpuHistory.size() > 60) {
+            cpuHistory.pop_front();
+        }
+        
+        lastUpdate = now;
+    }
+    
+    if (cpuHistory.empty()) {
+        return 0.0;
+    }
+    
+    // Calculate average CPU usage as load approximation
+    double sum = 0.0;
+    for (double cpu : cpuHistory) {
+        sum += cpu;
+    }
+    
+    return (sum / cpuHistory.size()) / 100.0; // Normalize to 0-1 range like Unix load
 }
 
 #else

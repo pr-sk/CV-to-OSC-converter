@@ -26,6 +26,24 @@ make
 ./cv_to_osc_converter
 ```
 
+### Windows (MSYS2)
+```bash
+# Install MSYS2 from https://www.msys2.org/
+# Open MSYS2 MinGW 64-bit shell and install dependencies
+pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-pkg-config
+pacman -S mingw-w64-x86_64-portaudio mingw-w64-x86_64-liblo mingw-w64-x86_64-nlohmann-json
+
+# Clone and build
+git clone https://github.com/pr-sk/cv_to_osc_converter.git
+cd cv_to_osc_converter
+mkdir build && cd build
+cmake -G "MSYS Makefiles" ..
+make
+
+# Run
+./cv_to_osc_converter.exe
+```
+
 ### Linux (Ubuntu/Debian)
 ```bash
 # Install dependencies
@@ -47,23 +65,6 @@ make
 ./cv_to_osc_converter
 ```
 
-### Windows (MSYS2)
-```bash
-# Install MSYS2 from https://www.msys2.org/
-# Open MSYS2 MinGW 64-bit shell and install dependencies
-pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-pkg-config
-pacman -S mingw-w64-x86_64-portaudio mingw-w64-x86_64-liblo mingw-w64-x86_64-nlohmann-json
-
-# Clone and build
-git clone https://github.com/pr-sk/cv_to_osc_converter.git
-cd cv_to_osc_converter
-mkdir build && cd build
-cmake -G "MSYS Makefiles" ..
-make
-
-# Run
-./cv_to_osc_converter.exe
-```
 
 ## ✨ Features
 
@@ -106,12 +107,6 @@ make
 
 4. **Plugin Architecture**
    - Design an architecture for user-extensible processing.
-
-5. **Cloud and AI Integration**
-   - Investigate opportunities for cloud services and AI/ML integration for advanced processing.
-
-6. **Enterprise Features**
-   - Plan multi-instance support and centralized management.
 
 ## Dependencies
 
