@@ -27,12 +27,25 @@ jobs:
     
     - name: Test application startup
       run: |
-        cd build && echo "" | timeout 5 ./cv_to_osc_converter || true
-        # Check if config file was created
-        if [ -f "build/config.json" ]; then
+        cd build
+        # Use gtimeout on macOS (from coreutils) or alternative approach
+        if command -v gtimeout >/dev/null 2>&1; then
+          echo "" | gtimeout 5 ./cv_to_osc_converter || true
+        else
+          # Alternative: use background process with kill
+          (echo "" | ./cv_to_osc_converter) &
+          PID=$!
+          sleep 3
+          kill $PID 2>/dev/null || true
+          wait $PID 2>/dev/null || true
+        fi
+        # Check if config file was created in the correct location
+        if [ -f "config.json" ]; then
           echo "✓ Config file created successfully"
+          cat config.json | head -5
         else
           echo "✗ Config file not created"
+          ls -la
           exit 1
         fi
 
@@ -53,9 +66,12 @@ jobs:
     
     - name: Run automated tests
       run: |
-        # Modify test runner for Ubuntu
-        sed -i 's|/usr/local/Cellar/nlohmann-json/3.12.0/include|/usr/include/nlohmann|g' run_tests.sh
-        ./run_tests.sh
+        # Create Ubuntu-compatible test runner
+        cp run_tests.sh run_tests_ubuntu.sh
+        # Update paths for Ubuntu nlohmann-json location
+        sed -i 's|/usr/local/Cellar/nlohmann-json/[0-9.]*/include|/usr/include|g' run_tests_ubuntu.sh
+        chmod +x run_tests_ubuntu.sh
+        ./run_tests_ubuntu.sh
     
     - name: Test application startup (headless)
       run: |
