@@ -46,8 +46,22 @@ cd "$TEST_BUILD_DIR"
 
 # Build the simple test executable
 print_status "Building simple test executable..."
+
+# Try to find nlohmann/json include path
+NLOHMANN_INCLUDE=""
+if [ -d "/usr/local/Cellar/nlohmann-json/3.12.0/include" ]; then
+    NLOHMANN_INCLUDE="-I/usr/local/Cellar/nlohmann-json/3.12.0/include"
+elif [ -d "/usr/include/nlohmann" ]; then
+    NLOHMANN_INCLUDE="-I/usr/include"
+elif [ -d "/opt/homebrew/include" ]; then
+    NLOHMANN_INCLUDE="-I/opt/homebrew/include"
+else
+    print_warning "nlohmann/json include path not found, using pkg-config"
+    NLOHMANN_INCLUDE=$(pkg-config --cflags nlohmann_json 2>/dev/null || echo "")
+fi
+
 g++ -std=c++17 -O2 -Wall -Wextra \
-    -I/usr/local/Cellar/nlohmann-json/3.12.0/include \
+    $NLOHMANN_INCLUDE \
     ../tests/simple_test.cpp \
     -o simple_test
 

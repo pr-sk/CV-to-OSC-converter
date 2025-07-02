@@ -107,13 +107,13 @@ add_executable(cv_to_osc_converter
     PerformanceMonitor.cpp
     Config.cpp
     OSCSecurity.cpp
+    ErrorHandler.cpp
 )
 
 # Include directories  
 target_include_directories(cv_to_osc_converter PRIVATE
     ${PORTAUDIO_INCLUDE_DIRS}
     ${LIBLO_INCLUDE_DIRS}
-    /usr/local/Cellar/nlohmann-json/3.12.0/include
 )
 
 # Link libraries
