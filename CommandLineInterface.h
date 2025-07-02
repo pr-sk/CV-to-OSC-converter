@@ -44,8 +44,6 @@ public:
     
 private:
     void addArgument(const std::string& arg) { args.push_back(arg); }
-    bool hasFlag(const std::string& flag) const;
-    std::string getFlagValue(const std::string& flag) const;
     void printUsage() const;
     
     // Interactive helpers

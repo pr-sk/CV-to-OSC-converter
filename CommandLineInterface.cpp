@@ -208,6 +208,7 @@ bool CommandLineInterface::runInteractiveMode() {
             // Run tests
             std::cout << Colors::YELLOW << "Running automated tests..." << Colors::RESET << std::endl;
             int result = system("./run_tests.sh");
+            (void)result; // Suppress unused variable warning
             if (result == 0) {
                 std::cout << Colors::GREEN << "All tests passed!" << Colors::RESET << std::endl;
             } else {
