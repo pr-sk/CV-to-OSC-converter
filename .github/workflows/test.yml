@@ -58,7 +58,9 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libportaudio2-dev liblo-dev nlohmann-json3-dev cmake pkg-config build-essential
+        # Try to install both variants of the package, only one will succeed
+        sudo apt-get install -y libportaudio2-dev || sudo apt-get install -y libportaudio-dev
+        sudo apt-get install -y liblo-dev nlohmann-json3-dev cmake pkg-config build-essential
     
     - name: Build main application
       run: |
@@ -87,7 +89,9 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libportaudio2-dev liblo-dev nlohmann-json3-dev cmake pkg-config build-essential cppcheck
+        # Try to install both variants of the package, only one will succeed
+        sudo apt-get install -y libportaudio2-dev || sudo apt-get install -y libportaudio-dev
+        sudo apt-get install -y liblo-dev nlohmann-json3-dev cmake pkg-config build-essential cppcheck
     
     - name: Run static analysis
       run: |
