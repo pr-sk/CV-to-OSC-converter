@@ -104,16 +104,15 @@ jobs:
       run: ${{ matrix.build_deps }}
 
     - name: Create build directory
-      run: mkdir build
+      run: mkdir -p build
 
     - name: Configure CMake with version info
       run: |
-        cd build
         export GIT_COMMIT_HASH=$(git rev-parse HEAD)
         export GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
         export BUILD_DATE=$(date)
         
-        cmake .. \
+        cmake -B build -S . \
           -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
           -DGIT_COMMIT_HASH="$GIT_COMMIT_HASH" \
           -DGIT_BRANCH="$GIT_BRANCH" \
@@ -121,17 +120,14 @@ jobs:
 
     - name: Build
       run: |
-        cd build
-        make -j$(nproc 2>/dev/null || sysctl -n hw.ncpu)
+        cmake --build build --config $BUILD_TYPE -j$(nproc 2>/dev/null || sysctl -n hw.ncpu)
 
     - name: Run tests
       run: |
-        cd build
         # Run basic test to ensure binary works
-        ./cv_to_osc_converter --version || true
+        ./build/cv_to_osc_converter --version || true
         
         # Run automated tests
-        cd ..
         if [ -f "run_tests.sh" ]; then
           chmod +x run_tests.sh
           ./run_tests.sh
@@ -139,12 +135,15 @@ jobs:
 
     - name: Package artifact
       run: |
-        cd build
-        strip cv_to_osc_converter 2>/dev/null || true  # Strip symbols if possible
-        tar -czf ${{ matrix.artifact_name }}.tar.gz cv_to_osc_converter
+        # Strip symbols if possible
+        strip build/cv_to_osc_converter 2>/dev/null || true
         
-        # Create additional files for the release
+        # Create binary-only package
+        cd build
+        tar -czf ${{ matrix.artifact_name }}.tar.gz cv_to_osc_converter
         cd ..
+        
+        # Create full package with documentation
         cp README.md USER_GUIDE.md CHANGELOG.md LICENSE build/
         cd build
         tar -czf ${{ matrix.artifact_name }}_full.tar.gz cv_to_osc_converter README.md USER_GUIDE.md CHANGELOG.md LICENSE
