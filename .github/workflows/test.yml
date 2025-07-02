@@ -58,20 +58,42 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        # Check which PortAudio package is available and install it
-        if apt-cache show libportaudio2-dev >/dev/null 2>&1; then
-          sudo apt-get install -y libportaudio2-dev
-        elif apt-cache show libportaudio-dev >/dev/null 2>&1; then
-          sudo apt-get install -y libportaudio-dev
-        elif apt-cache show portaudio19-dev >/dev/null 2>&1; then
-          sudo apt-get install -y portaudio19-dev
+        
+        # Install basic build tools first
+        sudo apt-get install -y cmake pkg-config build-essential
+        
+        # Try to install PortAudio - try different package names in order of preference
+        echo "Trying to install PortAudio..."
+        if sudo apt-get install -y portaudio19-dev; then
+          echo "✓ Installed portaudio19-dev"
+        elif sudo apt-get install -y libportaudio2-dev; then
+          echo "✓ Installed libportaudio2-dev"
+        elif sudo apt-get install -y libportaudio-dev; then
+          echo "✓ Installed libportaudio-dev"
         else
-          echo "No PortAudio development package found, trying to install from universe repository"
-          sudo add-apt-repository universe || true
+          echo "Failed to install PortAudio from default repositories, trying universe..."
+          sudo add-apt-repository universe -y
           sudo apt-get update
           sudo apt-get install -y portaudio19-dev
         fi
-        sudo apt-get install -y liblo-dev nlohmann-json3-dev cmake pkg-config build-essential
+        
+        # Install other dependencies
+        sudo apt-get install -y liblo-dev
+        
+        # Try to install nlohmann-json
+        if sudo apt-get install -y nlohmann-json3-dev; then
+          echo "✓ Installed nlohmann-json3-dev"
+        else
+          echo "Failed to install nlohmann-json3-dev, trying alternative..."
+          sudo apt-get install -y nlohmann-json-dev || {
+            echo "Installing nlohmann-json from source..."
+            cd /tmp
+            wget https://github.com/nlohmann/json/releases/download/v3.11.2/json.hpp
+            sudo mkdir -p /usr/local/include/nlohmann
+            sudo cp json.hpp /usr/local/include/nlohmann/
+            cd -
+          }
+        fi
     
     - name: Build main application
       run: |
@@ -100,20 +122,42 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        # Check which PortAudio package is available and install it
-        if apt-cache show libportaudio2-dev >/dev/null 2>&1; then
-          sudo apt-get install -y libportaudio2-dev
-        elif apt-cache show libportaudio-dev >/dev/null 2>&1; then
-          sudo apt-get install -y libportaudio-dev
-        elif apt-cache show portaudio19-dev >/dev/null 2>&1; then
-          sudo apt-get install -y portaudio19-dev
+        
+        # Install basic build tools first
+        sudo apt-get install -y cmake pkg-config build-essential cppcheck
+        
+        # Try to install PortAudio - try different package names in order of preference
+        echo "Trying to install PortAudio..."
+        if sudo apt-get install -y portaudio19-dev; then
+          echo "✓ Installed portaudio19-dev"
+        elif sudo apt-get install -y libportaudio2-dev; then
+          echo "✓ Installed libportaudio2-dev"
+        elif sudo apt-get install -y libportaudio-dev; then
+          echo "✓ Installed libportaudio-dev"
         else
-          echo "No PortAudio development package found, trying to install from universe repository"
-          sudo add-apt-repository universe || true
+          echo "Failed to install PortAudio from default repositories, trying universe..."
+          sudo add-apt-repository universe -y
           sudo apt-get update
           sudo apt-get install -y portaudio19-dev
         fi
-        sudo apt-get install -y liblo-dev nlohmann-json3-dev cmake pkg-config build-essential cppcheck
+        
+        # Install other dependencies
+        sudo apt-get install -y liblo-dev
+        
+        # Try to install nlohmann-json
+        if sudo apt-get install -y nlohmann-json3-dev; then
+          echo "✓ Installed nlohmann-json3-dev"
+        else
+          echo "Failed to install nlohmann-json3-dev, trying alternative..."
+          sudo apt-get install -y nlohmann-json-dev || {
+            echo "Installing nlohmann-json from source..."
+            cd /tmp
+            wget https://github.com/nlohmann/json/releases/download/v3.11.2/json.hpp
+            sudo mkdir -p /usr/local/include/nlohmann
+            sudo cp json.hpp /usr/local/include/nlohmann/
+            cd -
+          }
+        fi
     
     - name: Run static analysis
       run: |

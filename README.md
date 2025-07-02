@@ -10,8 +10,9 @@ A professional-grade, high-performance C++ application that converts Control Vol
 
 ## 🚀 Quick Start
 
+### macOS
 ```bash
-# Install dependencies (macOS)
+# Install dependencies
 brew install portaudio liblo nlohmann-json cmake pkg-config
 
 # Clone and build
@@ -23,6 +24,45 @@ make
 
 # Run
 ./cv_to_osc_converter
+```
+
+### Linux (Ubuntu/Debian)
+```bash
+# Install dependencies
+sudo apt-get update
+sudo apt-get install cmake pkg-config build-essential
+# Try installing PortAudio (one of these should work)
+sudo apt-get install portaudio19-dev || sudo apt-get install libportaudio2-dev
+sudo apt-get install liblo-dev
+sudo apt-get install nlohmann-json3-dev || sudo apt-get install nlohmann-json-dev
+
+# Clone and build
+git clone https://github.com/pr-sk/cv_to_osc_converter.git
+cd cv_to_osc_converter
+mkdir build && cd build
+cmake ..
+make
+
+# Run
+./cv_to_osc_converter
+```
+
+### Windows (MSYS2)
+```bash
+# Install MSYS2 from https://www.msys2.org/
+# Open MSYS2 MinGW 64-bit shell and install dependencies
+pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-pkg-config
+pacman -S mingw-w64-x86_64-portaudio mingw-w64-x86_64-liblo mingw-w64-x86_64-nlohmann-json
+
+# Clone and build
+git clone https://github.com/pr-sk/cv_to_osc_converter.git
+cd cv_to_osc_converter
+mkdir build && cd build
+cmake -G "MSYS Makefiles" ..
+make
+
+# Run
+./cv_to_osc_converter.exe
 ```
 
 ## ✨ Features
@@ -57,23 +97,20 @@ make
 1. **GUI Development**
    - Develop a cross-platform GUI for enhanced user interaction.
 
-2. **Windows Support**
-   - Complete and thoroughly test Windows compatibility.
-
-3. **Mobile Companion App**
+2. **Mobile Companion App**
    - Initiate development of an iOS/Android app for monitoring.
 
-4. **Advanced OSC Features**
+3. **Advanced OSC Features**
    - Implement custom OSC message formats.
    - Explore enhanced security features for OSC.
 
-5. **Plugin Architecture**
+4. **Plugin Architecture**
    - Design an architecture for user-extensible processing.
 
-6. **Cloud and AI Integration**
+5. **Cloud and AI Integration**
    - Investigate opportunities for cloud services and AI/ML integration for advanced processing.
 
-7. **Enterprise Features**
+6. **Enterprise Features**
    - Plan multi-instance support and centralized management.
 
 ## Dependencies
@@ -85,16 +122,51 @@ brew install portaudio liblo nlohmann-json cmake pkg-config
 brew install gcc
 ```
 
+### Windows
+
+**Option 1: Using MSYS2 (Recommended)**
+```bash
+# Install MSYS2 from https://www.msys2.org/
+# Open MSYS2 MinGW 64-bit shell and run:
+pacman -S mingw-w64-x86_64-gcc
+pacman -S mingw-w64-x86_64-cmake
+pacman -S mingw-w64-x86_64-pkg-config
+pacman -S mingw-w64-x86_64-portaudio
+pacman -S mingw-w64-x86_64-liblo
+pacman -S mingw-w64-x86_64-nlohmann-json
+```
+
+**Option 2: Using vcpkg**
+```bash
+# Install vcpkg from https://github.com/Microsoft/vcpkg
+# Then install dependencies:
+vcpkg install portaudio
+vcpkg install liblo
+vcpkg install nlohmann-json
+```
+
+**Option 3: Manual Installation**
+- Download and compile PortAudio from http://www.portaudio.com/
+- Download and compile liblo from http://liblo.sourceforge.net/
+- Download nlohmann/json headers from https://github.com/nlohmann/json
+
 ### Ubuntu/Debian
 ```bash
-# For most Ubuntu versions:
+# Install basic build tools first
 sudo apt-get update
-sudo apt-get install portaudio19-dev liblo-dev nlohmann-json3-dev cmake pkg-config build-essential
+sudo apt-get install cmake pkg-config build-essential
 
-# If portaudio19-dev is not available, try:
-# sudo apt-get install libportaudio2-dev liblo-dev nlohmann-json3-dev cmake pkg-config build-essential
-# or
-# sudo apt-get install libportaudio-dev liblo-dev nlohmann-json3-dev cmake pkg-config build-essential
+# Try to install PortAudio (try these in order)
+sudo apt-get install portaudio19-dev || \
+sudo apt-get install libportaudio2-dev || \
+sudo apt-get install libportaudio-dev
+
+# Install other dependencies
+sudo apt-get install liblo-dev
+sudo apt-get install nlohmann-json3-dev || sudo apt-get install nlohmann-json-dev
+
+# Alternative one-liner (tries common package names):
+# sudo apt-get install portaudio19-dev liblo-dev nlohmann-json3-dev cmake pkg-config build-essential
 ```
 
 ### Arch Linux
@@ -103,6 +175,8 @@ sudo pacman -S portaudio liblo nlohmann-json cmake pkg-config
 ```
 
 ## Building
+
+### macOS and Linux
 
 1. Clone or download the source code
 2. Create a build directory and navigate to it:
@@ -120,11 +194,56 @@ cmake ..
 make
 ```
 
+### Windows
+
+#### Using MSYS2 (Recommended)
+1. Open MSYS2 MinGW 64-bit shell
+2. Navigate to the project directory
+3. Create build directory and configure:
+```bash
+mkdir build && cd build
+cmake -G "MSYS Makefiles" ..
+make
+```
+
+#### Using Visual Studio
+1. Open Visual Studio Command Prompt or PowerShell
+2. Navigate to the project directory
+3. Create build directory and configure:
+```bash
+mkdir build
+cd build
+cmake -G "Visual Studio 16 2019" ..
+cmake --build . --config Release
+```
+
+#### Using vcpkg
+If using vcpkg, add the toolchain file:
+```bash
+cmake -DCMAKE_TOOLCHAIN_FILE=[vcpkg_root]/scripts/buildsystems/vcpkg.cmake ..
+```
+
+### Windows Build Notes
+
+- **MSYS2**: Recommended for most users. Provides a Unix-like environment with MinGW-w64 compiler
+- **Visual Studio**: Use Visual Studio 2019 or later with C++ development tools
+- **vcpkg**: Good for managing dependencies in Visual Studio projects
+- Ensure all dependencies are compiled with the same compiler toolchain
+- If using MSYS2, always use the MinGW 64-bit shell for consistency
+- Windows Defender may flag the executable - add build directory to exclusions
+
 ### macOS Build Notes
 
 - The project is configured to build for the current architecture only (arm64 on Apple Silicon, x86_64 on Intel Macs)
 - If you encounter linking errors related to architecture mismatches, ensure all dependencies are installed for your system's architecture
 - GCC may be required for some compilation scenarios; install with `brew install gcc` if needed
+
+### Linux Build Notes
+
+- Most distributions include the required dependencies in their package managers
+- For older Ubuntu versions, some package names may differ (see Dependencies section)
+- Arch Linux users should install from the official repositories for best compatibility
+- If building from source, ensure development headers are installed
 
 ### Troubleshooting Build Issues
 

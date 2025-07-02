@@ -77,7 +77,19 @@ jobs:
             artifact_name: cv_to_osc_converter_linux
             build_deps: |
               sudo apt-get update
-              sudo apt-get install -y libportaudio2-dev liblo-dev nlohmann-json3-dev cmake pkg-config build-essential
+              sudo apt-get install -y cmake pkg-config build-essential
+              # Try different PortAudio packages
+              if sudo apt-get install -y portaudio19-dev; then
+                echo "✓ Installed portaudio19-dev"
+              elif sudo apt-get install -y libportaudio2-dev; then
+                echo "✓ Installed libportaudio2-dev"
+              else
+                sudo add-apt-repository universe -y
+                sudo apt-get update
+                sudo apt-get install -y portaudio19-dev
+              fi
+              sudo apt-get install -y liblo-dev
+              sudo apt-get install -y nlohmann-json3-dev || sudo apt-get install -y nlohmann-json-dev
           - os: macos-latest
             artifact_name: cv_to_osc_converter_macos
             build_deps: |
