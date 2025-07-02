@@ -1,6 +1,6 @@
 # CV to OSC Converter
 
-[![Build Status](https://github.com/your-username/cv_to_osc_converter/workflows/CI/badge.svg)](https://github.com/your-username/cv_to_osc_converter/actions)
+[![Build Status](https://github.com/pr-sk/cv_to_osc_converter/workflows/CI/badge.svg)](https://github.com/pr-sk/cv_to_osc_converter/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey)]()
 [![Tests](https://img.shields.io/badge/tests-46%2F46%20passing-brightgreen)]()
@@ -15,7 +15,7 @@ A professional-grade, high-performance C++ application that converts Control Vol
 brew install portaudio liblo nlohmann-json cmake pkg-config
 
 # Clone and build
-git clone https://github.com/your-username/cv_to_osc_converter.git
+git clone https://github.com/pr-sk/cv_to_osc_converter.git
 cd cv_to_osc_converter
 mkdir build && cd build
 cmake ..
