@@ -1,20 +1,15 @@
 # CV to OSC Converter - User Guide
 
-This comprehensive guide will walk you through setting up and using the CV to OSC Converter for your audio production workflow. The application provides professional-grade CV to OSC conversion with advanced features for musicians, sound designers, and developers.
+Quick guide for setting up and using CV to OSC conversion for modular synthesizers and digital audio workflows.
 
-## Table of Contents
+## Contents
 
 1. [Quick Start](#quick-start)
-2. [Installation](#installation)
-3. [Basic Usage](#basic-usage)
-4. [Interactive Mode](#interactive-mode)
-5. [Configuration](#configuration)
-6. [Advanced Features](#advanced-features)
-7. [Hardware Setup](#hardware-setup)
-8. [Security & OSC Features](#security--osc-features)
-9. [Performance Monitoring](#performance-monitoring)
-10. [Troubleshooting](#troubleshooting)
-11. [Performance Tuning](#performance-tuning)
+2. [Basic Usage](#basic-usage)
+3. [Interactive Mode](#interactive-mode)
+4. [Configuration](#configuration)
+5. [Hardware Setup](#hardware-setup)
+6. [Troubleshooting](#troubleshooting)
 
 ## Quick Start
 
@@ -55,196 +50,41 @@ sudo apt-get install libportaudio2-dev liblo-dev nlohmann-json3-dev cmake pkg-co
 git clone https://github.com/your-username/cv_to_osc_converter.git
 cd cv_to_osc_converter
 mkdir build && cd build
-cmake ..
-make
+cmake .. && make
 
-# Run interactively
+# Run
 ./cv_to_osc_converter --interactive
-```
-
-## Installation
-
-### Prerequisites
-
-The CV to OSC Converter requires the following dependencies:
-
-- **PortAudio**: For audio interface access
-- **liblo**: For OSC message handling
-- **nlohmann/json**: For configuration file parsing
-- **CMake**: For build system
-- **pkg-config**: For dependency management
-
-### Platform-Specific Installation
-
-#### macOS (Homebrew)
-```bash
-brew install portaudio liblo nlohmann-json cmake pkg-config
-```
-
-#### Ubuntu/Debian
-```bash
-sudo apt-get update
-sudo apt-get install libportaudio2-dev liblo-dev nlohmann-json3-dev cmake pkg-config build-essential
-```
-
-#### Arch Linux
-```bash
-sudo pacman -S portaudio liblo nlohmann-json cmake pkg-config
-```
-
-### Building from Source
-
-1. Clone the repository:
-```bash
-git clone https://github.com/your-username/cv_to_osc_converter.git
-cd cv_to_osc_converter
-```
-
-2. Create build directory:
-```bash
-mkdir build && cd build
-```
-
-3. Configure with CMake:
-```bash
-cmake ..
-```
-
-4. Build:
-```bash
-make
-```
-
-### Testing the Build
-
-Run the test suite to verify everything is working:
-```bash
-# From project root
-./run_tests.sh
-```
-
-You should see:
-```
-✅ All tests passed! The CV to OSC converter is working correctly.
 ```
 
 ## Basic Usage
 
-### Command Line Options
-
-The application provides extensive command-line options:
-
 ```bash
-# Show help
-./cv_to_osc_converter --help
+# Basic run
+./cv_to_osc_converter
 
-# Show version information
-./cv_to_osc_converter --version
-
-# List available audio devices
-./cv_to_osc_converter --list-devices
-
-# Run in interactive mode
+# Interactive mode (recommended)
 ./cv_to_osc_converter --interactive
 
-# Run as daemon (background)
-./cv_to_osc_converter --daemon --quiet
+# List devices
+./cv_to_osc_converter --list-devices
 
-# Use custom config file
+# Custom config
 ./cv_to_osc_converter --config my_config.json
-
-# Override settings temporarily
-./cv_to_osc_converter --osc-host 192.168.1.100 --osc-port 8000
-
-# Enable debug logging
-./cv_to_osc_converter --log-level debug --verbose
 ```
 
-### First Run
-
-On first run, the application will:
-1. Create a default `config.json` file
-2. Auto-detect your audio interface
-3. Display current configuration
-4. Start conversion with default settings
-
-Example first run output:
-```
-CV to OSC Converter v1.0.0-dev
-==============================
-Config file not found, creating default configuration
-Using input device: Your Audio Interface
-Available channels: 8, using: 2
-CV Reader initialized successfully with 2 channels
-OSC sender initialized - target: 127.0.0.1:9000
-
-Current Configuration:
-  OSC Target: 127.0.0.1:9000
-  Audio Device: default
-  Update Rate: 100 Hz
-  CV Ranges:
-    Channel 1: 0V to 10V
-    Channel 2: 0V to 10V
-
-Starting CV to OSC converter...
-Press Enter to stop...
-```
+On first run, creates `config.json` with default settings.
 
 ## Interactive Mode
 
-Interactive mode provides a user-friendly menu system for configuration and monitoring:
-
 ```bash
 ./cv_to_osc_converter --interactive
 ```
 
-### Main Menu
-
-```
-===================================================
-   CV to OSC Converter - Interactive Mode
-===================================================
-
-Main Menu
-----------------------------------------
-1. Start CV to OSC Converter
-2. Configuration Settings
-3. Audio Device Selection
-4. Monitoring & Diagnostics
-5. Run Tests
-6. Exit
-```
-
-### Configuration Menu
-
-Access comprehensive configuration options:
-
-- **OSC Settings**: Change host, port, and message format
-- **Audio Device**: Select specific interface or use default
-- **Update Rate**: Adjust conversion frequency (1-1000 Hz)
-- **CV Ranges**: Configure voltage ranges per channel
-- **Save Configuration**: Persist settings to file
-
-### Audio Device Menu
-
-Comprehensive audio device management:
-
-1. **List All Devices**: Show every audio device on system
-2. **List Input Devices**: Show only devices with input capabilities
-3. **Device Details**: Get detailed specifications for any device
-4. **Test Device**: Verify device functionality and format support
-5. **Search Devices**: Find devices by name
-6. **Refresh List**: Update device list (detects hot-plugged devices)
-7. **Status Report**: System-wide audio device health check
-
-### Monitoring Menu
-
-Real-time monitoring and diagnostics:
-
-- **Live CV Monitor**: View current CV values in real-time
-- **OSC Connection Test**: Verify OSC message delivery
-- **Audio Device Status**: Check device health and performance
-- **Performance Metrics**: View system performance statistics
+Provides menu-driven interface for:
+- Device selection
+- Configuration
+- Real-time monitoring
+- Testing
 
 ## Configuration
 

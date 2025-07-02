@@ -3,10 +3,8 @@
 [![Build Status](https://github.com/pr-sk/cv_to_osc_converter/workflows/CI/badge.svg)](https://github.com/pr-sk/cv_to_osc_converter/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey)]()
-[![Tests](https://img.shields.io/badge/tests-46%2F46%20passing-brightgreen)]()
-[![Quality](https://img.shields.io/badge/code%20quality-A+-brightgreen)]()
 
-A professional-grade, high-performance C++ application that converts Control Voltage (CV) signals from audio interfaces to Open Sound Control (OSC) messages in real-time. Designed for musicians, sound designers, and developers who need reliable analog-to-digital interfacing for modular synthesizers, live performance setups, and studio environments.
+High-performance C++ application that converts CV signals to OSC messages in real-time, ideal for integrating modular synthesizers with digital audio workstations and live performance setups.
 
 ## 🚀 Quick Start
 
@@ -68,45 +66,13 @@ make
 
 ## ✨ Features
 
-### Core Functionality
-- 🎛️ **Real-time CV to OSC conversion** with sub-millisecond latency
-- 🎯 **Configurable CV input ranges** per channel (0-10V, ±5V, custom)
-- 🌐 **OSC networking** with batch message sending for efficiency
-- 🔧 **Auto-calibration system** for precise voltage measurement
-- 🎛️ **Advanced signal filtering** (low-pass, high-pass, median, etc.)
-- 📊 **Performance monitoring** with real-time metrics
-- 🔄 **Hot configuration reloading** without restart
-- 👥 **Configuration profiles** for different setups
-
-### Audio & Hardware
-- 🎵 **Automatic audio device detection** with up to 8 channels
-- 🔍 **Interactive device selection** with detailed specifications
-- ⚡ **High-performance audio processing** with zero-copy buffers
-- 🎚️ **RMS-based signal processing** for stable CV representation
-- 🛠️ **Thread-safe architecture** with mutex protection
-
-### User Experience
-- 💻 **Command-line interface** with extensive options
-- 🖥️ **Interactive mode** for easy setup and monitoring
-- 📁 **JSON configuration** with human-readable format
-- 📝 **Comprehensive logging** with multiple severity levels
-- 🎯 **Cross-platform support** (macOS, Linux, Windows)
-- 🧪 **Extensive testing suite** with 46+ automated tests
-
-## Future Improvements
-
-1. **GUI Development**
-   - Develop a cross-platform GUI for enhanced user interaction.
-
-2. **Mobile Companion App**
-   - Initiate development of an iOS/Android app for monitoring.
-
-3. **Advanced OSC Features**
-   - Implement custom OSC message formats.
-   - Explore enhanced security features for OSC.
-
-4. **Plugin Architecture**
-   - Design an architecture for user-extensible processing.
+- **Real-time CV to OSC conversion** with low latency
+- **Multi-channel support** with configurable voltage ranges
+- **Interactive mode** for easy setup and monitoring
+- **Hot configuration reloading** without restart
+- **Cross-platform support** (macOS, Linux, Windows)
+- **Automatic audio device detection**
+- **JSON configuration** with human-readable format
 
 ## Dependencies
 
