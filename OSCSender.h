@@ -4,7 +4,9 @@
 #include <memory>
 #include <vector>
 #include <iostream>
+#include <functional>
 #include <lo/lo.h>
+#include "OSCFormatManager.h"
 
 // OSC Message formatting options
 struct OSCMessageFormat {
@@ -59,4 +61,51 @@ public:
 private:
     void errorHandler(int num, const char* msg, const char* path);
     static void staticErrorHandler(int num, const char* msg, const char* path);
+};
+
+// OSC Receiver for bidirectional communication
+class OSCReceiver {
+private:
+    lo_server_thread server;
+    std::string port;
+    std::shared_ptr<OSCFormatManager> formatManager;
+    std::function<void(const std::string&, const std::vector<float>&)> messageCallback;
+    std::function<void(const std::string&, const std::string&)> stringCallback;
+    std::function<void(const std::string&, int)> intCallback;
+    bool running;
+    
+public:
+    OSCReceiver(const std::string& port, std::shared_ptr<OSCFormatManager> formatManager = nullptr);
+    ~OSCReceiver();
+    
+    // Server control
+    bool start();
+    void stop();
+    bool isRunning() const { return running; }
+    
+    // Callback registration
+    void setMessageCallback(std::function<void(const std::string&, const std::vector<float>&)> callback);
+    void setStringCallback(std::function<void(const std::string&, const std::string&)> callback);
+    void setIntCallback(std::function<void(const std::string&, int)> callback);
+    
+    // Learning mode integration
+    void enableLearning(bool enable);
+    
+    // Server information
+    std::string getPort() const { return port; }
+    std::string getURL() const;
+    
+private:
+    // Static callback handlers for liblo
+    static int floatHandler(const char* path, const char* types, lo_arg** argv, 
+                           int argc, lo_message msg, void* user_data);
+    static int stringHandler(const char* path, const char* types, lo_arg** argv, 
+                            int argc, lo_message msg, void* user_data);
+    static int intHandler(const char* path, const char* types, lo_arg** argv, 
+                         int argc, lo_message msg, void* user_data);
+    static int genericHandler(const char* path, const char* types, lo_arg** argv, 
+                             int argc, lo_message msg, void* user_data);
+    static void errorHandler(int num, const char* msg, const char* path);
+    
+    void setupHandlers();
 };

@@ -123,6 +123,8 @@ add_executable(cv_to_osc_converter
     main.cpp
     CVReader.cpp
     OSCSender.cpp
+    OSCReceiver.cpp
+    OSCFormatManager.cpp
     CommandLineInterface.cpp
     AudioDeviceManager.cpp
     CVCalibrator.cpp

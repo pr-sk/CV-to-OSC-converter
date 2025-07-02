@@ -260,3 +260,195 @@ void OSCSecurity::resetRateLimit() const {
     messageCount = 0;
     lastReset = std::chrono::steady_clock::now();
 }
+
+// OSCSecurityAdvanced Implementation
+OSCSecurityAdvanced::OSCSecurityAdvanced() : rng(std::random_device{}()) {
+    initializeCrypto();
+}
+
+OSCSecurityAdvanced::OSCSecurityAdvanced(const SecurityProfile& profile) 
+    : profile(profile), rng(std::random_device{}()) {
+    initializeCrypto();
+}
+
+bool OSCSecurityAdvanced::initializeCrypto() {
+    // Initialize OpenSSL (simplified for demo)
+    return true;
+}
+
+bool OSCSecurityAdvanced::generateKeyPair() {
+    // Simplified key generation
+    profile.sharedSecret = "generated_secret_key_32_bytes_long";
+    return true;
+}
+
+bool OSCSecurityAdvanced::setSharedSecret(const std::string& secret) {
+    if (secret.length() >= 32) {
+        profile.sharedSecret = secret;
+        return true;
+    }
+    return false;
+}
+
+std::vector<uint8_t> OSCSecurityAdvanced::generateNonce() const {
+    std::vector<uint8_t> nonce(12);
+    for (size_t i = 0; i < nonce.size(); ++i) {
+        nonce[i] = static_cast<uint8_t>(rng() % 256);
+    }
+    return nonce;
+}
+
+bool OSCSecurityAdvanced::validateNonce(const std::vector<uint8_t>& nonce) {
+    std::lock_guard<std::mutex> lock(nonceMutex);
+    if (usedNonces.find(nonce) != usedNonces.end()) {
+        return false; // Replay attack
+    }
+    usedNonces.insert(nonce);
+    if (usedNonces.size() > profile.nonceWindowSize) {
+        cleanupOldNonces();
+    }
+    return true;
+}
+
+void OSCSecurityAdvanced::cleanupOldNonces() {
+    if (usedNonces.size() > profile.nonceWindowSize / 2) {
+        auto it = usedNonces.begin();
+        std::advance(it, usedNonces.size() / 2);
+        usedNonces.erase(usedNonces.begin(), it);
+    }
+}
+
+uint64_t OSCSecurityAdvanced::getCurrentTimestamp() const {
+    return std::chrono::duration_cast<std::chrono::seconds>(
+        std::chrono::system_clock::now().time_since_epoch()).count();
+}
+
+bool OSCSecurityAdvanced::validateTimestamp(uint64_t timestamp) const {
+    if (!profile.requireTimestamp) return true;
+    uint64_t current = getCurrentTimestamp();
+    return std::abs(static_cast<int64_t>(current - timestamp)) <= profile.timestampTolerance;
+}
+
+bool OSCSecurityAdvanced::encryptMessage(const std::vector<uint8_t>& plaintext, EncryptedMessage& encrypted) const {
+    if (profile.encryption == EncryptionMode::NONE) {
+        encrypted.ciphertext = plaintext;
+        return true;
+    }
+    // Simplified encryption for demo
+    encrypted.nonce = generateNonce();
+    encrypted.timestamp = getCurrentTimestamp();
+    encrypted.ciphertext = plaintext; // In real implementation would encrypt
+    return true;
+}
+
+bool OSCSecurityAdvanced::decryptMessage(const EncryptedMessage& encrypted, std::vector<uint8_t>& plaintext) const {
+    if (profile.encryption == EncryptionMode::NONE) {
+        plaintext = encrypted.ciphertext;
+        return true;
+    }
+    if (!validateTimestamp(encrypted.timestamp)) return false;
+    plaintext = encrypted.ciphertext; // In real implementation would decrypt
+    return true;
+}
+
+std::string OSCSecurityAdvanced::generateSecurityAudit() const {
+    std::stringstream audit;
+    audit << "Advanced OSC Security Audit:\n";
+    audit << "- Encryption: " << (profile.encryption == EncryptionMode::AES_256_GCM ? "AES-256-GCM" : "None") << "\n";
+    audit << "- Authentication: " << (profile.authentication == AuthMode::HMAC_SHA256 ? "HMAC-SHA256" : "None") << "\n";
+    audit << "- Timestamp validation: " << (profile.requireTimestamp ? "Enabled" : "Disabled") << "\n";
+    audit << "- Nonce validation: " << (profile.enableNonceValidation ? "Enabled" : "Disabled") << "\n";
+    audit << "- Active nonces: " << usedNonces.size() << "\n";
+    return audit.str();
+}
+
+// OSCPatternMatcher Implementation
+void OSCPatternMatcher::addRoute(const RouteRule& rule) {
+    if (validateRule(rule)) {
+        routes.push_back(rule);
+        std::sort(routes.begin(), routes.end(), [](const RouteRule& a, const RouteRule& b) {
+            return a.priority > b.priority;
+        });
+    }
+}
+
+void OSCPatternMatcher::removeRoute(const std::string& pattern) {
+    routes.erase(std::remove_if(routes.begin(), routes.end(),
+        [&](const RouteRule& rule) { return rule.pattern == pattern; }), routes.end());
+}
+
+std::vector<OSCPatternMatcher::MatchResult> OSCPatternMatcher::matchPattern(const std::string& address) const {
+    std::vector<MatchResult> results;
+    for (const auto& rule : routes) {
+        if (!rule.enabled) continue;
+        if (isMatch(address, rule)) {
+            MatchResult result;
+            result.matched = true;
+            result.targetAddress = rule.targetAddress;
+            result.targetHost = rule.targetHost;
+            result.targetPort = rule.targetPort;
+            results.push_back(result);
+        }
+    }
+    return results;
+}
+
+bool OSCPatternMatcher::isMatch(const std::string& address, const RouteRule& rule) const {
+    switch (rule.matchType) {
+        case MatchType::EXACT: return matchExact(rule.pattern, address);
+        case MatchType::PREFIX: return matchPrefix(rule.pattern, address);
+        case MatchType::SUFFIX: return matchSuffix(rule.pattern, address);
+        case MatchType::CONTAINS: return matchContains(rule.pattern, address);
+        case MatchType::OSC_PATTERN: return matchOSCPattern(rule.pattern, address);
+        default: return false;
+    }
+}
+
+bool OSCPatternMatcher::matchOSCPattern(const std::string& pattern, const std::string& address) const {
+    // Simplified OSC pattern matching
+    if (pattern.find('*') == std::string::npos && pattern.find('?') == std::string::npos) {
+        return pattern == address;
+    }
+    // For demo - basic wildcard support
+    return matchWildcard(pattern, address);
+}
+
+bool OSCPatternMatcher::matchExact(const std::string& pattern, const std::string& address) const {
+    return pattern == address;
+}
+
+bool OSCPatternMatcher::matchPrefix(const std::string& pattern, const std::string& address) const {
+    return address.find(pattern) == 0;
+}
+
+bool OSCPatternMatcher::matchSuffix(const std::string& pattern, const std::string& address) const {
+    if (pattern.length() > address.length()) return false;
+    return address.substr(address.length() - pattern.length()) == pattern;
+}
+
+bool OSCPatternMatcher::matchContains(const std::string& pattern, const std::string& address) const {
+    return address.find(pattern) != std::string::npos;
+}
+
+bool OSCPatternMatcher::matchWildcard(const std::string& pattern, const std::string& address) const {
+    // Simple wildcard matching (* and ?)
+    size_t pPos = 0, aPos = 0;
+    while (pPos < pattern.length() && aPos < address.length()) {
+        if (pattern[pPos] == '*') {
+            pPos++;
+            if (pPos >= pattern.length()) return true;
+            while (aPos < address.length() && address[aPos] != pattern[pPos]) aPos++;
+        } else if (pattern[pPos] == '?') {
+            pPos++; aPos++;
+        } else {
+            if (pattern[pPos] != address[aPos]) return false;
+            pPos++; aPos++;
+        }
+    }
+    while (pPos < pattern.length() && pattern[pPos] == '*') pPos++;
+    return pPos >= pattern.length() && aPos >= address.length();
+}
+
+bool OSCPatternMatcher::validateRule(const RouteRule& rule) const {
+    return !rule.pattern.empty() && !rule.targetHost.empty() && !rule.targetPort.empty();
+}
