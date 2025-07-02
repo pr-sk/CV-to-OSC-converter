@@ -87,7 +87,14 @@ brew install gcc
 
 ### Ubuntu/Debian
 ```bash
-sudo apt-get install libportaudio2-dev liblo-dev nlohmann-json3-dev cmake pkg-config build-essential
+# For most Ubuntu versions:
+sudo apt-get update
+sudo apt-get install portaudio19-dev liblo-dev nlohmann-json3-dev cmake pkg-config build-essential
+
+# If portaudio19-dev is not available, try:
+# sudo apt-get install libportaudio2-dev liblo-dev nlohmann-json3-dev cmake pkg-config build-essential
+# or
+# sudo apt-get install libportaudio-dev liblo-dev nlohmann-json3-dev cmake pkg-config build-essential
 ```
 
 ### Arch Linux

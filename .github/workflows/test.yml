@@ -58,8 +58,19 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        # Try to install both variants of the package, only one will succeed
-        sudo apt-get install -y libportaudio2-dev || sudo apt-get install -y libportaudio-dev
+        # Check which PortAudio package is available and install it
+        if apt-cache show libportaudio2-dev >/dev/null 2>&1; then
+          sudo apt-get install -y libportaudio2-dev
+        elif apt-cache show libportaudio-dev >/dev/null 2>&1; then
+          sudo apt-get install -y libportaudio-dev
+        elif apt-cache show portaudio19-dev >/dev/null 2>&1; then
+          sudo apt-get install -y portaudio19-dev
+        else
+          echo "No PortAudio development package found, trying to install from universe repository"
+          sudo add-apt-repository universe || true
+          sudo apt-get update
+          sudo apt-get install -y portaudio19-dev
+        fi
         sudo apt-get install -y liblo-dev nlohmann-json3-dev cmake pkg-config build-essential
     
     - name: Build main application
@@ -89,8 +100,19 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        # Try to install both variants of the package, only one will succeed
-        sudo apt-get install -y libportaudio2-dev || sudo apt-get install -y libportaudio-dev
+        # Check which PortAudio package is available and install it
+        if apt-cache show libportaudio2-dev >/dev/null 2>&1; then
+          sudo apt-get install -y libportaudio2-dev
+        elif apt-cache show libportaudio-dev >/dev/null 2>&1; then
+          sudo apt-get install -y libportaudio-dev
+        elif apt-cache show portaudio19-dev >/dev/null 2>&1; then
+          sudo apt-get install -y portaudio19-dev
+        else
+          echo "No PortAudio development package found, trying to install from universe repository"
+          sudo add-apt-repository universe || true
+          sudo apt-get update
+          sudo apt-get install -y portaudio19-dev
+        fi
         sudo apt-get install -y liblo-dev nlohmann-json3-dev cmake pkg-config build-essential cppcheck
     
     - name: Run static analysis
