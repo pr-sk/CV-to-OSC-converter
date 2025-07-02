@@ -270,6 +270,78 @@ CommandLineInterface.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/CommandLineInterface.cpp.s
 .PHONY : CommandLineInterface.cpp.s
 
+Config.o: Config.cpp.o
+.PHONY : Config.o
+
+# target to build an object file
+Config.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/Config.cpp.o
+.PHONY : Config.cpp.o
+
+Config.i: Config.cpp.i
+.PHONY : Config.i
+
+# target to preprocess a source file
+Config.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/Config.cpp.i
+.PHONY : Config.cpp.i
+
+Config.s: Config.cpp.s
+.PHONY : Config.s
+
+# target to generate assembly for a file
+Config.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/Config.cpp.s
+.PHONY : Config.cpp.s
+
+ErrorHandler.o: ErrorHandler.cpp.o
+.PHONY : ErrorHandler.o
+
+# target to build an object file
+ErrorHandler.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/ErrorHandler.cpp.o
+.PHONY : ErrorHandler.cpp.o
+
+ErrorHandler.i: ErrorHandler.cpp.i
+.PHONY : ErrorHandler.i
+
+# target to preprocess a source file
+ErrorHandler.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/ErrorHandler.cpp.i
+.PHONY : ErrorHandler.cpp.i
+
+ErrorHandler.s: ErrorHandler.cpp.s
+.PHONY : ErrorHandler.s
+
+# target to generate assembly for a file
+ErrorHandler.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/ErrorHandler.cpp.s
+.PHONY : ErrorHandler.cpp.s
+
+OSCSecurity.o: OSCSecurity.cpp.o
+.PHONY : OSCSecurity.o
+
+# target to build an object file
+OSCSecurity.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/OSCSecurity.cpp.o
+.PHONY : OSCSecurity.cpp.o
+
+OSCSecurity.i: OSCSecurity.cpp.i
+.PHONY : OSCSecurity.i
+
+# target to preprocess a source file
+OSCSecurity.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/OSCSecurity.cpp.i
+.PHONY : OSCSecurity.cpp.i
+
+OSCSecurity.s: OSCSecurity.cpp.s
+.PHONY : OSCSecurity.s
+
+# target to generate assembly for a file
+OSCSecurity.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cv_to_osc_converter.dir/build.make CMakeFiles/cv_to_osc_converter.dir/OSCSecurity.cpp.s
+.PHONY : OSCSecurity.cpp.s
+
 OSCSender.o: OSCSender.cpp.o
 .PHONY : OSCSender.o
 
@@ -367,6 +439,15 @@ help:
 	@echo "... CommandLineInterface.o"
 	@echo "... CommandLineInterface.i"
 	@echo "... CommandLineInterface.s"
+	@echo "... Config.o"
+	@echo "... Config.i"
+	@echo "... Config.s"
+	@echo "... ErrorHandler.o"
+	@echo "... ErrorHandler.i"
+	@echo "... ErrorHandler.s"
+	@echo "... OSCSecurity.o"
+	@echo "... OSCSecurity.i"
+	@echo "... OSCSecurity.s"
 	@echo "... OSCSender.o"
 	@echo "... OSCSender.i"
 	@echo "... OSCSender.s"

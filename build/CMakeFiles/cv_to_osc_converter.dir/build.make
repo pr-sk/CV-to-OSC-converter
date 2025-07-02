@@ -170,6 +170,48 @@ CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/prubtsov/cv_to_osc_converter/PerformanceMonitor.cpp -o CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.s
 
+CMakeFiles/cv_to_osc_converter.dir/Config.cpp.o: CMakeFiles/cv_to_osc_converter.dir/flags.make
+CMakeFiles/cv_to_osc_converter.dir/Config.cpp.o: /Users/prubtsov/cv_to_osc_converter/Config.cpp
+CMakeFiles/cv_to_osc_converter.dir/Config.cpp.o: CMakeFiles/cv_to_osc_converter.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/cv_to_osc_converter.dir/Config.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cv_to_osc_converter.dir/Config.cpp.o -MF CMakeFiles/cv_to_osc_converter.dir/Config.cpp.o.d -o CMakeFiles/cv_to_osc_converter.dir/Config.cpp.o -c /Users/prubtsov/cv_to_osc_converter/Config.cpp
+
+CMakeFiles/cv_to_osc_converter.dir/Config.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/cv_to_osc_converter.dir/Config.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/prubtsov/cv_to_osc_converter/Config.cpp > CMakeFiles/cv_to_osc_converter.dir/Config.cpp.i
+
+CMakeFiles/cv_to_osc_converter.dir/Config.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/cv_to_osc_converter.dir/Config.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/prubtsov/cv_to_osc_converter/Config.cpp -o CMakeFiles/cv_to_osc_converter.dir/Config.cpp.s
+
+CMakeFiles/cv_to_osc_converter.dir/OSCSecurity.cpp.o: CMakeFiles/cv_to_osc_converter.dir/flags.make
+CMakeFiles/cv_to_osc_converter.dir/OSCSecurity.cpp.o: /Users/prubtsov/cv_to_osc_converter/OSCSecurity.cpp
+CMakeFiles/cv_to_osc_converter.dir/OSCSecurity.cpp.o: CMakeFiles/cv_to_osc_converter.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/cv_to_osc_converter.dir/OSCSecurity.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cv_to_osc_converter.dir/OSCSecurity.cpp.o -MF CMakeFiles/cv_to_osc_converter.dir/OSCSecurity.cpp.o.d -o CMakeFiles/cv_to_osc_converter.dir/OSCSecurity.cpp.o -c /Users/prubtsov/cv_to_osc_converter/OSCSecurity.cpp
+
+CMakeFiles/cv_to_osc_converter.dir/OSCSecurity.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/cv_to_osc_converter.dir/OSCSecurity.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/prubtsov/cv_to_osc_converter/OSCSecurity.cpp > CMakeFiles/cv_to_osc_converter.dir/OSCSecurity.cpp.i
+
+CMakeFiles/cv_to_osc_converter.dir/OSCSecurity.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/cv_to_osc_converter.dir/OSCSecurity.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/prubtsov/cv_to_osc_converter/OSCSecurity.cpp -o CMakeFiles/cv_to_osc_converter.dir/OSCSecurity.cpp.s
+
+CMakeFiles/cv_to_osc_converter.dir/ErrorHandler.cpp.o: CMakeFiles/cv_to_osc_converter.dir/flags.make
+CMakeFiles/cv_to_osc_converter.dir/ErrorHandler.cpp.o: /Users/prubtsov/cv_to_osc_converter/ErrorHandler.cpp
+CMakeFiles/cv_to_osc_converter.dir/ErrorHandler.cpp.o: CMakeFiles/cv_to_osc_converter.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/cv_to_osc_converter.dir/ErrorHandler.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cv_to_osc_converter.dir/ErrorHandler.cpp.o -MF CMakeFiles/cv_to_osc_converter.dir/ErrorHandler.cpp.o.d -o CMakeFiles/cv_to_osc_converter.dir/ErrorHandler.cpp.o -c /Users/prubtsov/cv_to_osc_converter/ErrorHandler.cpp
+
+CMakeFiles/cv_to_osc_converter.dir/ErrorHandler.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/cv_to_osc_converter.dir/ErrorHandler.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/prubtsov/cv_to_osc_converter/ErrorHandler.cpp > CMakeFiles/cv_to_osc_converter.dir/ErrorHandler.cpp.i
+
+CMakeFiles/cv_to_osc_converter.dir/ErrorHandler.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/cv_to_osc_converter.dir/ErrorHandler.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/prubtsov/cv_to_osc_converter/ErrorHandler.cpp -o CMakeFiles/cv_to_osc_converter.dir/ErrorHandler.cpp.s
+
 # Object files for target cv_to_osc_converter
 cv_to_osc_converter_OBJECTS = \
 "CMakeFiles/cv_to_osc_converter.dir/main.cpp.o" \
@@ -178,7 +220,10 @@ cv_to_osc_converter_OBJECTS = \
 "CMakeFiles/cv_to_osc_converter.dir/CommandLineInterface.cpp.o" \
 "CMakeFiles/cv_to_osc_converter.dir/AudioDeviceManager.cpp.o" \
 "CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.o" \
-"CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.o"
+"CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.o" \
+"CMakeFiles/cv_to_osc_converter.dir/Config.cpp.o" \
+"CMakeFiles/cv_to_osc_converter.dir/OSCSecurity.cpp.o" \
+"CMakeFiles/cv_to_osc_converter.dir/ErrorHandler.cpp.o"
 
 # External object files for target cv_to_osc_converter
 cv_to_osc_converter_EXTERNAL_OBJECTS =
@@ -190,9 +235,12 @@ cv_to_osc_converter: CMakeFiles/cv_to_osc_converter.dir/CommandLineInterface.cpp
 cv_to_osc_converter: CMakeFiles/cv_to_osc_converter.dir/AudioDeviceManager.cpp.o
 cv_to_osc_converter: CMakeFiles/cv_to_osc_converter.dir/CVCalibrator.cpp.o
 cv_to_osc_converter: CMakeFiles/cv_to_osc_converter.dir/PerformanceMonitor.cpp.o
+cv_to_osc_converter: CMakeFiles/cv_to_osc_converter.dir/Config.cpp.o
+cv_to_osc_converter: CMakeFiles/cv_to_osc_converter.dir/OSCSecurity.cpp.o
+cv_to_osc_converter: CMakeFiles/cv_to_osc_converter.dir/ErrorHandler.cpp.o
 cv_to_osc_converter: CMakeFiles/cv_to_osc_converter.dir/build.make
 cv_to_osc_converter: CMakeFiles/cv_to_osc_converter.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable cv_to_osc_converter"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/prubtsov/cv_to_osc_converter/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable cv_to_osc_converter"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/cv_to_osc_converter.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
