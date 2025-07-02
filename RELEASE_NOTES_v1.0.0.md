@@ -77,7 +77,7 @@ This is the first stable production release of CV to OSC Converter, a profession
 ### macOS (Homebrew)
 ```bash
 brew install portaudio liblo nlohmann-json cmake pkg-config
-git clone https://github.com/your-username/cv_to_osc_converter.git
+git clone https://github.com/pr-sk/cv_to_osc_converter.git
 cd cv_to_osc_converter
 mkdir build && cd build
 cmake ..
@@ -87,7 +87,7 @@ make
 ### Ubuntu/Debian
 ```bash
 sudo apt-get install libportaudio2-dev liblo-dev nlohmann-json3-dev cmake pkg-config build-essential
-git clone https://github.com/your-username/cv_to_osc_converter.git
+git clone https://github.com/pr-sk/cv_to_osc_converter.git
 cd cv_to_osc_converter
 mkdir build && cd build
 cmake ..
