@@ -93,7 +93,10 @@ pkg_check_modules(PORTAUDIO REQUIRED portaudio-2.0)
 # Find liblo (OSC library)
 pkg_check_modules(LIBLO REQUIRED liblo)
 
-# Remove duplicate libraries from LIBLO_LIBRARIES to fix linker warning
+# Remove duplicate libraries to fix linker warnings
+if(PORTAUDIO_LIBRARIES)
+    list(REMOVE_DUPLICATES PORTAUDIO_LIBRARIES)
+endif()
 if(LIBLO_LIBRARIES)
     list(REMOVE_DUPLICATES LIBLO_LIBRARIES)
 endif()
@@ -131,14 +134,11 @@ endif()
 
 # Link libraries
 if(APPLE)
+    # On macOS, let pkg-config handle framework dependencies to avoid duplicates
     target_link_libraries(cv_to_osc_converter PRIVATE
         ${PORTAUDIO_LIBRARIES}
         ${LIBLO_LIBRARIES}
         nlohmann_json::nlohmann_json
-        "-framework CoreAudio"
-        "-framework AudioToolbox"
-        "-framework AudioUnit"
-        "-framework CoreServices"
     )
 else()
     target_link_libraries(cv_to_osc_converter PRIVATE
