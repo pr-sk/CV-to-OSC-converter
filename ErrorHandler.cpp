@@ -107,31 +107,31 @@ void ErrorHandler::logWarning(const std::string& message, const std::string& det
 
 void ErrorHandler::logError(const std::string& message, const std::string& details,
                            const std::string& suggestedAction, bool recoverable) {
-    reportError(ErrorSeverity::ERROR, ErrorCategory::SYSTEM, message, details, 
-                "", "", 0, recoverable, suggestedAction);
+    reportError(ErrorSeverity::ERROR_LEVEL, ErrorCategory::SYSTEM, message, details, 
+               "", "", 0, recoverable, suggestedAction);
 }
 
 void ErrorHandler::logCritical(const std::string& message, const std::string& details,
-                              const std::string& suggestedAction) {
-    reportError(ErrorSeverity::CRITICAL, ErrorCategory::SYSTEM, message, details, 
-                "", "", 0, false, suggestedAction);
+                             const std::string& suggestedAction) {
+    reportError(ErrorSeverity::CRITICAL_LEVEL, ErrorCategory::SYSTEM, message, details, 
+               "", "", 0, false, suggestedAction);
 }
 
 void ErrorHandler::reportAudioError(const std::string& message, const std::string& details,
                                    bool recoverable, const std::string& suggestedAction) {
-    reportError(ErrorSeverity::ERROR, ErrorCategory::AUDIO, message, details, 
+    reportError(ErrorSeverity::ERROR_LEVEL, ErrorCategory::AUDIO, message, details, 
                 "", "", 0, recoverable, suggestedAction);
 }
 
 void ErrorHandler::reportNetworkError(const std::string& message, const std::string& details,
                                      bool recoverable, const std::string& suggestedAction) {
-    reportError(ErrorSeverity::ERROR, ErrorCategory::NETWORK, message, details, 
+    reportError(ErrorSeverity::ERROR_LEVEL, ErrorCategory::NETWORK, message, details, 
                 "", "", 0, recoverable, suggestedAction);
 }
 
 void ErrorHandler::reportConfigError(const std::string& message, const std::string& details,
                                     bool recoverable, const std::string& suggestedAction) {
-    reportError(ErrorSeverity::ERROR, ErrorCategory::CONFIG, message, details, 
+    reportError(ErrorSeverity::ERROR_LEVEL, ErrorCategory::CONFIG, message, details, 
                 "", "", 0, recoverable, suggestedAction);
 }
 
@@ -246,7 +246,7 @@ std::string ErrorHandler::generateErrorReport() const {
     
     // Summary by severity
     report << "Errors by Severity:\n";
-    for (int i = 0; i <= static_cast<int>(ErrorSeverity::CRITICAL); ++i) {
+    for (int i = 0; i <= static_cast<int>(ErrorSeverity::CRITICAL_LEVEL); ++i) {
         ErrorSeverity sev = static_cast<ErrorSeverity>(i);
         size_t count = getErrorCountBySeverity(sev);
         if (count > 0) {
@@ -272,7 +272,7 @@ std::string ErrorHandler::generateErrorReport() const {
     
     for (auto it = errorHistory.rbegin(); it != errorHistory.rend() && recentCount < 10; ++it) {
         if (it->timestamp > oneHourAgo && 
-            (it->severity == ErrorSeverity::ERROR || it->severity == ErrorSeverity::CRITICAL)) {
+            (it->severity == ErrorSeverity::ERROR_LEVEL || it->severity == ErrorSeverity::CRITICAL_LEVEL)) {
             report << "  [" << formatTimestamp(it->timestamp) << "] "
                    << severityToString(it->severity) << " (" << categoryToString(it->category) << "): "
                    << it->message << "\n";
@@ -291,8 +291,8 @@ std::string ErrorHandler::generateErrorReport() const {
 std::string ErrorHandler::generateHealthStatus() const {
     std::ostringstream status;
     auto recentErrors = getRecentErrors(std::chrono::minutes(10));
-    auto criticalErrors = getErrorCountBySeverity(ErrorSeverity::CRITICAL);
-    auto errors = getErrorCountBySeverity(ErrorSeverity::ERROR);
+    auto criticalErrors = getErrorCountBySeverity(ErrorSeverity::CRITICAL_LEVEL);
+    auto errors = getErrorCountBySeverity(ErrorSeverity::ERROR_LEVEL);
     auto warnings = getErrorCountBySeverity(ErrorSeverity::WARNING);
     
     status << "System Health: ";
@@ -420,8 +420,8 @@ std::string ErrorHandler::severityToString(ErrorSeverity severity) {
         case ErrorSeverity::DEBUG: return "DEBUG";
         case ErrorSeverity::INFO: return "INFO";
         case ErrorSeverity::WARNING: return "WARNING";
-        case ErrorSeverity::ERROR: return "ERROR";
-        case ErrorSeverity::CRITICAL: return "CRITICAL";
+        case ErrorSeverity::ERROR_LEVEL: return "ERROR";
+        case ErrorSeverity::CRITICAL_LEVEL: return "CRITICAL";
         default: return "UNKNOWN";
     }
 }
@@ -446,8 +446,8 @@ ErrorSeverity ErrorHandler::stringToSeverity(const std::string& str) {
     if (lower == "debug") return ErrorSeverity::DEBUG;
     if (lower == "info") return ErrorSeverity::INFO;
     if (lower == "warning" || lower == "warn") return ErrorSeverity::WARNING;
-    if (lower == "error") return ErrorSeverity::ERROR;
-    if (lower == "critical") return ErrorSeverity::CRITICAL;
+    if (lower == "error") return ErrorSeverity::ERROR_LEVEL;
+    if (lower == "critical") return ErrorSeverity::CRITICAL_LEVEL;
     
     return ErrorSeverity::INFO; // Default
 }
@@ -561,8 +561,8 @@ std::string ErrorHandler::getColorForSeverity(ErrorSeverity severity) const {
         case ErrorSeverity::DEBUG: return "\033[37m";    // White
         case ErrorSeverity::INFO: return "\033[36m";     // Cyan
         case ErrorSeverity::WARNING: return "\033[33m";  // Yellow
-        case ErrorSeverity::ERROR: return "\033[31m";    // Red
-        case ErrorSeverity::CRITICAL: return "\033[35m"; // Magenta
+        case ErrorSeverity::ERROR_LEVEL: return "\033[31m";    // Red
+        case ErrorSeverity::CRITICAL_LEVEL: return "\033[35m"; // Magenta
         default: return "\033[0m";                       // Reset
     }
 }

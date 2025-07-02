@@ -104,7 +104,7 @@ public:
         
         // Add error callback for monitoring
         ErrorHandler::getInstance().addErrorCallback([this](const ErrorInfo& error) {
-            if (error.severity >= ErrorSeverity::ERROR) {
+            if (error.severity >= ErrorSeverity::ERROR_LEVEL) {
                 // Handle critical errors that might require stopping the converter
                 if (error.category == ErrorCategory::AUDIO && !error.recoverable) {
                     running = false;

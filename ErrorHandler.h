@@ -13,8 +13,8 @@ enum class ErrorSeverity {
     DEBUG = 0,
     INFO = 1,
     WARNING = 2,
-    ERROR = 3,
-    CRITICAL = 4
+    ERROR_LEVEL = 3,
+    CRITICAL_LEVEL = 4
 };
 
 enum class ErrorCategory {
@@ -165,24 +165,24 @@ public:
                                           msg, details, __FUNCTION__, __FILE__, __LINE__, true, action)
 
 #define ERROR_ERROR(msg, details, action, recoverable) \
-    ErrorHandler::getInstance().reportError(ErrorSeverity::ERROR, ErrorCategory::SYSTEM, \
+    ErrorHandler::getInstance().reportError(ErrorSeverity::ERROR_LEVEL, ErrorCategory::SYSTEM, \
                                           msg, details, __FUNCTION__, __FILE__, __LINE__, recoverable, action)
 
 #define ERROR_CRITICAL(msg, details, action) \
-    ErrorHandler::getInstance().reportError(ErrorSeverity::CRITICAL, ErrorCategory::SYSTEM, \
+    ErrorHandler::getInstance().reportError(ErrorSeverity::CRITICAL_LEVEL, ErrorCategory::SYSTEM, \
                                           msg, details, __FUNCTION__, __FILE__, __LINE__, false, action)
 
 // Category-specific macros
 #define AUDIO_ERROR(msg, details, recoverable, action) \
-    ErrorHandler::getInstance().reportError(ErrorSeverity::ERROR, ErrorCategory::AUDIO, \
+    ErrorHandler::getInstance().reportError(ErrorSeverity::ERROR_LEVEL, ErrorCategory::AUDIO, \
                                           msg, details, __FUNCTION__, __FILE__, __LINE__, recoverable, action)
 
 #define NETWORK_ERROR(msg, details, recoverable, action) \
-    ErrorHandler::getInstance().reportError(ErrorSeverity::ERROR, ErrorCategory::NETWORK, \
+    ErrorHandler::getInstance().reportError(ErrorSeverity::ERROR_LEVEL, ErrorCategory::NETWORK, \
                                           msg, details, __FUNCTION__, __FILE__, __LINE__, recoverable, action)
 
 #define CONFIG_ERROR(msg, details, recoverable, action) \
-    ErrorHandler::getInstance().reportError(ErrorSeverity::ERROR, ErrorCategory::CONFIG, \
+    ErrorHandler::getInstance().reportError(ErrorSeverity::ERROR_LEVEL, ErrorCategory::CONFIG, \
                                           msg, details, __FUNCTION__, __FILE__, __LINE__, recoverable, action)
 
 #define PERFORMANCE_WARNING(msg, details, action) \
