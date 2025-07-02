@@ -106,6 +106,7 @@ add_executable(cv_to_osc_converter
     CVCalibrator.cpp
     PerformanceMonitor.cpp
     Config.cpp
+    OSCSecurity.cpp
 )
 
 # Include directories  
