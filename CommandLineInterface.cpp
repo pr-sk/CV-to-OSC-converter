@@ -491,9 +491,11 @@ bool CommandLineInterface::getUserConfirmation(const std::string& prompt) {
 
 void CommandLineInterface::clearScreen() {
 #ifdef _WIN32
-    system("cls");
+    int result = system("cls");
+    (void)result; // Suppress unused result warning
 #else
-    system("clear");
+    int result = system("clear");
+    (void)result; // Suppress unused result warning
 #endif
 }
 
