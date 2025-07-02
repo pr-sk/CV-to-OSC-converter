@@ -238,20 +238,25 @@ void test_json_parsing() {
     
     // Create test JSON file
     std::string jsonContent = R"({
-        "osc_host": "192.168.1.50",
-        "osc_port": "7000",
-        "audio_device": "Test Device",
-        "update_interval_ms": 50,
-        "cv_ranges": [
-            {
-                "min": -10.0,
-                "max": 10.0
-            },
-            {
-                "min": 0.0,
-                "max": 5.0
+        "active_profile": "default",
+        "profiles": {
+            "default": {
+                "osc_host": "192.168.1.50",
+                "osc_port": "7000",
+                "audio_device": "Test Device",
+                "update_interval_ms": 50,
+                "cv_ranges": [
+                    {
+                        "min": -10.0,
+                        "max": 10.0
+                    },
+                    {
+                        "min": 0.0,
+                        "max": 5.0
+                    }
+                ]
             }
-        ]
+        }
     })";
     
     std::ofstream file(testConfigPath);

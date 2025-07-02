@@ -6,7 +6,7 @@
 #define CV_TO_OSC_VERSION_MAJOR 1
 #define CV_TO_OSC_VERSION_MINOR 0
 #define CV_TO_OSC_VERSION_PATCH 0
-#define CV_TO_OSC_VERSION_BUILD "dev"
+#define CV_TO_OSC_VERSION_BUILD "release"
 
 // Git information - populated by build system
 #ifndef GIT_COMMIT_HASH

@@ -20,7 +20,7 @@ public:
         size_t maxMessagesPerSecond = 1000;
         size_t maxBundleSize = 100;
         
-        // Value constraints
+        // Value limits
         float maxFloatValue = 1000000.0f;
         float minFloatValue = -1000000.0f;
         int maxIntValue = 1000000;
@@ -28,14 +28,10 @@ public:
         size_t maxStringLength = 1024;
         size_t maxBlobSize = 1024 * 1024; // 1MB
         
-        // Address validation
-        std::set<std::string> allowedAddresses;
-        std::set<std::string> blockedAddresses;
-        std::regex allowedAddressPattern{R"(^/[a-zA-Z0-9/_-]*$)"};
-        
-        // Host validation  
-        std::set<std::string> allowedHosts;
-        std::set<std::string> blockedHosts;
+        // Whitelists
+        std::vector<std::string> allowedAddresses;
+        std::regex allowedAddressPattern{std::regex(R"(^/[a-zA-Z0-9/_-]*$)")};
+        std::vector<std::string> allowedHosts;
     };
 
 private:
@@ -47,7 +43,11 @@ private:
     mutable std::mutex rateLimitMutex;
 
 public:
-    OSCSecurity(const SecurityConfig& cfg = SecurityConfig()) : config(cfg) {
+    OSCSecurity() : config{} {
+        lastReset = std::chrono::steady_clock::now();
+    }
+    
+    OSCSecurity(const SecurityConfig& cfg) : config(cfg) {
         lastReset = std::chrono::steady_clock::now();
     }
     

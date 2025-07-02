@@ -1,101 +1,178 @@
 # CV to OSC Converter - User Guide
 
+This comprehensive guide will walk you through setting up and using the CV to OSC Converter for your audio production workflow. The application provides professional-grade CV to OSC conversion with advanced features for musicians, sound designers, and developers.
+
 ## Table of Contents
-1. [Installation](#installation)
-2. [First Run](#first-run)
-3. [Configuration](#configuration)
-4. [Advanced Features](#advanced-features)
-5. [Hardware Setup](#hardware-setup)
-6. [Troubleshooting](#troubleshooting)
-7. [Performance Tuning](#performance-tuning)
+
+1. [Quick Start](#quick-start)
+2. [Installation](#installation)
+3. [Basic Usage](#basic-usage)
+4. [Interactive Mode](#interactive-mode)
+5. [Configuration](#configuration)
+6. [Advanced Features](#advanced-features)
+7. [Hardware Setup](#hardware-setup)
+8. [Security & OSC Features](#security--osc-features)
+9. [Performance Monitoring](#performance-monitoring)
+10. [Troubleshooting](#troubleshooting)
+11. [Performance Tuning](#performance-tuning)
+
+## Quick Start
+
+To get up and running quickly:
+
+1. Install dependencies
+2. Build the application
+3. Run with default settings or use interactive mode
+4. Configure for your specific setup
+
+### macOS Quick Start
+
+```bash
+# Install dependencies
+brew install portaudio liblo nlohmann-json cmake pkg-config
+
+# Clone and build
+git clone https://github.com/your-username/cv_to_osc_converter.git
+cd cv_to_osc_converter
+mkdir build && cd build
+cmake ..
+make
+
+# Run interactively (recommended for first-time users)
+./cv_to_osc_converter --interactive
+
+# Or run with defaults
+./cv_to_osc_converter
+```
+
+### Ubuntu Quick Start
+
+```bash
+# Install dependencies
+sudo apt-get install libportaudio2-dev liblo-dev nlohmann-json3-dev cmake pkg-config build-essential
+
+# Clone and build
+git clone https://github.com/your-username/cv_to_osc_converter.git
+cd cv_to_osc_converter
+mkdir build && cd build
+cmake ..
+make
+
+# Run interactively
+./cv_to_osc_converter --interactive
+```
 
 ## Installation
 
-### macOS
+### Prerequisites
 
-#### Prerequisites
-- macOS 10.14 or later
-- Homebrew (install from [brew.sh](https://brew.sh))
+The CV to OSC Converter requires the following dependencies:
 
-#### Step-by-step Installation
+- **PortAudio**: For audio interface access
+- **liblo**: For OSC message handling
+- **nlohmann/json**: For configuration file parsing
+- **CMake**: For build system
+- **pkg-config**: For dependency management
 
-1. **Install Homebrew** (if not already installed):
-   ```bash
-   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-   ```
+### Platform-Specific Installation
 
-2. **Install dependencies**:
-   ```bash
-   brew install portaudio liblo nlohmann-json cmake pkg-config
-   ```
-
-3. **Clone the repository**:
-   ```bash
-   git clone https://github.com/your-username/cv_to_osc_converter.git
-   cd cv_to_osc_converter
-   ```
-
-4. **Build the application**:
-   ```bash
-   mkdir build && cd build
-   cmake ..
-   make
-   ```
-
-5. **Test the installation**:
-   ```bash
-   ./cv_to_osc_converter --help
-   ```
-
-### Linux (Ubuntu/Debian)
-
-1. **Install dependencies**:
-   ```bash
-   sudo apt-get update
-   sudo apt-get install libportaudio2-dev liblo-dev nlohmann-json3-dev cmake pkg-config build-essential
-   ```
-
-2. **Clone and build**:
-   ```bash
-   git clone https://github.com/your-username/cv_to_osc_converter.git
-   cd cv_to_osc_converter
-   mkdir build && cd build
-   cmake ..
-   make
-   ```
-
-### Linux (Arch Linux)
-
-1. **Install dependencies**:
-   ```bash
-   sudo pacman -S portaudio liblo nlohmann-json cmake pkg-config base-devel
-   ```
-
-2. **Clone and build**:
-   ```bash
-   git clone https://github.com/your-username/cv_to_osc_converter.git
-   cd cv_to_osc_converter
-   mkdir build && cd build
-   cmake ..
-   make
-   ```
-
-## First Run
-
-### Quick Start
-1. Connect your CV sources to your audio interface
-2. Run the converter:
-   ```bash
-   ./cv_to_osc_converter
-   ```
-3. The application will auto-detect your audio interface and create a default configuration
-
-### What Happens on First Run
+#### macOS (Homebrew)
+```bash
+brew install portaudio liblo nlohmann-json cmake pkg-config
 ```
-CV to OSC Converter v1.0
-=========================
-Config file 'config.json' not found, using defaults
-Configuration saved to config.json
+
+#### Ubuntu/Debian
+```bash
+sudo apt-get update
+sudo apt-get install libportaudio2-dev liblo-dev nlohmann-json3-dev cmake pkg-config build-essential
+```
+
+#### Arch Linux
+```bash
+sudo pacman -S portaudio liblo nlohmann-json cmake pkg-config
+```
+
+### Building from Source
+
+1. Clone the repository:
+```bash
+git clone https://github.com/your-username/cv_to_osc_converter.git
+cd cv_to_osc_converter
+```
+
+2. Create build directory:
+```bash
+mkdir build && cd build
+```
+
+3. Configure with CMake:
+```bash
+cmake ..
+```
+
+4. Build:
+```bash
+make
+```
+
+### Testing the Build
+
+Run the test suite to verify everything is working:
+```bash
+# From project root
+./run_tests.sh
+```
+
+You should see:
+```
+✅ All tests passed! The CV to OSC converter is working correctly.
+```
+
+## Basic Usage
+
+### Command Line Options
+
+The application provides extensive command-line options:
+
+```bash
+# Show help
+./cv_to_osc_converter --help
+
+# Show version information
+./cv_to_osc_converter --version
+
+# List available audio devices
+./cv_to_osc_converter --list-devices
+
+# Run in interactive mode
+./cv_to_osc_converter --interactive
+
+# Run as daemon (background)
+./cv_to_osc_converter --daemon --quiet
+
+# Use custom config file
+./cv_to_osc_converter --config my_config.json
+
+# Override settings temporarily
+./cv_to_osc_converter --osc-host 192.168.1.100 --osc-port 8000
+
+# Enable debug logging
+./cv_to_osc_converter --log-level debug --verbose
+```
+
+### First Run
+
+On first run, the application will:
+1. Create a default `config.json` file
+2. Auto-detect your audio interface
+3. Display current configuration
+4. Start conversion with default settings
+
+Example first run output:
+```
+CV to OSC Converter v1.0.0-dev
+==============================
+Config file not found, creating default configuration
 Using input device: Your Audio Interface
 Available channels: 8, using: 2
 CV Reader initialized successfully with 2 channels
@@ -113,35 +190,67 @@ Starting CV to OSC converter...
 Press Enter to stop...
 ```
 
-## Configuration
+## Interactive Mode
 
-### Basic Configuration
+Interactive mode provides a user-friendly menu system for configuration and monitoring:
 
-The application uses a `config.json` file for configuration:
-
-```json
-{
-    "active_profile": "default",
-    "profiles": {
-        "default": {
-            "osc_host": "127.0.0.1",
-            "osc_port": "9000",
-            "audio_device": "",
-            "update_interval_ms": 10,
-            "cv_ranges": [
-                {"min": 0.0, "max": 10.0},
-                {"min": 0.0, "max": 10.0},
-                {"min": -5.0, "max": 5.0},
-                {"min": -5.0, "max": 5.0}
-            ]
-        }
-    }
-}
+```bash
+./cv_to_osc_converter --interactive
 ```
+
+### Main Menu
+
+```
+===================================================
+   CV to OSC Converter - Interactive Mode
+===================================================
+
+Main Menu
+----------------------------------------
+1. Start CV to OSC Converter
+2. Configuration Settings
+3. Audio Device Selection
+4. Monitoring & Diagnostics
+5. Run Tests
+6. Exit
+```
+
+### Configuration Menu
+
+Access comprehensive configuration options:
+
+- **OSC Settings**: Change host, port, and message format
+- **Audio Device**: Select specific interface or use default
+- **Update Rate**: Adjust conversion frequency (1-1000 Hz)
+- **CV Ranges**: Configure voltage ranges per channel
+- **Save Configuration**: Persist settings to file
+
+### Audio Device Menu
+
+Comprehensive audio device management:
+
+1. **List All Devices**: Show every audio device on system
+2. **List Input Devices**: Show only devices with input capabilities
+3. **Device Details**: Get detailed specifications for any device
+4. **Test Device**: Verify device functionality and format support
+5. **Search Devices**: Find devices by name
+6. **Refresh List**: Update device list (detects hot-plugged devices)
+7. **Status Report**: System-wide audio device health check
+
+### Monitoring Menu
+
+Real-time monitoring and diagnostics:
+
+- **Live CV Monitor**: View current CV values in real-time
+- **OSC Connection Test**: Verify OSC message delivery
+- **Audio Device Status**: Check device health and performance
+- **Performance Metrics**: View system performance statistics
+
+## Configuration
 
 ### Configuration Profiles
 
-You can create multiple profiles for different setups:
+The application supports multiple configuration profiles for different setups:
 
 ```json
 {
@@ -227,39 +336,47 @@ Configuration reloaded successfully
 
 The application includes an auto-calibration system for precise voltage measurement:
 
+#### Manual Calibration Workflow
 1. **Start calibration** for a specific channel
 2. **Apply known voltages** to the input
 3. **Record calibration points**
 4. **Finish calibration** to apply the correction
 
-Example calibration workflow:
-```cpp
-// In interactive mode or via API
-cvReader->startChannelCalibration(0);
-cvReader->addCalibrationPoint(0, 0.0f);    // Apply 0V
-cvReader->addCalibrationPoint(0, 5.0f);    // Apply 5V
-cvReader->addCalibrationPoint(0, 10.0f);   // Apply 10V
-auto result = cvReader->finishChannelCalibration(0);
-```
+#### Calibration Presets
+- **Eurorack Configuration**: 0-10V with high precision
+- **Bipolar Configuration**: -5V to +5V range
+- **Audio Rate Configuration**: ±5V for audio signals
 
 ### Signal Filtering
 
-Configure signal filtering for each channel:
+Configure advanced signal filtering for each channel:
 
 - **Low-pass filter**: Remove high-frequency noise
-- **High-pass filter**: Remove DC offset
+- **High-pass filter**: Remove DC offset and low-frequency drift
 - **Median filter**: Remove spikes and impulse noise
 - **Moving average**: Smooth rapid changes
+- **Exponential filter**: Gentle smoothing with configurable response
 
-### Performance Monitoring
+#### Filter Factory Presets
+- **CV Filter**: Optimized for control voltage signals
+- **Audio Filter**: Optimized for audio-rate signals
+- **Smoothing Filter**: Gentle signal smoothing
+- **Noise Reduction**: Aggressive noise filtering
 
-The application includes real-time performance monitoring:
+### OSC Message Format
 
-- **CPU usage tracking**
-- **Memory usage monitoring**
-- **Network latency measurement**
-- **Audio buffer health**
-- **OSC message statistics**
+The converter sends OSC messages with the following format:
+
+- **Address**: `/cv/channel/N` (where N is the channel number, starting from 1)
+- **Type**: Float (32-bit)
+- **Value**: Normalized value between 0.0 and 1.0
+
+Example OSC Messages:
+```
+/cv/channel/1 0.5    # Channel 1 at 50% of its configured range
+/cv/channel/2 0.0    # Channel 2 at minimum value
+/cv/channel/3 1.0    # Channel 3 at maximum value
+```
 
 ## Hardware Setup
 
@@ -292,6 +409,89 @@ The application includes real-time performance monitoring:
 2. **Configure buffer size**: 64-256 samples for low latency
 3. **Enable DC coupling**: If available, for accurate CV measurement
 4. **Set input gains**: Adjust for proper voltage range coverage
+
+## Security & OSC Features
+
+### OSC Security Configuration
+
+The application includes comprehensive OSC security features:
+
+```cpp
+// Security configuration
+OSCSecurity::SecurityConfig secConfig;
+secConfig.enableValidation = true;
+secConfig.enableSanitization = true;
+secConfig.enableRateLimiting = true;
+secConfig.maxMessagesPerSecond = 1000;
+secConfig.maxFloatValue = 1000000.0f;
+secConfig.minFloatValue = -1000000.0f;
+```
+
+### Security Features
+
+- **Address Validation**: Ensures OSC addresses follow proper format
+- **Value Sanitization**: Clamps values to safe ranges
+- **Rate Limiting**: Prevents OSC message flooding
+- **Host Whitelisting**: Restrict OSC targets to approved hosts
+- **Message Validation**: Comprehensive message format checking
+
+### OSC Message Security
+
+- **Float Range Validation**: Prevents overflow/underflow
+- **String Length Limits**: Prevents buffer overflow attacks
+- **Blob Size Limits**: Controls memory usage
+- **Pattern Matching**: Validates address patterns
+
+## Performance Monitoring
+
+### Real-Time Metrics
+
+The application provides comprehensive performance monitoring:
+
+```
+Performance Report
+==================
+
+System Statistics:
+  Uptime: 127 minutes
+  Total Cycles: 762000
+  Total OSC Messages: 762000
+  Total Dropped Samples: 0
+  Total Buffer Underruns: 0
+
+Resource Usage:
+  Average CPU: 3.2%
+  Peak CPU: 8.1%
+  Average Memory: 12.3 MB
+  Peak Memory: 15.7 MB
+
+Performance Metrics:
+  Average Latency: 2.34 ms
+  Peak Latency: 8.92 ms
+  Average Efficiency: 99.8%
+  Minimum Efficiency: 97.2%
+```
+
+### Performance Alerts
+
+Automatic alerting for performance issues:
+
+- **CPU Usage**: Warnings at 70%, critical at 90%
+- **Memory Usage**: Warnings at 80MB, critical at 150MB
+- **Latency**: Warnings at 20ms, critical at 50ms
+- **Efficiency**: Warnings below 80%, critical below 60%
+
+### Monitoring Configuration
+
+Configure monitoring behavior:
+
+```cpp
+PerformanceMonitor::MonitorConfig config;
+config.updateInterval = std::chrono::milliseconds(1000);
+config.enableDetailedMetrics = true;
+config.enableAlerts = true;
+config.logToFile = true;
+```
 
 ## Troubleshooting
 
@@ -394,32 +594,41 @@ This provides detailed information about:
 3. **Use appropriate buffer sizes**
 4. **Consider OSC message bundling** (automatic)
 
-### Monitoring Performance
+### Docker Deployment
 
-The application provides real-time performance metrics:
+For containerized deployment:
 
-```
-Performance Report
-==================
+```bash
+# Build Docker image
+docker build -t cv-to-osc .
 
-System Statistics:
-  Uptime: 127 minutes
-  Total Cycles: 762000
-  Total OSC Messages: 762000
-  Total Dropped Samples: 0
-  Total Buffer Underruns: 0
+# Run with basic configuration
+docker run -d --name cv-to-osc \
+  --network host \
+  --device /dev/snd:/dev/snd \
+  cv-to-osc
 
-Resource Usage:
-  Average CPU: 3.2%
-  Peak CPU: 8.1%
-  Average Memory: 12.3 MB
-  Peak Memory: 15.7 MB
-
-Performance Metrics:
-  Average Latency: 2.34 ms
-  Peak Latency: 8.92 ms
-  Average Efficiency: 99.8%
-  Minimum Efficiency: 97.2%
+# Run with custom configuration
+docker run -d --name cv-to-osc \
+  --network host \
+  --device /dev/snd:/dev/snd \
+  -v $(pwd)/custom-config.json:/app/config.json:ro \
+  cv-to-osc
 ```
 
-This guide should help you get started with the CV to OSC Converter and optimize it for your specific use case.
+### Performance Profiles
+
+Use predefined performance profiles:
+
+```cpp
+// High performance (low latency)
+auto config = MonitorConfigFactory::createHighPerformanceConfig();
+
+// Production (stable, logged)
+auto config = MonitorConfigFactory::createProductionConfig();
+
+// Debug (detailed monitoring)
+auto config = MonitorConfigFactory::createDebugConfig();
+```
+
+This guide provides comprehensive coverage of all the CV to OSC Converter's features and capabilities. For additional support, check the project's issue tracker or documentation.

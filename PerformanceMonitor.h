@@ -68,7 +68,7 @@ struct PerformanceAlert {
 };
 
 class PerformanceMonitor {
-private:
+public:
     // Configuration
     struct MonitorConfig {
         bool enabled = true;
@@ -88,7 +88,10 @@ private:
         double latencyThresholdCritical = 50.0; // ms
         double efficiencyThresholdWarning = 0.8; // 80%
         double efficiencyThresholdCritical = 0.6; // 60%
-    } config;
+    };
+
+private:
+    MonitorConfig config;
     
     // Metrics storage
     std::deque<PerformanceMetrics> metricsHistory;
@@ -195,7 +198,7 @@ private:
     void monitoringLoop();
     
     // Metrics calculation
-    PerformanceMetrics calculateCurrentMetrics();
+    PerformanceMetrics calculateCurrentMetrics() const;
     void updateCounters();
     void checkThresholds(const PerformanceMetrics& metrics);
     
@@ -223,13 +226,12 @@ private:
 // RAII helper for automatic timing measurement
 class ScopedTimer {
 private:
-    PerformanceMonitor& monitor;
     std::chrono::steady_clock::time_point startTime;
     std::function<void(std::chrono::nanoseconds)> recordFunction;
 
 public:
-    ScopedTimer(PerformanceMonitor& mon, std::function<void(std::chrono::nanoseconds)> recorder)
-        : monitor(mon), startTime(std::chrono::steady_clock::now()), recordFunction(recorder) {}
+    ScopedTimer(PerformanceMonitor&, std::function<void(std::chrono::nanoseconds)> recorder)
+        : startTime(std::chrono::steady_clock::now()), recordFunction(recorder) {}
     
     ~ScopedTimer() {
         auto endTime = std::chrono::steady_clock::now();

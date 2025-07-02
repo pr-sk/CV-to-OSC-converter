@@ -97,17 +97,20 @@ void PerformanceMonitor::recordCycleStart() {
 void PerformanceMonitor::recordCycleEnd() {
     auto now = std::chrono::steady_clock::now();
     auto cycleDuration = now - lastCycleTime;
+    (void)cycleDuration; // Suppress unused variable warning
     
     cycleCounter++;
     lastCycleTime = now;
 }
 
 void PerformanceMonitor::recordProcessingTime(std::chrono::nanoseconds duration) {
+    (void)duration; // Suppress unused parameter warning
     // This will be used by the monitoring loop to calculate averages
     // For now, we'll store the latest value
 }
 
 void PerformanceMonitor::recordNetworkLatency(std::chrono::nanoseconds latency) {
+    (void)latency; // Suppress unused parameter warning
     // Similar to processing time
 }
 

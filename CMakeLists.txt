@@ -59,7 +59,7 @@ endif()
 set(CMAKE_BUILD_TYPE Release)
 if(APPLE)
     # Apple optimizations (works for both Intel and Apple Silicon)
-    set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG -ffast-math")
+    set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 else()
     # Other platforms
     set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG -march=native -mtune=native")
@@ -93,6 +93,11 @@ pkg_check_modules(PORTAUDIO REQUIRED portaudio-2.0)
 # Find liblo (OSC library)
 pkg_check_modules(LIBLO REQUIRED liblo)
 
+# Remove duplicate libraries from LIBLO_LIBRARIES to fix linker warning
+if(LIBLO_LIBRARIES)
+    list(REMOVE_DUPLICATES LIBLO_LIBRARIES)
+endif()
+
 # Find nlohmann/json
 find_package(nlohmann_json REQUIRED)
 
@@ -114,14 +119,28 @@ add_executable(cv_to_osc_converter
 target_include_directories(cv_to_osc_converter PRIVATE
     ${PORTAUDIO_INCLUDE_DIRS}
     ${LIBLO_INCLUDE_DIRS}
+    /usr/local/Cellar/nlohmann-json/3.12.0/include
+    /opt/homebrew/include
 )
 
 # Link libraries
-target_link_libraries(cv_to_osc_converter
-    ${PORTAUDIO_LIBRARIES}
-    ${LIBLO_LIBRARIES}
-    nlohmann_json::nlohmann_json
-)
+if(APPLE)
+    target_link_libraries(cv_to_osc_converter PRIVATE
+        ${PORTAUDIO_LIBRARIES}
+        ${LIBLO_LIBRARIES}
+        nlohmann_json::nlohmann_json
+        "-framework CoreAudio"
+        "-framework AudioToolbox"
+        "-framework AudioUnit"
+        "-framework CoreServices"
+    )
+else()
+    target_link_libraries(cv_to_osc_converter PRIVATE
+        ${PORTAUDIO_LIBRARIES}
+        ${LIBLO_LIBRARIES}
+        nlohmann_json::nlohmann_json
+    )
+endif()
 
 # Add version definitions
 target_compile_definitions(cv_to_osc_converter PRIVATE
@@ -142,15 +161,6 @@ target_link_directories(cv_to_osc_converter PRIVATE
     ${LIBLO_LIBRARY_DIRS}
 )
 
-# macOS specific settings
-if(APPLE)
-    target_link_libraries(cv_to_osc_converter
-        "-framework CoreAudio"
-        "-framework AudioToolbox"
-        "-framework AudioUnit"
-        "-framework CoreServices"
-    )
-endif()
 
 # Install target
 install(TARGETS cv_to_osc_converter

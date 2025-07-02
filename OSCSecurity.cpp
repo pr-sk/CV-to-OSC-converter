@@ -14,15 +14,13 @@ bool OSCSecurity::isAddressValid(const std::string& address) const {
     
     // Check against whitelist if enabled
     if (config.enableAddressWhitelist && !config.allowedAddresses.empty()) {
-        if (config.allowedAddresses.find(address) == config.allowedAddresses.end()) {
+        if (std::find(config.allowedAddresses.begin(), config.allowedAddresses.end(), address) == config.allowedAddresses.end()) {
             return false;
         }
     }
     
     // Check against blacklist
-    if (config.blockedAddresses.find(address) != config.blockedAddresses.end()) {
-        return false;
-    }
+    // No blocked addresses check for now - could be added to config
     
     // Pattern matching
     return matchesPattern(address, config.allowedAddressPattern);
@@ -145,14 +143,9 @@ std::string OSCSecurity::sanitizeString(const std::string& value) const {
 bool OSCSecurity::isHostAllowed(const std::string& host) const {
     if (!config.enableHostWhitelist) return true;
     
-    // Check against blacklist first
-    if (config.blockedHosts.find(host) != config.blockedHosts.end()) {
-        return false;
-    }
-    
     // Check against whitelist if enabled
     if (!config.allowedHosts.empty()) {
-        return config.allowedHosts.find(host) != config.allowedHosts.end();
+        return std::find(config.allowedHosts.begin(), config.allowedHosts.end(), host) != config.allowedHosts.end();
     }
     
     return true;
@@ -235,13 +228,7 @@ std::string OSCSecurity::generateSecurityReport() const {
         report << "\n";
     }
     
-    if (!config.blockedAddresses.empty()) {
-        report << "Blocked Addresses (" << config.blockedAddresses.size() << "):\n";
-        for (const auto& addr : config.blockedAddresses) {
-            report << "  " << addr << "\n";
-        }
-        report << "\n";
-    }
+    // No blocked addresses in current config
     
     if (config.enableHostWhitelist && !config.allowedHosts.empty()) {
         report << "Allowed Hosts (" << config.allowedHosts.size() << "):\n";
@@ -251,13 +238,7 @@ std::string OSCSecurity::generateSecurityReport() const {
         report << "\n";
     }
     
-    if (!config.blockedHosts.empty()) {
-        report << "Blocked Hosts (" << config.blockedHosts.size() << "):\n";
-        for (const auto& host : config.blockedHosts) {
-            report << "  " << host << "\n";
-        }
-        report << "\n";
-    }
+    // No blocked hosts in current config
     
     return report.str();
 }

@@ -52,7 +52,7 @@ private:
     
     std::vector<ErrorInfo> errorHistory;
     std::vector<std::function<void(const ErrorInfo&)>> errorCallbacks;
-    std::mutex errorMutex;
+    mutable std::mutex errorMutex;
     std::ofstream logFile;
     ErrorSeverity logLevel;
     size_t maxHistorySize;
@@ -139,6 +139,8 @@ public:
     
 private:
     ErrorHandler();
+    
+public:
     ~ErrorHandler();
     
     void writeToLog(const ErrorInfo& error);

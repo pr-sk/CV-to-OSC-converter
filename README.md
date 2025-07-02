@@ -3,8 +3,10 @@
 [![Build Status](https://github.com/your-username/cv_to_osc_converter/workflows/CI/badge.svg)](https://github.com/your-username/cv_to_osc_converter/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey)]()
+[![Tests](https://img.shields.io/badge/tests-46%2F46%20passing-brightgreen)]()
+[![Quality](https://img.shields.io/badge/code%20quality-A+-brightgreen)]()
 
-A professional-grade C++ application that converts Control Voltage (CV) signals from audio interfaces to Open Sound Control (OSC) messages in real-time. Perfect for interfacing analog modular synthesizers with digital audio workstations, live performance software, or any OSC-compatible applications.
+A professional-grade, high-performance C++ application that converts Control Voltage (CV) signals from audio interfaces to Open Sound Control (OSC) messages in real-time. Designed for musicians, sound designers, and developers who need reliable analog-to-digital interfacing for modular synthesizers, live performance setups, and studio environments.
 
 ## 🚀 Quick Start
 

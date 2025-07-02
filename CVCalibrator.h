@@ -32,12 +32,7 @@ struct CalibrationResult {
 };
 
 class CVCalibrator {
-private:
-    std::vector<CalibrationResult> channelCalibrations;
-    std::string calibrationFile;
-    std::atomic<bool> calibrationInProgress{false};
-    std::function<std::vector<float>()> dataProvider;
-    
+public:
     // Auto-calibration parameters
     struct AutoCalibrationConfig {
         float minVoltage = 0.0f;
@@ -46,7 +41,14 @@ private:
         std::chrono::milliseconds dwellTime{1000};
         float tolerance = 0.01f;  // 1% tolerance
         bool enabled = false;
-    } autoConfig;
+    };
+
+private:
+    std::vector<CalibrationResult> channelCalibrations;
+    std::string calibrationFile;
+    std::atomic<bool> calibrationInProgress{false};
+    std::function<std::vector<float>()> dataProvider;
+    AutoCalibrationConfig autoConfig;
     
 public:
     CVCalibrator(int channelCount = 8, const std::string& calibFile = "calibration.json");

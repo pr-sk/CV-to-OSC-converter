@@ -63,6 +63,8 @@ fi
 g++ -std=c++17 -O2 -Wall -Wextra \
     $NLOHMANN_INCLUDE \
     ../tests/simple_test.cpp \
+    ../Config.cpp \
+    ../ErrorHandler.cpp \
     -o simple_test
 
 if [ $? -eq 0 ]; then

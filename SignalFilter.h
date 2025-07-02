@@ -138,7 +138,8 @@ private:
 
 public:
     MovingAverageFilter(size_t window = 32) : windowSize(window), sum(0.0f) {
-        buffer.reserve(windowSize);
+        // deque doesn't have reserve(), resize instead
+        buffer.resize(0);
     }
     
     void setWindowSize(size_t window) {
@@ -177,7 +178,8 @@ private:
 
 public:
     MedianFilter(size_t window = 5) : windowSize(window) {
-        buffer.reserve(windowSize);
+        // deque doesn't have reserve(), resize instead
+        buffer.resize(0);
     }
     
     void setWindowSize(size_t window) {
