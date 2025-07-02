@@ -1,8 +1,14 @@
-# CV to OSC Converter
+![CV to OSC Converter](assets/hero-image.svg)
+
+<div align="center">
+
+![Logo](assets/logo.svg)
 
 [![Build Status](https://github.com/pr-sk/cv_to_osc_converter/workflows/CI/badge.svg)](https://github.com/pr-sk/cv_to_osc_converter/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey)]()
+
+</div>
 
 High-performance C++ application that converts CV signals to OSC messages in real-time, ideal for integrating modular synthesizers with digital audio workstations and live performance setups.
 

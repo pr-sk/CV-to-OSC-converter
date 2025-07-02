@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="cvGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff6b35;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f7931e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="oscGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3498db;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2980b9;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#bgGradient)"/>
+  
+  <!-- Title -->
+  <text x="400" y="50" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="white" text-anchor="middle">CV to OSC Converter</text>
+  <text x="400" y="75" font-family="Arial, sans-serif" font-size="16" fill="#ecf0f1" text-anchor="middle">Real-time Control Voltage to Open Sound Control Protocol Bridge</text>
+  
+  <!-- Modular Synth Section (Left) -->
+  <rect x="50" y="120" width="200" height="200" fill="#2c3e50" rx="10" stroke="#34495e" stroke-width="2"/>
+  <text x="150" y="145" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">MODULAR SYNTH</text>
+  
+  <!-- CV Outputs -->
+  <circle cx="80" cy="180" r="8" fill="#ff6b35" filter="url(#glow)"/>
+  <circle cx="80" cy="210" r="8" fill="#ff6b35" filter="url(#glow)"/>
+  <circle cx="80" cy="240" r="8" fill="#ff6b35" filter="url(#glow)"/>
+  <circle cx="80" cy="270" r="8" fill="#ff6b35" filter="url(#glow)"/>
+  
+  <text x="100" y="185" font-family="Arial, sans-serif" font-size="10" fill="#bdc3c7">CV OUT 1</text>
+  <text x="100" y="215" font-family="Arial, sans-serif" font-size="10" fill="#bdc3c7">CV OUT 2</text>
+  <text x="100" y="245" font-family="Arial, sans-serif" font-size="10" fill="#bdc3c7">CV OUT 3</text>
+  <text x="100" y="275" font-family="Arial, sans-serif" font-size="10" fill="#bdc3c7">CV OUT 4</text>
+  
+  <!-- CV Waves -->
+  <path d="M80 180 Q90 170, 100 180 T120 180 T140 180 T160 180 T180 180 T200 180 T220 180 T240 180 T260 180" 
+        stroke="url(#cvGradient)" stroke-width="2" fill="none" opacity="0.8"/>
+  <path d="M80 210 Q90 200, 100 210 T120 210 T140 210 T160 210 T180 210 T200 210 T220 210 T240 210 T260 210" 
+        stroke="url(#cvGradient)" stroke-width="2" fill="none" opacity="0.6"/>
+  <path d="M80 240 Q90 230, 100 240 T120 240 T140 240 T160 240 T180 240 T200 240 T220 240 T240 240 T260 240" 
+        stroke="url(#cvGradient)" stroke-width="2" fill="none" opacity="0.9"/>
+  <path d="M80 270 Q90 260, 100 270 T120 270 T140 270 T160 270 T180 270 T200 270 T220 270 T240 270 T260 270" 
+        stroke="url(#cvGradient)" stroke-width="2" fill="none" opacity="0.7"/>
+  
+  <!-- Converter Box (Center) -->
+  <rect x="320" y="160" width="160" height="120" fill="#34495e" rx="8" stroke="#5d6d7e" stroke-width="2"/>
+  <text x="400" y="185" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">CV→OSC</text>
+  <text x="400" y="205" font-family="Arial, sans-serif" font-size="12" fill="#bdc3c7" text-anchor="middle">CONVERTER</text>
+  
+  <!-- Processing indicators -->
+  <circle cx="360" cy="230" r="4" fill="#27ae60">
+    <animate attributeName="opacity" values="0.3;1;0.3" dur="1s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="380" cy="230" r="4" fill="#f39c12">
+    <animate attributeName="opacity" values="0.3;1;0.3" dur="1.2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="400" cy="230" r="4" fill="#e74c3c">
+    <animate attributeName="opacity" values="0.3;1;0.3" dur="0.8s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="420" cy="230" r="4" fill="#9b59b6">
+    <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="440" cy="230" r="4" fill="#3498db">
+    <animate attributeName="opacity" values="0.3;1;0.3" dur="1.1s" repeatCount="indefinite"/>
+  </circle>
+  
+  <text x="400" y="255" font-family="Arial, sans-serif" font-size="10" fill="#95a5a6" text-anchor="middle">Real-time Processing</text>
+  
+  <!-- DAW Section (Right) -->
+  <rect x="550" y="120" width="200" height="200" fill="#2c3e50" rx="10" stroke="#34495e" stroke-width="2"/>
+  <text x="650" y="145" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">DIGITAL AUDIO</text>
+  <text x="650" y="160" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">WORKSTATION</text>
+  
+  <!-- OSC Data visualization -->
+  <rect x="580" y="180" width="10" height="15" fill="#3498db" opacity="0.8">
+    <animate attributeName="height" values="15;25;15" dur="0.5s" repeatCount="indefinite"/>
+  </rect>
+  <rect x="595" y="180" width="10" height="20" fill="#3498db" opacity="0.6">
+    <animate attributeName="height" values="20;30;20" dur="0.7s" repeatCount="indefinite"/>
+  </rect>
+  <rect x="610" y="180" width="10" height="18" fill="#3498db" opacity="0.9">
+    <animate attributeName="height" values="18;28;18" dur="0.4s" repeatCount="indefinite"/>
+  </rect>
+  <rect x="625" y="180" width="10" height="22" fill="#3498db" opacity="0.7">
+    <animate attributeName="height" values="22;32;22" dur="0.6s" repeatCount="indefinite"/>
+  </rect>
+  <rect x="640" y="180" width="10" height="16" fill="#3498db" opacity="0.8">
+    <animate attributeName="height" values="16;26;16" dur="0.8s" repeatCount="indefinite"/>
+  </rect>
+  <rect x="655" y="180" width="10" height="19" fill="#3498db" opacity="0.5">
+    <animate attributeName="height" values="19;29;19" dur="0.9s" repeatCount="indefinite"/>
+  </rect>
+  <rect x="670" y="180" width="10" height="21" fill="#3498db" opacity="0.7">
+    <animate attributeName="height" values="21;31;21" dur="0.3s" repeatCount="indefinite"/>
+  </rect>
+  <rect x="685" y="180" width="10" height="17" fill="#3498db" opacity="0.6">
+    <animate attributeName="height" values="17;27;17" dur="1.0s" repeatCount="indefinite"/>
+  </rect>
+  
+  <text x="580" y="230" font-family="Arial, sans-serif" font-size="10" fill="#bdc3c7">/osc/ch1</text>
+  <text x="580" y="245" font-family="Arial, sans-serif" font-size="10" fill="#bdc3c7">/osc/ch2</text>
+  <text x="580" y="260" font-family="Arial, sans-serif" font-size="10" fill="#bdc3c7">/osc/ch3</text>
+  <text x="580" y="275" font-family="Arial, sans-serif" font-size="10" fill="#bdc3c7">/osc/ch4</text>
+  
+  <!-- Connection arrows -->
+  <path d="M260 220 L310 220" stroke="#ecf0f1" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M490 220 L540 220" stroke="#ecf0f1" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#ecf0f1"/>
+    </marker>
+  </defs>
+  
+  <!-- Features list -->
+  <rect x="50" y="340" width="700" height="50" fill="rgba(255,255,255,0.1)" rx="5"/>
+  <text x="400" y="358" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">✨ Real-time • Multi-channel • Cross-platform • Low Latency • Hot Config Reload ✨</text>
+  <text x="400" y="375" font-family="Arial, sans-serif" font-size="12" fill="#bdc3c7" text-anchor="middle">macOS • Linux • Windows | PortAudio • liblo • JSON Config</text>
+</svg>
