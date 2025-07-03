@@ -31,7 +31,7 @@ enum class DeviceStatus {
     DISCONNECTED,
     CONNECTING,
     CONNECTED,
-    ERROR
+    ERROR_STATUS  // Renamed to avoid Windows ERROR macro conflict
 };
 
 /**

@@ -203,8 +203,8 @@ bool DeviceManager::connectDevice(const std::string& deviceId) {
         std::cout << "Device connected: " << device.name << " (" << deviceId << ")" << std::endl;
         return true;
     } else {
-        device.status = DeviceStatus::ERROR;
-        updateDeviceStatus(deviceId, DeviceStatus::ERROR);
+        device.status = DeviceStatus::ERROR_STATUS;
+        updateDeviceStatus(deviceId, DeviceStatus::ERROR_STATUS);
         lastError_ = handler->getLastError();
         return false;
     }
@@ -318,7 +318,7 @@ void DeviceManager::discoveryLoop() {
             if (autoReconnectEnabled_) {
                 std::lock_guard<std::mutex> lock(devicesMutex_);
                 for (auto& [deviceId, device] : devices_) {
-                    if (device.status == DeviceStatus::ERROR || device.status == DeviceStatus::DISCONNECTED) {
+                    if (device.status == DeviceStatus::ERROR_STATUS || device.status == DeviceStatus::DISCONNECTED) {
                         auto* handler = getHandlerForType(device.type);
                         if (handler && handler->isDeviceAvailable(deviceId)) {
                             // Try to reconnect

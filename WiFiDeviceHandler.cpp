@@ -86,7 +86,7 @@ bool WiFiDeviceHandler::isDeviceAvailable(const std::string& deviceId) {
     std::lock_guard<std::mutex> lock(wifiMutex_);
     
     auto it = wifiDevices_.find(deviceId);
-    return it != wifiDevices_.end() && it->second.status != DeviceStatus::ERROR;
+    return it != wifiDevices_.end() && it->second.status != DeviceStatus::ERROR_STATUS;
 }
 
 bool WiFiDeviceHandler::connect(const DeviceInfo& device) {
