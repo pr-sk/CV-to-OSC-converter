@@ -74,6 +74,9 @@ bool CVWriter::writeChannel(int channelId, float voltage) {
     #ifdef DEBUG
     std::cout << "CVWriter: Channel " << channelId << " = " << clampedVoltage 
               << "V (sample: " << sample << ")" << std::endl;
+    #else
+    // Suppress unused variable warning in release builds
+    (void)sample;
     #endif
     
     return true;

@@ -16,6 +16,16 @@ bool WiFiDeviceHandler::initialize() {
         return true;
     }
     
+#ifdef _WIN32
+    // Initialize Winsock on Windows
+    WSADATA wsaData;
+    int result = WSAStartup(MAKEWORD(2, 2), &wsaData);
+    if (result != 0) {
+        lastError_ = "WSAStartup failed: " + std::to_string(result);
+        return false;
+    }
+#endif
+    
     // Initialize network components
     // This is a simplified implementation
     running_ = true;
@@ -49,6 +59,11 @@ void WiFiDeviceHandler::shutdown() {
     // Disconnect all devices
     std::lock_guard<std::mutex> lock(wifiMutex_);
     wifiDevices_.clear();
+    
+#ifdef _WIN32
+    // Cleanup Winsock on Windows
+    WSACleanup();
+#endif
     
     initialized_ = false;
     std::cout << "WiFi Device Handler shutdown complete" << std::endl;

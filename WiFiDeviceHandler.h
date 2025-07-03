@@ -1,11 +1,24 @@
 #pragma once
 
 #include "DeviceManager.h"
-#include <netinet/in.h>
-#include <sys/socket.h>
 #include <map>
 #include <thread>
 #include <atomic>
+#include <chrono>
+
+// Cross-platform networking headers
+#ifdef _WIN32
+    #include <winsock2.h>
+    #include <ws2tcpip.h>
+    #pragma comment(lib, "ws2_32.lib")
+    typedef int socklen_t;
+#else
+    #include <netinet/in.h>
+    #include <sys/socket.h>
+    #include <arpa/inet.h>
+    #include <unistd.h>
+    #include <netdb.h>
+#endif
 
 /**
  * @brief WiFi Device Handler for network-based devices

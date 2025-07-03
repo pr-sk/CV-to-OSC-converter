@@ -96,9 +96,11 @@ void DeviceManager::shutdown() {
     }
     
     // Shutdown handlers
+#ifdef __APPLE__
     if (midiHandler_) {
         midiHandler_->shutdown();
     }
+#endif
     if (wifiHandler_) {
         wifiHandler_->shutdown();
     }
