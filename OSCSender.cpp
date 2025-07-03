@@ -100,21 +100,20 @@ void OSCSender::errorHandler(int num, const char* msg, const char* path) {
 }
 
 bool OSCSender::sendFloatBatch(const std::vector<std::string>& addresses, const std::vector<float>& values) {
-    if (!target || addresses.size() != values.size()) return false;
-    
-    // Create a bundle for better performance and timing
-    lo_bundle bundle = lo_bundle_new(LO_TT_IMMEDIATE);
-    
-    for (size_t i = 0; i < addresses.size(); ++i) {
-        lo_message message = lo_message_new();
-        lo_message_add_float(message, values[i]);
-        lo_bundle_add_message(bundle, addresses[i].c_str(), message);
+    if (!target || addresses.size() != values.size()) {
+        return false;
     }
     
-    int result = lo_send_bundle(target, bundle);
-    lo_bundle_free_recursive(bundle);
+    // Temporary fix: use individual messages instead of bundle
+    bool allSuccess = true;
+    for (size_t i = 0; i < addresses.size(); ++i) {
+        int result = lo_send(target, addresses[i].c_str(), "f", values[i]);
+        if (result < 0) {
+            allSuccess = false;
+        }
+    }
     
-    return result >= 0;
+    return allSuccess;
 }
 
 bool OSCSender::sendBlob(const std::string& address, const void* data, size_t size) {
