@@ -1,4 +1,4 @@
-#include "OSCSender.h"
+#include "OSCReceiver.h"
 #include "ErrorHandler.h"
 #include <iostream>
 
@@ -119,7 +119,9 @@ int OSCReceiver::floatHandler(const char* path, const char* types, lo_arg** argv
         receiver->messageCallback(path, values);
     }
     
-    receiver->formatManager->recordMessageReceived(path);
+    if (receiver->formatManager) {
+        receiver->formatManager->recordMessageReceived(path);
+    }
     return 0;
 }
 
@@ -180,7 +182,7 @@ int OSCReceiver::genericHandler(const char* path, const char* types, lo_arg** ar
         }
     }
     
-    // Forward to learning system if enabled
+    // Forward to learning system if enabled  
     if (receiver->formatManager && receiver->formatManager->isLearningMode() && !floatValues.empty()) {
         receiver->formatManager->learnOSCMessage(path, floatValues);
     }

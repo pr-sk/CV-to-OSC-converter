@@ -29,6 +29,7 @@ bool Config::loadFromFile(const std::string& filename) {
                 profile.oscPort = profileJson.value("osc_port", "9000");
                 profile.audioDevice = profileJson.value("audio_device", "");
                 profile.updateIntervalMs = profileJson.value("update_interval_ms", 10);
+                profile.language = static_cast<Language>(profileJson.value("language", static_cast<int>(Language::English)));
                 
                 if (profileJson.contains("cv_ranges") && profileJson["cv_ranges"].is_array()) {
                     profile.cvRanges.clear();
@@ -65,6 +66,7 @@ bool Config::saveToFile(const std::string& filename) {
             profileJson["osc_port"] = profile.oscPort;
             profileJson["audio_device"] = profile.audioDevice;
             profileJson["update_interval_ms"] = profile.updateIntervalMs;
+            profileJson["language"] = static_cast<int>(profile.language);
             
             profileJson["cv_ranges"] = nlohmann::json::array();
             for (const auto& range : profile.cvRanges) {
@@ -148,6 +150,10 @@ void Config::setAudioDevice(const std::string& device) {
 
 void Config::setUpdateIntervalMs(int interval) {
     getActiveProfile().updateIntervalMs = interval;
+}
+
+void Config::setLanguage(Language lang) {
+    getActiveProfile().language = lang;
 }
 
 void Config::setCVRange(int channel, float min, float max) {

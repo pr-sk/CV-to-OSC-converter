@@ -124,7 +124,8 @@ bool CVReader::initialize() {
     }
 
     const PaDeviceInfo* deviceInfo = Pa_GetDeviceInfo(deviceIndex);
-    std::cout << "Using input device: " << deviceInfo->name << std::endl;
+    currentDeviceName = deviceInfo->name ? deviceInfo->name : "Unknown Device";
+    std::cout << "Using input device: " << currentDeviceName << std::endl;
     
     // Auto-detect maximum available channels, but start with a reasonable default
     maxChannels = std::min(static_cast<int>(deviceInfo->maxInputChannels), 8);

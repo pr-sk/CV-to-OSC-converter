@@ -1,7 +1,8 @@
 #include "CommandLineInterface.h"
 #include "Config.h"
-#include "CVReader.h"
 #include "AudioDeviceManager.h"
+#include "MacOSPermissions.h"
+#include "Version.h"
 #include "Version.h"
 #include <algorithm>
 #include <iomanip>
@@ -105,6 +106,12 @@ bool CommandLineInterface::parseArguments() {
                 return false;
             }
         }
+        else if (arg == "--request-permissions") {
+            options.requestPermissions = true;
+        }
+        else if (arg == "--check-permissions") {
+            options.checkPermissions = true;
+        }
         else {
             std::cerr << "Error: Unknown option: " << arg << std::endl;
             return false;
@@ -130,6 +137,8 @@ void CommandLineInterface::printHelp() const {
     std::cout << "  -c, --config FILE       Use specific config file (default: config.json)" << std::endl;
     std::cout << "  --verbose               Enable verbose output" << std::endl;
     std::cout << "  -q, --quiet             Suppress non-essential output" << std::endl;
+    std::cout << "  --request-permissions   Request macOS permissions (microphone, etc.)" << std::endl;
+    std::cout << "  --check-permissions     Check current permission status" << std::endl;
     std::cout << std::endl;
     
     std::cout << Colors::BOLD << "Configuration Overrides:" << Colors::RESET << std::endl;

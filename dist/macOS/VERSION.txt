@@ -1,0 +1,3 @@
+Version: 1.0.0 (f49a810)
+Build Date: Thu Jul  3 00:29:28 MSK 2025
+Platform: macOS

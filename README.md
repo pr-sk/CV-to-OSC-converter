@@ -1,51 +1,51 @@
-![CV to OSC Converter](assets/hero-image.svg)
+# CV to OSC Converter v1.3.0
 
-<div align="center">
+🎛️ **Professional CV ↔ OSC converter** with real-time bidirectional signal processing, external device integration, and advanced GUI.
 
-![Logo](assets/logo.svg)
-
-[![Build Status](https://github.com/pr-sk/cv_to_osc_converter/workflows/CI/badge.svg)](https://github.com/pr-sk/cv_to_osc_converter/actions)
+[![Download DMG](https://img.shields.io/badge/Download-macOS%20DMG-blue?style=for-the-badge)](https://github.com/prubtsov/cv_to_osc_converter/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey)]()
 
-</div>
+## ✨ Features
 
-High-performance C++ application that converts CV signals to OSC messages in real-time, ideal for integrating modular synthesizers with digital audio workstations and live performance setups.
+### Core Conversion
+- **Real-time CV to OSC conversion** with sub-10ms latency
+- **Bidirectional OSC ↔ CV** for complete signal integration
+- **Multi-channel support** with individual voltage range configuration
+- **Professional GUI** with real-time visualization and waveform plotting
+- **Cross-platform** support (macOS, Linux, Windows)
+
+### Advanced GUI
+- **Real-time signal visualization** with professional plotting
+- **Individual channel windows** with zoom controls (0.1x-10x)
+- **Live parameter adjustment** without interruption
+- **Performance monitoring** with system metrics
+- **Device management** with automatic discovery
+
+### External Integration
+- **MIDI device support** with CC mapping
+- **WiFi/Bluetooth connectivity** for wireless control
+- **JSON configuration** with hot-reload capability
+- **Professional packaging** with native app bundle
 
 ## 🚀 Quick Start
 
-### macOS
+### macOS (Recommended)
 ```bash
-# Install dependencies
+# Install using Homebrew
 brew install portaudio liblo nlohmann-json cmake pkg-config
 
 # Clone and build
-git clone https://github.com/pr-sk/cv_to_osc_converter.git
+git clone https://github.com/prubtsov/cv_to_osc_converter.git
 cd cv_to_osc_converter
 mkdir build && cd build
-cmake ..
-make
+
+# Build GUI version
+cmake .. -DBUILD_GUI=ON
+make -j$(sysctl -n hw.ncpu)
 
 # Run
-./cv_to_osc_converter
-```
-
-### Windows (MSYS2)
-```bash
-# Install MSYS2 from https://www.msys2.org/
-# Open MSYS2 MinGW 64-bit shell and install dependencies
-pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-pkg-config
-pacman -S mingw-w64-x86_64-portaudio mingw-w64-x86_64-liblo mingw-w64-x86_64-nlohmann-json
-
-# Clone and build
-git clone https://github.com/pr-sk/cv_to_osc_converter.git
-cd cv_to_osc_converter
-mkdir build && cd build
-cmake -G "MSYS Makefiles" ..
-make
-
-# Run
-./cv_to_osc_converter.exe
+./cv_to_osc_converter_gui
 ```
 
 ### Linux (Ubuntu/Debian)
@@ -53,25 +53,37 @@ make
 # Install dependencies
 sudo apt-get update
 sudo apt-get install cmake pkg-config build-essential
-# Try installing PortAudio (one of these should work)
-sudo apt-get install portaudio19-dev || sudo apt-get install libportaudio2-dev
-sudo apt-get install liblo-dev
-sudo apt-get install nlohmann-json3-dev || sudo apt-get install nlohmann-json-dev
+sudo apt-get install portaudio19-dev liblo-dev nlohmann-json3-dev
 
 # Clone and build
-git clone https://github.com/pr-sk/cv_to_osc_converter.git
+git clone https://github.com/prubtsov/cv_to_osc_converter.git
 cd cv_to_osc_converter
 mkdir build && cd build
-cmake ..
+cmake .. -DBUILD_GUI=ON
 make
 
 # Run
-./cv_to_osc_converter
+./cv_to_osc_converter_gui
+```
+
+### Windows (MSYS2)
+```bash
+# Install MSYS2, then in MinGW 64-bit shell:
+pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake
+pacman -S mingw-w64-x86_64-portaudio mingw-w64-x86_64-liblo mingw-w64-x86_64-nlohmann-json
+
+# Build
+git clone https://github.com/prubtsov/cv_to_osc_converter.git
+cd cv_to_osc_converter
+mkdir build && cd build
+cmake -G "MSYS Makefiles" .. -DBUILD_GUI=ON
+make
 ```
 
 
 ## ✨ Features
 
+### Core Features
 - **Real-time CV to OSC conversion** with low latency
 - **Multi-channel support** with configurable voltage ranges
 - **Interactive mode** for easy setup and monitoring
@@ -79,6 +91,24 @@ make
 - **Cross-platform support** (macOS, Linux, Windows)
 - **Automatic audio device detection**
 - **JSON configuration** with human-readable format
+
+### 🎨 Enhanced GUI Features
+- **Cross-platform GUI** with Dear ImGui/OpenGL
+- **Real-time visualization** with professional signal plotting
+- **Individual channel windows** with detailed analysis
+- **Advanced zoom controls** (0.1x to 10x magnification)
+- **Time range adjustment** (1-60 seconds of signal history)
+- **Auto-scale and manual Y-axis control** (-20V to +20V)
+- **Multi-window interface** with flexible layouts
+- **Performance monitoring** with real-time metrics
+- **Visual feedback** for all operations
+
+### 🔄 Bidirectional OSC Communication
+- **OSC to CV conversion** - Convert incoming OSC messages to CV signals
+- **Real-time signal injection** via OSC messages
+- **Configurable listening port** for incoming OSC
+- **Professional signal visualization** for both directions
+- **Format: `/cv/channel/N <float_value>`** (0.0-1.0 normalized range)
 
 ## Dependencies
 
@@ -143,7 +173,9 @@ sudo pacman -S portaudio liblo nlohmann-json cmake pkg-config
 
 ## Building
 
-### macOS and Linux
+### CLI Version (Standard)
+
+#### macOS and Linux
 
 1. Clone or download the source code
 2. Create a build directory and navigate to it:
@@ -159,6 +191,52 @@ cmake ..
 4. Build the application:
 ```bash
 make
+```
+
+### 🎨 GUI Version
+
+#### Quick GUI Setup (macOS)
+```bash
+# Install GUI dependencies
+./install_gui_deps.sh
+
+# Set up environment
+source ./setup_gui_env.sh
+
+# Build with GUI support
+mkdir build && cd build
+cmake .. -DBUILD_GUI=ON
+make -j$(sysctl -n hw.ncpu)
+
+# Run GUI version
+./cv_to_osc_converter_gui
+```
+
+#### Manual GUI Setup
+
+**Dependencies:**
+- All core dependencies (portaudio, liblo, nlohmann-json)
+- GLFW3 (window management)
+- OpenGL (graphics)
+- Dear ImGui (GUI framework)
+- ImPlot (plotting)
+- gl3w (OpenGL loader)
+
+**macOS:**
+```bash
+brew install glfw imgui implot gl3w
+mkdir build && cd build
+cmake .. -DBUILD_GUI=ON
+make
+```
+
+**Linux:**
+```bash
+sudo apt-get install libglfw3-dev libgl1-mesa-dev
+# ImGui and ImPlot need to be built from source
+git clone https://github.com/ocornut/imgui.git
+git clone https://github.com/epezent/implot.git
+# Follow their build instructions
 ```
 
 ### Windows
@@ -286,6 +364,8 @@ The application uses a `config.json` file for configuration. If the file doesn't
 
 ## Usage
 
+### CLI Version
+
 1. **Connect your CV sources** to your audio interface inputs
 2. **Run the converter** (it will auto-create config.json on first run):
 ```bash
@@ -299,6 +379,31 @@ The application uses a `config.json` file for configuration. If the file doesn't
    - Display current configuration
    - Start real-time CV to OSC conversion
 6. **Press Enter** to stop the converter
+
+### 🎨 GUI Version
+
+1. **Connect your CV sources** to your audio interface inputs
+2. **Launch the GUI application**:
+```bash
+./cv_to_osc_converter_gui
+```
+
+3. **Configure via GUI**:
+   - Use **View → Audio Configuration** to select your audio device
+   - Use **View → OSC Configuration** to set network target
+   - Use **View → Channel Configuration** for per-channel settings
+
+4. **Start conversion**:
+   - Click **"Start Conversion"** button or use **Control → Start Conversion**
+   - Watch real-time meters and waveforms
+   - Adjust parameters live without stopping
+
+5. **GUI Features**:
+   - **Real-time visualization**: Live waveforms and signal meters
+   - **Drag & drop**: Reorder channels and assign OSC addresses
+   - **Live adjustments**: Change ranges, names, and settings on-the-fly
+   - **Dockable windows**: Arrange interface to your preference
+   - **Performance monitoring**: Track system performance and message rates
 
 ## OPTIONS
 
@@ -320,6 +425,8 @@ Options:
   -c, --config FILE       Use specific config file (default: config.json)
   --verbose               Enable verbose output
   -q, --quiet             Suppress non-essential output
+  --request-permissions   Request macOS permissions (microphone, etc.)
+  --check-permissions     Check current permission status
 
 Configuration Overrides:
   --osc-host HOST         Override OSC target host
@@ -465,10 +572,118 @@ The optimized version provides significantly better performance:
 - Some interfaces may report more channels than physically available
 - Configure `audio_device` name for specific interface selection
 
+## 🆕 Enhanced Features
+
+See [ENHANCED_FEATURES.md](ENHANCED_FEATURES.md) for detailed information about the latest improvements:
+
+- **Individual Channel Windows** with advanced zoom controls
+- **OSC to CV Conversion** for bidirectional communication  
+- **Professional Visualization** with ImPlot integration
+- **Real-time Signal Analysis** with customizable time ranges
+
+### Testing OSC to CV Conversion
+
+Use the included test script to verify OSC to CV functionality:
+
+```bash
+# Install python-osc library
+pip install python-osc
+
+# Run continuous wave test (30 seconds)
+python3 test_osc_to_cv.py --mode continuous --duration 30
+
+# Send single test values
+python3 test_osc_to_cv.py --mode single
+
+# Custom host/port
+python3 test_osc_to_cv.py --host 127.0.0.1 --port 8001
+```
+
+Make sure to:
+1. Start the GUI application
+2. Enable OSC listening in OSC Configuration window
+3. Open individual channel windows to see the signals
+
 ## License
 
 This project is open source. Feel free to modify and distribute according to your needs.
 
+## 🚀 What's New in v1.2.0
+
+### Major Features Added
+- ✅ **Bidirectional CV ↔ OSC Conversion**: Full OSC to CV support for complete signal integration
+- ✅ **External Device Management**: MIDI, WiFi, Bluetooth, and USB device integration
+- ✅ **Plugin Architecture**: Extensible plugin system with real-time processing
+- ✅ **Professional App Bundle**: Native macOS .app with proper icon and metadata
+- ✅ **DMG Distribution**: Professional installer package with plugin installers
+- ✅ **Plugin Formats**: VST3, VST2, and Audio Unit plugin support (framework ready)
+- ✅ **Enhanced Device Management**: Automatic device discovery and connection
+- ✅ **Plugin Manager**: Dynamic plugin loading with real-time processing capabilities
+- ✅ **Advanced UI**: Channel strips, mixers, and external device mapping windows
+
+### Technical Improvements
+- **DeviceManager System**: Centralized device handling with automatic discovery
+- **ExternalDeviceManager**: MIDI CC mapping, OSC control, and automation support
+- **PluginManager**: Dynamic loading of processing plugins with hot-swapping
+- **Real-time Processing**: Enhanced audio processing pipeline with plugin support
+- **Professional Packaging**: Complete macOS app bundle with installer/uninstaller
+
+### Distribution
+- **DMG Package**: `CV-to-OSC-Converter-1.2.0.dmg` (2.4MB)
+- **App Bundle**: Native macOS application with icon and metadata
+- **CLI Tool**: Command-line version for automation and scripting
+- **Plugin Installers**: Automated VST3/AU installation scripts
+- **Documentation**: Complete user manual and quick start guide
+
+### Plugin Development Framework
+```cpp
+// Example plugin interface
+class CustomCVPlugin {
+public:
+    virtual void process(float* input, float* output, int samples) = 0;
+    virtual void setParameter(int index, float value) = 0;
+    virtual float getParameter(int index) = 0;
+};
+```
+
+### External Device Integration
+```cpp
+// Example MIDI device integration
+auto deviceManager = std::make_unique<ExternalDeviceManager>();
+deviceManager->connectMidiDevice("Your MIDI Controller");
+deviceManager->addMapping({
+    .type = ControllerType::MIDI_CC,
+    .channel = 0,
+    .parameter = "fader",
+    .midiCC = 7,
+    .callback = [](float value) { /* handle CC */ }
+});
+```
+
+## Installation (v1.2.0)
+
+### macOS DMG Installation
+1. Download `CV-to-OSC-Converter-1.2.0.dmg`
+2. Double-click to mount the disk image
+3. Drag "CV to OSC Converter.app" to Applications
+4. (Optional) Run "Install Plugins.command" for DAW integration
+5. Grant microphone permissions when prompted
+
+### Plugin Installation
+- **VST3**: Automatically installed to `~/Library/Audio/Plug-Ins/VST3/`
+- **Audio Units**: Automatically installed to `~/Library/Audio/Plug-Ins/Components/`
+- **Uninstaller**: Use "Uninstall Plugins.command" to remove
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit pull requests or open issues for bugs and feature requests.
+
+### Development Setup
+```bash
+# Build with all features
+cmake .. -DBUILD_GUI=ON -DBUILD_PLUGINS=ON
+make -j8
+
+# Create distribution package
+make dmg
+```

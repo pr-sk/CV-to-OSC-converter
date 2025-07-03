@@ -5,6 +5,7 @@
 #include <memory>
 #include <functional>
 #include <portaudio.h>
+#include "MacOSPermissions.h"
 
 struct AudioDeviceInfo {
     PaDeviceIndex index;
@@ -41,6 +42,12 @@ public:
     void cleanup();
     void refreshDeviceList();
     
+    // Permission management
+    bool checkPermissions();
+    void requestPermissions(std::function<void(bool)> callback = nullptr);
+    PermissionStatus getPermissionStatus();
+    std::string getPermissionStatusMessage();
+    
     // Device enumeration
     const std::vector<AudioDeviceInfo>& getDevices() const { return devices; }
     std::vector<AudioDeviceInfo> getInputDevices() const;
@@ -57,6 +64,8 @@ public:
     bool isDeviceValid(PaDeviceIndex index) const;
     bool canDeviceHandleFormat(PaDeviceIndex index, int channelCount, double sampleRate) const;
     bool testDevice(PaDeviceIndex index, int channelCount = 2, double sampleRate = 44100.0) const;
+    bool testDeviceWithPermissionCheck(PaDeviceIndex index, int channelCount = 2, double sampleRate = 44100.0) const;
+    bool forceTestDevice(PaDeviceIndex index) const; // More aggressive testing
     
     // Monitoring and callbacks
     void addDeviceChangeCallback(std::function<void(const std::vector<AudioDeviceInfo>&)> callback);
@@ -67,6 +76,7 @@ public:
     void printDeviceList() const;
     void printDeviceDetails(PaDeviceIndex index) const;
     std::string getDeviceStatusReport() const;
+    void runDetailedDiagnostics() const;
     
     // Utility functions
     static std::string getHostApiName(PaHostApiIndex hostApi);

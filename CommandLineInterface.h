@@ -9,17 +9,19 @@
 struct CLIOptions {
     std::string configFile = "config.json";
     std::string logLevel = "info";
-    bool interactive = false;
-    bool listDevices = false;
-    bool daemon = false;
-    bool help = false;
-    bool version = false;
     std::string oscHost = "";
     std::string oscPort = "";
     std::string audioDevice = "";
     int updateInterval = -1;
+    bool help = false;
+    bool version = false;
+    bool interactive = false;
+    bool listDevices = false;
+    bool daemon = false;
     bool verbose = false;
     bool quiet = false;
+    bool requestPermissions = false;
+    bool checkPermissions = false;
 };
 
 class CommandLineInterface {

@@ -12,6 +12,7 @@
 #include "ErrorHandler.h"
 #include "PerformanceMonitor.h"
 #include "ConfigWatcher.h"
+#include "MacOSPermissions.h"
 #include "Version.h"
 
 class CVToOSCConverter {
@@ -252,6 +253,28 @@ int main(int argc, char* argv[]) {
         return 0;
     }
     
+    // Check for permission options
+    if (options.checkPermissions) {
+        std::cout << MacOSPermissions::generatePermissionReport() << std::endl;
+        return 0;
+    }
+    
+    if (options.requestPermissions) {
+        std::cout << "🔐 Requesting all required permissions..." << std::endl;
+        MacOSPermissions::requestAllRequiredPermissions([](bool granted) {
+            if (granted) {
+                std::cout << "✅ All permissions granted! You can now run the application normally." << std::endl;
+            } else {
+                std::cout << "❌ Some permissions were denied. The application may not function properly." << std::endl;
+                std::cout << "Please enable the required permissions in System Preferences." << std::endl;
+            }
+        });
+        
+        // Wait a bit for the async callback to complete
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+        return 0;
+    }
+    
     if (options.listDevices) {
         AudioDeviceManager deviceManager;
         if (!deviceManager.initialize()) {
@@ -260,9 +283,7 @@ int main(int argc, char* argv[]) {
         }
         
         if (options.verbose) {
-            deviceManager.printDeviceList();
-            std::cout << std::endl;
-            std::cout << deviceManager.getDeviceStatusReport() << std::endl;
+            deviceManager.runDetailedDiagnostics();
         } else {
             // Simple listing for non-verbose mode
             auto inputDevices = deviceManager.getInputDevices();
@@ -277,6 +298,20 @@ int main(int argc, char* argv[]) {
                     std::cout << " [UNAVAILABLE]";
                 }
                 std::cout << std::endl;
+            }
+            
+            // If no devices are available, show helpful message
+            bool hasAvailable = false;
+            for (const auto& device : inputDevices) {
+                if (device.isCurrentlyAvailable) {
+                    hasAvailable = true;
+                    break;
+                }
+            }
+            
+            if (!hasAvailable && !inputDevices.empty()) {
+                std::cout << "\n⚠️  All devices are UNAVAILABLE. Run with --verbose for detailed diagnostics." << std::endl;
+                std::cout << "🔧 Quick fix: ./cv_to_osc_converter --request-permissions" << std::endl;
             }
         }
         

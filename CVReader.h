@@ -20,6 +20,7 @@ private:
     int maxChannels;
     double sampleRate;
     std::string deviceName;
+    std::string currentDeviceName;  // Actual device name from PortAudio
     std::atomic<bool> initialized;
     static constexpr int FRAMES_PER_BUFFER = 64;
     static constexpr int DEFAULT_CHANNELS = 2;  // Start with stereo, auto-detect max
@@ -39,6 +40,10 @@ public:
     std::vector<float> readChannels();
     void readChannels(std::vector<float>& output);  // Zero-copy version
     int getChannelCount() const { return numChannels; }
+    int getMaxChannels() const { return maxChannels; }
+    double getSampleRate() const { return sampleRate; }
+    std::string getCurrentDeviceName() const { return currentDeviceName; }
+    bool isInitialized() const { return initialized; }
     
     // Calibration methods
     void enableCalibration(bool enable) { calibrationEnabled = enable; }

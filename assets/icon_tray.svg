@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <defs>
+    <linearGradient id="trayGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b35;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3498db;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Simplified design for 16x16 pixels -->
+  <!-- Outer shape -->
+  <rect x="2" y="2" width="12" height="12" rx="6" fill="none" stroke="url(#trayGradient)" stroke-width="2"/>
+  
+  <!-- Inner shape -->
+  <rect x="5" y="5" width="6" height="6" rx="3" fill="none" stroke="url(#trayGradient)" stroke-width="1.5"/>
+  
+  <!-- Center point -->
+  <circle cx="8" cy="8" r="1.5" fill="url(#trayGradient)"/>
+</svg>

@@ -6,6 +6,7 @@
 #include <iostream>
 #include <map>
 #include <nlohmann/json.hpp>
+#include "Localization.h"
 
 struct CVRange {
     float min;
@@ -20,6 +21,7 @@ struct ConfigProfile {
     std::string audioDevice = "";
     int updateIntervalMs = 10;
     std::vector<CVRange> cvRanges;
+    Language language = Language::English;
     
     ConfigProfile() {
         cvRanges.resize(8, CVRange(0.0f, 10.0f)); // Default CV ranges
@@ -51,6 +53,7 @@ public:
     const std::string& getOSCPort() const { return getActiveProfile().oscPort; }
     const std::string& getAudioDevice() const { return getActiveProfile().audioDevice; }
     int getUpdateIntervalMs() const { return getActiveProfile().updateIntervalMs; }
+    Language getLanguage() const { return getActiveProfile().language; }
     CVRange getCVRange(int channel) const;
     
     // Setters for active profile
@@ -58,6 +61,7 @@ public:
     void setOSCPort(const std::string& port);
     void setAudioDevice(const std::string& device);
     void setUpdateIntervalMs(int interval);
+    void setLanguage(Language lang);
     void setCVRange(int channel, float min, float max);
     
     void printConfiguration() const;
