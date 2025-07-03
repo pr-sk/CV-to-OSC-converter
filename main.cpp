@@ -255,12 +255,21 @@ int main(int argc, char* argv[]) {
     
     // Check for permission options
     if (options.checkPermissions) {
+#ifdef __APPLE__
         std::cout << MacOSPermissions::generatePermissionReport() << std::endl;
+#else
+        std::cout << "🔐 Permission Status Report\n";
+        std::cout << "============================\n";
+        std::cout << "Platform: Non-Apple system\n";
+        std::cout << "Permissions: Not applicable on this platform\n";
+        std::cout << "All Required Permissions: ✅ Granted\n";
+#endif
         return 0;
     }
     
     if (options.requestPermissions) {
         std::cout << "🔐 Requesting all required permissions..." << std::endl;
+#ifdef __APPLE__
         MacOSPermissions::requestAllRequiredPermissions([](bool granted) {
             if (granted) {
                 std::cout << "✅ All permissions granted! You can now run the application normally." << std::endl;
@@ -272,6 +281,9 @@ int main(int argc, char* argv[]) {
         
         // Wait a bit for the async callback to complete
         std::this_thread::sleep_for(std::chrono::seconds(3));
+#else
+        std::cout << "✅ Permissions are not required on this platform." << std::endl;
+#endif
         return 0;
     }
     

@@ -1,40 +1,46 @@
 {
-    "osc_host": "127.0.0.1",
-    "osc_port": "9000",
-    "audio_device": "",
-    "update_interval_ms": 10,
-    "cv_ranges": [
-        {
-            "min": 0.0,
-            "max": 10.0
-        },
-        {
-            "min": 0.0,
-            "max": 10.0
-        },
-        {
-            "min": 0.0,
-            "max": 10.0
-        },
-        {
-            "min": 0.0,
-            "max": 10.0
-        },
-        {
-            "min": -5.0,
-            "max": 5.0
-        },
-        {
-            "min": -5.0,
-            "max": 5.0
-        },
-        {
-            "min": 0.0,
-            "max": 10.0
-        },
-        {
-            "min": 0.0,
-            "max": 10.0
+    "active_profile": "default",
+    "profiles": {
+        "default": {
+            "audio_device": "",
+            "cv_ranges": [
+                {
+                    "max": 10.0,
+                    "min": 0.0
+                },
+                {
+                    "max": 10.0,
+                    "min": 0.0
+                },
+                {
+                    "max": 10.0,
+                    "min": 0.0
+                },
+                {
+                    "max": 10.0,
+                    "min": 0.0
+                },
+                {
+                    "max": 10.0,
+                    "min": 0.0
+                },
+                {
+                    "max": 10.0,
+                    "min": 0.0
+                },
+                {
+                    "max": 10.0,
+                    "min": 0.0
+                },
+                {
+                    "max": 10.0,
+                    "min": 0.0
+                }
+            ],
+            "language": 0,
+            "osc_host": "127.0.0.1",
+            "osc_port": "9000",
+            "update_interval_ms": 10
         }
-    ]
+    }
 }
