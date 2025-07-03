@@ -147,7 +147,9 @@ private:
     std::unique_ptr<DeviceHandler> bluetoothHandler_;
     std::unique_ptr<DeviceHandler> wifiHandler_;
     std::unique_ptr<DeviceHandler> usbHandler_;
+#ifdef __APPLE__
     std::unique_ptr<DeviceHandler> midiHandler_;
+#endif
     
     // Device registry
     std::map<std::string, DeviceInfo> devices_;

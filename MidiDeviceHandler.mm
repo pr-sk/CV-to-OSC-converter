@@ -1,6 +1,8 @@
 #include "MidiDeviceHandler.h"
 #include <iostream>
 #include <sstream>
+
+#ifdef __APPLE__
 #include <CoreFoundation/CoreFoundation.h>
 
 MidiDeviceHandler::MidiDeviceHandler() 
@@ -485,3 +487,91 @@ std::vector<uint8_t> MidiDeviceHandler::convertOSCToMidi(const std::string& addr
     
     return midiData;
 }
+
+#else // Non-Apple platforms
+
+// Stub implementations for non-macOS platforms
+MidiDeviceHandler::MidiDeviceHandler() 
+    : initialized_(false), learningMode_(false) {
+}
+
+MidiDeviceHandler::~MidiDeviceHandler() {
+}
+
+bool MidiDeviceHandler::initialize() {
+    lastError_ = "MIDI support not available on this platform";
+    return false;
+}
+
+void MidiDeviceHandler::shutdown() {
+}
+
+std::vector<DeviceInfo> MidiDeviceHandler::scanForDevices() {
+    return {};
+}
+
+bool MidiDeviceHandler::connect(const DeviceInfo& device) {
+    lastError_ = "MIDI support not available on this platform";
+    return false;
+}
+
+bool MidiDeviceHandler::disconnect(const std::string& deviceId) {
+    return true;
+}
+
+bool MidiDeviceHandler::isDeviceAvailable(const std::string& deviceId) {
+    return false;
+}
+
+bool MidiDeviceHandler::sendData(const std::string& deviceId, const std::vector<uint8_t>& data) {
+    lastError_ = "MIDI support not available on this platform";
+    return false;
+}
+
+bool MidiDeviceHandler::sendOSCMessage(const std::string& deviceId, const std::string& address, float value) {
+    lastError_ = "MIDI support not available on this platform";
+    return false;
+}
+
+DeviceStatus MidiDeviceHandler::getDeviceStatus(const std::string& deviceId) {
+    return DeviceStatus::DISCONNECTED;
+}
+
+void MidiDeviceHandler::setDataCallback(std::function<void(const std::string&, const std::vector<uint8_t>&)> callback) {
+    dataCallback_ = callback;
+}
+
+void MidiDeviceHandler::setOSCCallback(std::function<void(const std::string&, const std::string&, float)> callback) {
+    oscCallback_ = callback;
+}
+
+std::string MidiDeviceHandler::getLastError() const {
+    return lastError_;
+}
+
+// MIDI-specific stub methods
+bool MidiDeviceHandler::sendMIDICC(const std::string& deviceId, int channel, int cc, int value) {
+    lastError_ = "MIDI support not available on this platform";
+    return false;
+}
+
+bool MidiDeviceHandler::sendMIDINote(const std::string& deviceId, int channel, int note, int velocity, bool noteOn) {
+    lastError_ = "MIDI support not available on this platform";
+    return false;
+}
+
+bool MidiDeviceHandler::sendMIDIPitchBend(const std::string& deviceId, int channel, int value) {
+    lastError_ = "MIDI support not available on this platform";
+    return false;
+}
+
+bool MidiDeviceHandler::sendMIDISysEx(const std::string& deviceId, const std::vector<uint8_t>& sysex) {
+    lastError_ = "MIDI support not available on this platform";
+    return false;
+}
+
+void MidiDeviceHandler::enableLearningMode(bool enable) {
+    learningMode_ = enable;
+}
+
+#endif // __APPLE__

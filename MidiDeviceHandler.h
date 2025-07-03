@@ -1,9 +1,19 @@
 #pragma once
 
 #include "DeviceManager.h"
-#include <CoreMIDI/CoreMIDI.h>
 #include <map>
 #include <thread>
+
+#ifdef __APPLE__
+#include <CoreMIDI/CoreMIDI.h>
+#else
+// Placeholder definitions for non-macOS platforms
+typedef uint32_t MIDIEndpointRef;
+typedef uint32_t MIDIPortRef;
+typedef uint32_t MIDIClientRef;
+struct MIDIPacketList {};
+struct MIDINotification {};
+#endif
 
 /**
  * @brief MIDI Device Handler for macOS using CoreMIDI
@@ -57,8 +67,14 @@ private:
     
     bool initialized_;
     bool learningMode_;
+    std::string lastError_;
     
     // Callbacks
+    std::function<void(const std::string&, const std::vector<uint8_t>&)> dataCallback_;
+    std::function<void(const std::string&, const std::string&, float)> oscCallback_;
+    
+#ifdef __APPLE__
+    // macOS-specific callback functions
     static void midiInputCallback(const MIDIPacketList* pktlist, void* readProcRefCon, void* srcConnRefCon);
     static void midiNotifyCallback(const MIDINotification* message, void* refCon);
     
@@ -71,4 +87,5 @@ private:
     bool createMidiPorts(const std::string& deviceId, MIDIEndpointRef inputEndpoint, MIDIEndpointRef outputEndpoint);
     void convertMidiToOSC(const std::string& deviceId, const std::vector<uint8_t>& midiData);
     std::vector<uint8_t> convertOSCToMidi(const std::string& address, float value);
+#endif // __APPLE__
 };

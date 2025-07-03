@@ -19,11 +19,16 @@ DeviceManager::~DeviceManager() {
 bool DeviceManager::initialize() {
     try {
         // Initialize device handlers
+#ifdef __APPLE__
         midiHandler_ = std::make_unique<MidiDeviceHandler>();
+#endif
         wifiHandler_ = std::make_unique<WiFiDeviceHandler>();
         
         // Initialize handlers
-        bool midiOk = midiHandler_->initialize();
+        bool midiOk = true;
+#ifdef __APPLE__
+        midiOk = midiHandler_->initialize();
+#endif
         bool wifiOk = wifiHandler_->initialize();
         
         if (!midiOk || !wifiOk) {
@@ -32,6 +37,7 @@ bool DeviceManager::initialize() {
         }
         
         // Set up callbacks
+#ifdef __APPLE__
         if (midiHandler_) {
             midiHandler_->setDataCallback([this](const std::string& deviceId, const std::vector<uint8_t>& data) {
                 handleDeviceData(deviceId, data);
@@ -41,6 +47,7 @@ bool DeviceManager::initialize() {
                 handleOSCData(deviceId, address, value);
             });
         }
+#endif
         
         if (wifiHandler_) {
             wifiHandler_->setDataCallback([this](const std::string& deviceId, const std::vector<uint8_t>& data) {
@@ -106,6 +113,7 @@ std::vector<DeviceInfo> DeviceManager::scanAllDevices() {
     std::vector<DeviceInfo> allDevices;
     
     // Scan MIDI devices
+#ifdef __APPLE__
     if (midiHandler_) {
         try {
             auto midiDevices = midiHandler_->scanForDevices();
@@ -114,6 +122,7 @@ std::vector<DeviceInfo> DeviceManager::scanAllDevices() {
             std::cerr << "Error scanning MIDI devices: " << e.what() << std::endl;
         }
     }
+#endif
     
     // Scan WiFi devices
     if (wifiHandler_) {
@@ -352,7 +361,11 @@ void DeviceManager::updateDeviceStatus(const std::string& deviceId, DeviceStatus
 DeviceHandler* DeviceManager::getHandlerForType(DeviceType type) {
     switch (type) {
         case DeviceType::MIDI:
+#ifdef __APPLE__
             return midiHandler_.get();
+#else
+            return nullptr;
+#endif
         case DeviceType::WIFI:
             return wifiHandler_.get();
         case DeviceType::BLUETOOTH:
