@@ -5,7 +5,19 @@
 #include <memory>
 #include <functional>
 #include <portaudio.h>
+
+#ifdef __APPLE__
 #include "MacOSPermissions.h"
+#else
+// Stub permission status for non-Apple platforms
+enum class PermissionStatus {
+    Granted,
+    Denied,
+    NotDetermined,
+    Restricted,
+    Unknown
+};
+#endif
 
 struct AudioDeviceInfo {
     PaDeviceIndex index;

@@ -250,6 +250,9 @@ void WiFiDeviceHandler::convertNetworkToOSC(const std::string& deviceId, const s
 }
 
 std::vector<uint8_t> WiFiDeviceHandler::convertOSCToNetwork(const std::string& address, float value) {
+    // Suppress unused parameter warning
+    (void)address;
+    
     // Stub - would convert OSC to network protocol
     std::vector<uint8_t> data;
     

@@ -432,10 +432,16 @@ bool AudioDeviceManager::isDeviceNameMatch(const std::string& deviceName, const 
 
 // Permission management methods
 bool AudioDeviceManager::checkPermissions() {
+#ifdef __APPLE__
     return MacOSPermissions::checkMicrophonePermission() == PermissionStatus::Granted;
+#else
+    // On non-Apple platforms, assume permissions are always granted
+    return true;
+#endif
 }
 
 void AudioDeviceManager::requestPermissions(std::function<void(bool)> callback) {
+#ifdef __APPLE__
     std::cout << "🔐 Requesting microphone permissions..." << std::endl;
     MacOSPermissions::requestMicrophonePermission([this, callback](bool granted) {
         if (granted) {
@@ -456,10 +462,21 @@ void AudioDeviceManager::requestPermissions(std::function<void(bool)> callback) 
             callback(granted);
         }
     });
+#else
+    // On non-Apple platforms, permissions are assumed to be granted
+    std::cout << "Permissions not required on this platform." << std::endl;
+    if (callback) {
+        callback(true);
+    }
+#endif
 }
 
 PermissionStatus AudioDeviceManager::getPermissionStatus() {
+#ifdef __APPLE__
     return MacOSPermissions::checkMicrophonePermission();
+#else
+    return PermissionStatus::Granted;
+#endif
 }
 
 std::string AudioDeviceManager::getPermissionStatusMessage() {
@@ -551,11 +568,17 @@ void AudioDeviceManager::runDetailedDiagnostics() const {
     }
     
     // Permissions
+#ifdef __APPLE__
     std::cout << "\n🔐 macOS Permissions:" << std::endl;
     PermissionStatus micStatus = MacOSPermissions::checkMicrophonePermission();
     std::cout << "  Microphone: " << MacOSPermissions::permissionStatusToString(micStatus) << std::endl;
     PermissionStatus fileStatus = MacOSPermissions::checkFilePermission();
     std::cout << "  File Access: " << MacOSPermissions::permissionStatusToString(fileStatus) << std::endl;
+#else
+    std::cout << "\n🔐 Platform Permissions:" << std::endl;
+    PermissionStatus micStatus = PermissionStatus::Granted;
+    std::cout << "  Microphone: Granted (No permission system on this platform)" << std::endl;
+#endif
     
     // Test each device individually
     std::cout << "\n🎤 Device Testing Results:" << std::endl;
@@ -604,9 +627,14 @@ void AudioDeviceManager::runDetailedDiagnostics() const {
     
     // System info
     std::cout << "\n💻 System Information:" << std::endl;
+#ifdef __APPLE__
     std::cout << "  App Bundle ID: " << MacOSPermissions::getBundleIdentifier() << std::endl;
     std::cout << "  App Name: " << MacOSPermissions::getAppName() << std::endl;
     std::cout << "  Sandboxed: " << (MacOSPermissions::isAppSandboxed() ? "Yes" : "No") << std::endl;
+#else
+    std::cout << "  Platform: Non-Apple system" << std::endl;
+    std::cout << "  App permissions: Not applicable" << std::endl;
+#endif
     
     std::cout << "\n" << std::string(80, '=') << std::endl;
     
