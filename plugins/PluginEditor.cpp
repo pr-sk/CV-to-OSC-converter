@@ -2,15 +2,15 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-CVToOSCEditor::CVToOSCEditor(CVToOSCProcessor& p)
-    : AudioProcessorEditor(&p), audioProcessor(p), updateTimer(*this)
+CVToOSCEditor::CVToOSCEditor(CVToOSCProcessor* p)
+    : AudioProcessorEditor(p), audioProcessor(p), updateTimer(*this)
 {
     // Set editor size
     setSize(600, 500);
     
     // Setup title
     titleLabel.setText("CV to OSC Converter", juce::dontSendNotification);
-    titleLabel.setFont(juce::Font(20.0f, juce::Font::bold));
+    titleLabel.setFont(juce::FontOptions(20.0f).withStyle(juce::Font::bold));
     titleLabel.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(titleLabel);
     
@@ -18,12 +18,12 @@ CVToOSCEditor::CVToOSCEditor(CVToOSCProcessor& p)
     oscHostLabel.setText("OSC Host:", juce::dontSendNotification);
     addAndMakeVisible(oscHostLabel);
     
-    oscHostEditor.setText(audioProcessor.getOSCHostParameter()->get());
+    oscHostEditor.setText(audioProcessor->getOSCHostParameter()->getCurrentChoiceName());
     addAndMakeVisible(oscHostEditor);
     
-    // Create parameter attachment for OSC host
-    oscHostAttachment = std::make_unique<juce::AudioProcessorValueTreeState::TextEditAttachment>(
-        audioProcessor.getParameterTree(), "oscHost", oscHostEditor);
+    // Create parameter attachment for OSC host - use ComboBox instead
+    // oscHostAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(
+    //     audioProcessor->getParameterTree(), "oscHost", oscHostCombo);
     
     oscPortLabel.setText("OSC Port:", juce::dontSendNotification);
     addAndMakeVisible(oscPortLabel);
@@ -33,7 +33,7 @@ CVToOSCEditor::CVToOSCEditor(CVToOSCProcessor& p)
     
     // Create parameter attachment for OSC port
     oscPortAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
-        audioProcessor.getParameterTree(), "oscPort", oscPortSlider);
+        audioProcessor->getParameterTree(), "oscPort", oscPortSlider);
     
     // Audio Processing Controls
     gainLabel.setText("Gain:", juce::dontSendNotification);
@@ -44,7 +44,7 @@ CVToOSCEditor::CVToOSCEditor(CVToOSCProcessor& p)
     
     // Create parameter attachment for gain
     gainAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
-        audioProcessor.getParameterTree(), "gain", gainSlider);
+        audioProcessor->getParameterTree(), "gain", gainSlider);
     
     thresholdLabel.setText("Threshold:", juce::dontSendNotification);
     addAndMakeVisible(thresholdLabel);
@@ -54,7 +54,7 @@ CVToOSCEditor::CVToOSCEditor(CVToOSCProcessor& p)
     
     // Create parameter attachment for threshold
     thresholdAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
-        audioProcessor.getParameterTree(), "threshold", thresholdSlider);
+        audioProcessor->getParameterTree(), "threshold", thresholdSlider);
     
     smoothingLabel.setText("Smoothing:", juce::dontSendNotification);
     addAndMakeVisible(smoothingLabel);
@@ -64,7 +64,7 @@ CVToOSCEditor::CVToOSCEditor(CVToOSCProcessor& p)
     
     // Create parameter attachment for smoothing
     smoothingAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
-        audioProcessor.getParameterTree(), "smoothing", smoothingSlider);
+        audioProcessor->getParameterTree(), "smoothing", smoothingSlider);
     
     // Status
     statusLabel.setText("Status: Ready", juce::dontSendNotification);
@@ -82,9 +82,9 @@ CVToOSCEditor::CVToOSCEditor(CVToOSCProcessor& p)
         channelLabels[i].setJustificationType(juce::Justification::centred);
         addAndMakeVisible(channelLabels[i]);
         
-        channelMeters[i].setRange(0.0, 1.0);
-        channelMeters[i].setPercentageDisplay(true);
-        addAndMakeVisible(channelMeters[i]);
+        channelMeters[i] = std::make_unique<juce::ProgressBar>();
+        channelMeters[i]->setPercentageDisplay(true);
+        addAndMakeVisible(*channelMeters[i]);
     }
     
     // Start update timer
@@ -157,7 +157,7 @@ void CVToOSCEditor::resized()
     for (int i = 0; i < 8; ++i) {
         auto channelArea = metersSection.removeFromLeft(channelWidth).reduced(2);
         channelLabels[i].setBounds(channelArea.removeFromTop(20));
-        channelMeters[i].setBounds(channelArea);
+        channelMeters[i]->setBounds(channelArea);
     }
     
     // Smoothing slider (bottom row)
@@ -193,18 +193,18 @@ void CVToOSCEditor::updateMeters()
     for (int i = 0; i < 8; ++i) {
         // Simulate meter values (in real implementation, get from processor)
         double value = 0.5 + 0.3 * std::sin(juce::Time::getMillisecondCounter() * 0.001 * (i + 1));
-        channelMeters[i].setProgress(value);
+        channelMeters[i]->setProgress(value);
     }
     
     // Update OSC host text editor
-    oscHostEditor.setText(audioProcessor.getOSCHostParameter()->get(), false);
+    oscHostEditor.setText(audioProcessor->getOSCHostParameter()->getCurrentChoiceName(), false);
 }
 
 void CVToOSCEditor::updateConnectionStatus()
 {
     // Update connection status
-    juce::String host = audioProcessor.getOSCHostParameter()->get();
-    int port = audioProcessor.getOSCPortParameter()->get();
+    juce::String host = audioProcessor->getOSCHostParameter()->getCurrentChoiceName();
+    int port = audioProcessor->getOSCPortParameter()->get();
     
     statusLabel.setText("Status: Connected to " + host + ":" + juce::String(port), 
                        juce::dontSendNotification);

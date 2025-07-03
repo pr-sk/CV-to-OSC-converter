@@ -79,7 +79,7 @@ public:
     };
 
     // Access to parameters
-    juce::AudioParameterString* getOSCHostParameter() { return oscHostParam; }
+    juce::AudioParameterChoice* getOSCHostParameter() { return oscHostParam; }
     juce::AudioParameterInt* getOSCPortParameter() { return oscPortParam; }
     juce::AudioParameterFloat* getGainParameter() { return gainParam; }
     juce::AudioParameterFloat* getThresholdParameter() { return thresholdParam; }
@@ -102,7 +102,7 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState> parameterTree;
     
     // Plugin parameters
-    juce::AudioParameterString* oscHostParam;
+    juce::AudioParameterChoice* oscHostParam;
     juce::AudioParameterInt* oscPortParam;
     juce::AudioParameterFloat* gainParam;
     juce::AudioParameterFloat* thresholdParam;

@@ -12,7 +12,7 @@ CVToOSCProcessor::CVToOSCProcessor()
     parameterTree = std::make_unique<juce::AudioProcessorValueTreeState>(*this, nullptr, "Parameters", std::move(layout));
     
     // Get parameter pointers
-    oscHostParam = dynamic_cast<juce::AudioParameterString*>(parameterTree->getParameter("oscHost"));
+    oscHostParam = dynamic_cast<juce::AudioParameterChoice*>(parameterTree->getParameter("oscHost"));
     oscPortParam = dynamic_cast<juce::AudioParameterInt*>(parameterTree->getParameter("oscPort"));
     gainParam = dynamic_cast<juce::AudioParameterFloat*>(parameterTree->getParameter("gain"));
     thresholdParam = dynamic_cast<juce::AudioParameterFloat*>(parameterTree->getParameter("threshold"));
@@ -23,8 +23,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout CVToOSCProcessor::createPara
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout;
     
-    layout.add(std::make_unique<juce::AudioParameterString>(
-        "oscHost", "OSC Host", "127.0.0.1"));
+    layout.add(std::make_unique<juce::AudioParameterChoice>(
+        "oscHost", "OSC Host", juce::StringArray{"127.0.0.1", "192.168.1.1", "localhost"}, 0));
     
     layout.add(std::make_unique<juce::AudioParameterInt>(
         "oscPort", "OSC Port", 1024, 65535, 9000));
@@ -193,7 +193,7 @@ bool CVToOSCProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* CVToOSCProcessor::createEditor()
 {
-    return new CVToOSCEditor(*this);
+    return new CVToOSCEditor(this);
 }
 
 //==============================================================================

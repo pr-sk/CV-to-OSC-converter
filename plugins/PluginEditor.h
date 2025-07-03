@@ -22,7 +22,7 @@
 class CVToOSCEditor : public juce::AudioProcessorEditor
 {
 public:
-    CVToOSCEditor(CVToOSCProcessor&);
+    CVToOSCEditor(CVToOSCProcessor*);
     ~CVToOSCEditor() override;
 
     //==============================================================================
@@ -31,7 +31,7 @@ public:
 
 private:
     // Reference to processor
-    CVToOSCProcessor& audioProcessor;
+    CVToOSCProcessor* audioProcessor;
 
     // GUI components
     juce::Label titleLabel;
@@ -59,14 +59,14 @@ private:
     
     // Visualizations
     juce::Label channelLabels[8];
-    juce::ProgressBar channelMeters[8];
+    std::array<std::unique_ptr<juce::ProgressBar>, 8> channelMeters;
     
     // Parameter attachments
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> oscPortAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> gainAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> thresholdAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> smoothingAttachment;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::TextEditAttachment> oscHostAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> oscHostAttachment;
     
     // Timer for updates
     class UpdateTimer : public juce::Timer

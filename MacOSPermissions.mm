@@ -222,8 +222,8 @@ void MacOSPermissions::openSystemPreferences(PermissionType type) {
 bool MacOSPermissions::isAppSandboxed() {
 #ifdef __APPLE__
     NSBundle *bundle = [NSBundle mainBundle];
-    NSDictionary *entitlements = [bundle objectForInfoDictionaryKey:@"com.apple.security.app-sandbox"];
-    return [entitlements boolValue];
+    NSNumber *entitlements = [bundle objectForInfoDictionaryKey:@"com.apple.security.app-sandbox"];
+    return entitlements ? [entitlements boolValue] : false;
 #else
     return false;
 #endif
