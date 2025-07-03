@@ -7,7 +7,7 @@ set -e  # Exit on any error
 
 # Configuration
 PROJECT_NAME="CV to OSC Converter"
-VERSION="1.4.1"
+VERSION="1.5.0"
 DMG_NAME="CV-to-OSC-Converter-${VERSION}"
 BUILD_DIR="${CMAKE_BINARY_DIR:-.}"
 DIST_DIR="${BUILD_DIR}/dist"
