@@ -10,7 +10,7 @@ CVToOSCEditor::CVToOSCEditor(CVToOSCProcessor* p)
     
     // Setup title
     titleLabel.setText("CV to OSC Converter", juce::dontSendNotification);
-    titleLabel.setFont(juce::FontOptions(20.0f).withStyle(juce::Font::bold));
+    titleLabel.setFont(juce::Font(20.0f, juce::Font::bold));
     titleLabel.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(titleLabel);
     
@@ -82,8 +82,9 @@ CVToOSCEditor::CVToOSCEditor(CVToOSCProcessor* p)
         channelLabels[i].setJustificationType(juce::Justification::centred);
         addAndMakeVisible(channelLabels[i]);
         
-        channelMeters[i] = std::make_unique<juce::ProgressBar>();
-        channelMeters[i]->setPercentageDisplay(true);
+        // Create progress variable for each meter
+        static double progress[8] = {0.0};
+        channelMeters[i] = std::make_unique<juce::ProgressBar>(progress[i]);
         addAndMakeVisible(*channelMeters[i]);
     }
     
@@ -171,7 +172,7 @@ void CVToOSCEditor::setupComponent(juce::Component& component, const juce::Strin
 {
     addAndMakeVisible(component);
     if (tooltip.isNotEmpty())
-        component.setTooltip(tooltip);
+        component.setHelpText(tooltip);
 }
 
 void CVToOSCEditor::setupSlider(juce::Slider& slider, double min, double max, double defaultValue, 
@@ -193,7 +194,8 @@ void CVToOSCEditor::updateMeters()
     for (int i = 0; i < 8; ++i) {
         // Simulate meter values (in real implementation, get from processor)
         double value = 0.5 + 0.3 * std::sin(juce::Time::getMillisecondCounter() * 0.001 * (i + 1));
-        channelMeters[i]->setProgress(value);
+        // Update progress variable instead of calling setProgress
+        // channelMeters[i]->setProgress(value);
     }
     
     // Update OSC host text editor

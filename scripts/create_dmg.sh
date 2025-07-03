@@ -7,12 +7,12 @@ set -e  # Exit on any error
 
 # Configuration
 PROJECT_NAME="CV to OSC Converter"
-VERSION="1.3.0"
+VERSION="1.4.0"
 DMG_NAME="CV-to-OSC-Converter-${VERSION}"
 BUILD_DIR="${CMAKE_BINARY_DIR:-.}"
 DIST_DIR="${BUILD_DIR}/dist"
 DMG_DIR="${BUILD_DIR}/dmg"
-APP_NAME="CV to OSC Converter.app"
+APP_NAME="cv_to_osc_converter_gui.app"
 
 echo "=========================================="
 echo "Creating DMG for ${PROJECT_NAME} v${VERSION}"

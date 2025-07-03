@@ -118,12 +118,18 @@ endif()
 # Find nlohmann/json
 find_package(nlohmann_json REQUIRED)
 
+# Always find OpenGL for potential GUI use
+find_package(OpenGL)
+
 # Find OpenGL and GLFW only when building GUI
 if(BUILD_GUI)
-    find_package(OpenGL REQUIRED)
-    # Use pkg-config to find GLFW and GLEW
-    pkg_check_modules(GLFW3 REQUIRED glfw3)
-    pkg_check_modules(GLEW REQUIRED glew)
+    if(OpenGL_FOUND)
+        # Use pkg-config to find GLFW and GLEW
+        pkg_check_modules(GLFW3 REQUIRED glfw3)
+        pkg_check_modules(GLEW REQUIRED glew)
+    else()
+        message(WARNING "OpenGL not found. GUI will be built without OpenGL support.")
+    endif()
 endif()
 
 # Check for GUI libraries availability
@@ -247,11 +253,23 @@ if(APPLE)
         "-framework AppKit"
         "-framework CoreMIDI"
     )
-else()
+elseif(WIN32)
+    # Windows-specific libraries
     target_link_libraries(cv_to_osc_converter PRIVATE
         ${PORTAUDIO_LIBRARIES}
         ${LIBLO_LIBRARIES}
         nlohmann_json::nlohmann_json
+        kernel32
+        user32
+        advapi32
+    )
+else()
+    # Linux and other Unix-like systems
+    target_link_libraries(cv_to_osc_converter PRIVATE
+        ${PORTAUDIO_LIBRARIES}
+        ${LIBLO_LIBRARIES}
+        nlohmann_json::nlohmann_json
+        dl  # Dynamic loading library for Linux
     )
 endif()
 
@@ -297,11 +315,10 @@ if(GUI_AVAILABLE)
     
     # Link libraries for GUI
     if(APPLE)
-        target_link_libraries(cv_to_osc_converter_gui PRIVATE
+        set(GUI_LIBS
             ${PORTAUDIO_LIBRARIES}
             ${LIBLO_LIBRARIES}
             nlohmann_json::nlohmann_json
-            OpenGL::GL
             ${GLFW3_LIBRARIES}
             ${IMGUI_LIBRARY}
             ${IMPLOT_LIBRARY}
@@ -311,17 +328,24 @@ if(GUI_AVAILABLE)
             "-framework AppKit"
             "-framework CoreMIDI"
         )
+        if(OpenGL_FOUND)
+            list(APPEND GUI_LIBS OpenGL::GL)
+        endif()
+        target_link_libraries(cv_to_osc_converter_gui PRIVATE ${GUI_LIBS})
     else()
-        target_link_libraries(cv_to_osc_converter_gui PRIVATE
+        set(GUI_LIBS
             ${PORTAUDIO_LIBRARIES}
             ${LIBLO_LIBRARIES}
             nlohmann_json::nlohmann_json
-            OpenGL::GL
             ${GLFW3_LIBRARIES}
             ${IMGUI_LIBRARY}
             ${IMPLOT_LIBRARY}
             ${GLEW_LIBRARIES}
         )
+        if(OpenGL_FOUND)
+            list(APPEND GUI_LIBS OpenGL::GL)
+        endif()
+        target_link_libraries(cv_to_osc_converter_gui PRIVATE ${GUI_LIBS})
     endif()
     
     # Add version definitions for GUI

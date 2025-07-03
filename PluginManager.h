@@ -10,7 +10,18 @@
 #include <mutex>
 #include <chrono>
 #include <filesystem>
-#include <dlfcn.h>
+// Platform-specific dynamic loading headers
+#ifdef _WIN32
+    #include <windows.h>
+    // Define POSIX-like functions for Windows
+    #define dlopen(filename, flag) LoadLibraryA(filename)
+    #define dlsym(handle, symbol) GetProcAddress((HMODULE)handle, symbol)
+    #define dlclose(handle) FreeLibrary((HMODULE)handle)
+    #define dlerror() "Windows LoadLibrary error"
+    #define RTLD_LAZY 0
+#else
+    #include <dlfcn.h>
+#endif
 
 // Plugin API version
 #define PLUGIN_API_VERSION 1

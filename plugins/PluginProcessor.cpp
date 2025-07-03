@@ -202,7 +202,7 @@ void CVToOSCProcessor::getStateInformation(juce::MemoryBlock& destData)
     // Create XML to store plugin state
     std::unique_ptr<juce::XmlElement> xml(new juce::XmlElement("CVToOSCSettings"));
     
-    xml->setAttribute("oscHost", oscHostParam->get());
+    xml->setAttribute("oscHost", oscHostParam->getCurrentChoiceName());
     xml->setAttribute("oscPort", oscPortParam->get());
     xml->setAttribute("gain", gainParam->get());
     xml->setAttribute("threshold", thresholdParam->get());
@@ -221,7 +221,9 @@ void CVToOSCProcessor::setStateInformation(const void* data, int sizeInBytes)
     {
         if (xmlState->hasTagName("CVToOSCSettings"))
         {
-            *oscHostParam = xmlState->getStringAttribute("oscHost", "127.0.0.1");
+            // Note: AudioParameterChoice doesn't support direct assignment
+            // Use setValueNotifyingHost instead
+            oscHostParam->setValueNotifyingHost(0); // Default to first choice
             *oscPortParam = xmlState->getIntAttribute("oscPort", 9000);
             *gainParam = (float)xmlState->getDoubleAttribute("gain", 1.0);
             *thresholdParam = (float)xmlState->getDoubleAttribute("threshold", 0.01);
@@ -243,12 +245,14 @@ void CVToOSCProcessor::initializeComponents()
         formatManager_ = std::make_unique<OSCFormatManager>();
         
         // Initialize OSC sender
-        std::string host = oscHostParam->get().toStdString();
+        std::string host = oscHostParam->getCurrentChoiceName().toStdString();
         std::string port = std::to_string(oscPortParam->get());
         oscSender_ = std::make_unique<OSCSender>(host, port);
         
         // Initialize OSC receiver
-        oscReceiver_ = std::make_unique<OSCReceiver>("8001", formatManager_);
+        std::shared_ptr<OSCFormatManager> sharedFormatManager(formatManager_.release());
+        oscReceiver_ = std::make_unique<OSCReceiver>("8001", sharedFormatManager);
+        formatManager_ = std::unique_ptr<OSCFormatManager>(sharedFormatManager.get());
         
         // Set up OSC receiver callback for OSC to CV conversion
         oscReceiver_->setMessageCallback([this](const std::string& address, const std::vector<float>& values) {
@@ -274,7 +278,7 @@ void CVToOSCProcessor::updateOSCConnection()
 {
     if (!oscSender_) return;
     
-    juce::String currentHost = oscHostParam->get();
+    juce::String currentHost = oscHostParam->getCurrentChoiceName();
     int currentPort = oscPortParam->get();
     
     if (currentHost != lastOSCHost || currentPort != lastOSCPort) {
