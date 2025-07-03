@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include "CommonTypes.h"
 #include <functional>
 
 #ifdef __APPLE__
@@ -8,14 +8,6 @@
 // Forward declarations for C++ headers
 struct objc_object;
 #endif
-
-enum class PermissionStatus {
-    NotDetermined,    // Permission hasn't been requested yet
-    Denied,          // User explicitly denied permission
-    Restricted,      // Permission restricted by system/parental controls
-    Granted,         // Permission granted
-    Unknown          // Status cannot be determined
-};
 
 enum class PermissionType {
     Microphone,
