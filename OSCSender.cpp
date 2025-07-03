@@ -104,16 +104,46 @@ bool OSCSender::sendFloatBatch(const std::vector<std::string>& addresses, const 
         return false;
     }
     
-    // Temporary fix: use individual messages instead of bundle
-    bool allSuccess = true;
+    // Try bundle approach first for better performance
+    lo_bundle bundle = lo_bundle_new(LO_TT_IMMEDIATE);
+    if (!bundle) {
+        // Fallback to individual messages if bundle creation fails
+        bool allSuccess = true;
+        for (size_t i = 0; i < addresses.size(); ++i) {
+            int result = lo_send(target, addresses[i].c_str(), "f", values[i]);
+            if (result < 0) {
+                allSuccess = false;
+            }
+        }
+        return allSuccess;
+    }
+    
+    // Add messages to bundle
     for (size_t i = 0; i < addresses.size(); ++i) {
-        int result = lo_send(target, addresses[i].c_str(), "f", values[i]);
-        if (result < 0) {
-            allSuccess = false;
+        lo_message message = lo_message_new();
+        if (message) {
+            lo_message_add_float(message, values[i]);
+            lo_bundle_add_message(bundle, addresses[i].c_str(), message);
         }
     }
     
-    return allSuccess;
+    // Send bundle
+    int result = lo_send_bundle(target, bundle);
+    lo_bundle_free_recursive(bundle);
+    
+    if (result < 0) {
+        // Bundle failed, try individual messages as fallback
+        bool allSuccess = true;
+        for (size_t i = 0; i < addresses.size(); ++i) {
+            int msgResult = lo_send(target, addresses[i].c_str(), "f", values[i]);
+            if (msgResult < 0) {
+                allSuccess = false;
+            }
+        }
+        return allSuccess;
+    }
+    
+    return true;
 }
 
 bool OSCSender::sendBlob(const std::string& address, const void* data, size_t size) {
