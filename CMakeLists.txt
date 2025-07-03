@@ -152,7 +152,7 @@ else()
 endif()
 
 # Add CLI executable (always built)
-add_executable(cv_to_osc_converter
+set(CLI_SOURCES
     main.cpp
     CVReader.cpp
     CVWriter.cpp
@@ -169,18 +169,25 @@ add_executable(cv_to_osc_converter
     Localization.cpp
     ExternalDeviceManager.cpp
     DeviceManager.cpp
-    MidiDeviceHandler.mm
     WiFiDeviceHandler.cpp
     PluginManager.cpp
-    MacOSPermissions.mm
 )
+
+# Add platform-specific sources
+if(APPLE)
+    list(APPEND CLI_SOURCES
+        MidiDeviceHandler.mm
+        MacOSPermissions.mm
+    )
+endif()
+
+add_executable(cv_to_osc_converter ${CLI_SOURCES})
 
 # Add GUI executable (if GUI libraries are available)
 if(GUI_AVAILABLE)
-    add_executable(cv_to_osc_converter_gui
+    set(GUI_SOURCES
         main_gui.cpp
         GuiApplication.cpp
-        FileDialog.mm
         DragDropManager.cpp
         CommandSystem.cpp
         CVReader.cpp
@@ -198,11 +205,20 @@ if(GUI_AVAILABLE)
         Localization.cpp
         ExternalDeviceManager.cpp
         DeviceManager.cpp
-        MidiDeviceHandler.mm
         WiFiDeviceHandler.cpp
         PluginManager.cpp
-        MacOSPermissions.mm
     )
+    
+    # Add platform-specific GUI sources
+    if(APPLE)
+        list(APPEND GUI_SOURCES
+            FileDialog.mm
+            MidiDeviceHandler.mm
+            MacOSPermissions.mm
+        )
+    endif()
+    
+    add_executable(cv_to_osc_converter_gui ${GUI_SOURCES})
 endif()
 
 # Include directories  
