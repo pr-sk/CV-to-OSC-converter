@@ -1,3 +1,0 @@
-Version: 1.4.0
-Build Date: Thu Jul  3 05:40:47 MSK 2025
-Platform: macOS
