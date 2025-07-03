@@ -4,8 +4,8 @@
 
 // Version information - automatically updated by CI/CD
 #define CV_TO_OSC_VERSION_MAJOR 1
-#define CV_TO_OSC_VERSION_MINOR 5
-#define CV_TO_OSC_VERSION_PATCH 0
+#define CV_TO_OSC_VERSION_MINOR 6
+#define CV_TO_OSC_VERSION_PATCH 1
 #define CV_TO_OSC_VERSION_BUILD "release"
 
 // Git information - populated by build system
