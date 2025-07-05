@@ -1,0 +1,274 @@
+{
+  "version": "3.0.0",
+  "application": {
+    "name": "Multi-Channel CV to OSC Converter",
+    "description": "Dynamic multi-channel CV/RMS to OSC converter with configurable routing per channel"
+  },
+  "defaults": {
+    "osc": {
+      "host": "127.0.0.1",
+      "port": 9000,
+      "localPort": 0,
+      "addressPattern": "/cv/channel/{channelId}",
+      "protocol": "UDP",
+      "timeout": 5000
+    },
+    "cv": {
+      "voltageRange": {
+        "min": -10.0,
+        "max": 10.0
+      },
+      "sampleRate": 44100,
+      "updateRate": 100
+    },
+    "rms": {
+      "windowSize": 1024,
+      "smoothing": 0.9,
+      "scale": 1.0
+    }
+  },
+  "channels": [
+    {
+      "id": 0,
+      "enabled": true,
+      "name": "Channel 1",
+      "description": "CV/RMS Channel 1",
+      "host": "{defaults.osc.host}",
+      "port": "{defaults.osc.port}",
+      "localPort": "{defaults.osc.localPort}",
+      "oscAddress": "/cv/channel/1",
+      "cvRange": {
+        "min": "{defaults.cv.voltageRange.min}",
+        "max": "{defaults.cv.voltageRange.max}"
+      },
+      "signalType": "CV",
+      "rmsSettings": {
+        "windowSize": "{defaults.rms.windowSize}",
+        "smoothing": "{defaults.rms.smoothing}",
+        "scale": "{defaults.rms.scale}"
+      }
+    },
+    {
+      "id": 1,
+      "enabled": true,
+      "name": "Channel 2",
+      "description": "CV/RMS Channel 2",
+      "host": "{defaults.osc.host}",
+      "port": "{defaults.osc.port}",
+      "localPort": "{defaults.osc.localPort}",
+      "oscAddress": "/cv/channel/2",
+      "cvRange": {
+        "min": "{defaults.cv.voltageRange.min}",
+        "max": "{defaults.cv.voltageRange.max}"
+      },
+      "signalType": "CV",
+      "rmsSettings": {
+        "windowSize": "{defaults.rms.windowSize}",
+        "smoothing": "{defaults.rms.smoothing}",
+        "scale": "{defaults.rms.scale}"
+      }
+    },
+    {
+      "id": 2,
+      "enabled": true,
+      "name": "Channel 3",
+      "description": "CV/RMS Channel 3",
+      "host": "{defaults.osc.host}",
+      "port": "{defaults.osc.port}",
+      "localPort": "{defaults.osc.localPort}",
+      "oscAddress": "/cv/channel/3",
+      "cvRange": {
+        "min": "{defaults.cv.voltageRange.min}",
+        "max": "{defaults.cv.voltageRange.max}"
+      },
+      "signalType": "CV",
+      "rmsSettings": {
+        "windowSize": "{defaults.rms.windowSize}",
+        "smoothing": "{defaults.rms.smoothing}",
+        "scale": "{defaults.rms.scale}"
+      }
+    },
+    {
+      "id": 3,
+      "enabled": true,
+      "name": "Channel 4",
+      "description": "CV/RMS Channel 4",
+      "host": "{defaults.osc.host}",
+      "port": "{defaults.osc.port}",
+      "localPort": "{defaults.osc.localPort}",
+      "oscAddress": "/cv/channel/4",
+      "cvRange": {
+        "min": "{defaults.cv.voltageRange.min}",
+        "max": "{defaults.cv.voltageRange.max}"
+      },
+      "signalType": "CV",
+      "rmsSettings": {
+        "windowSize": "{defaults.rms.windowSize}",
+        "smoothing": "{defaults.rms.smoothing}",
+        "scale": "{defaults.rms.scale}"
+      }
+    },
+    {
+      "id": 4,
+      "enabled": true,
+      "name": "Channel 5",
+      "description": "CV/RMS Channel 5",
+      "host": "{defaults.osc.host}",
+      "port": "{defaults.osc.port}",
+      "localPort": "{defaults.osc.localPort}",
+      "oscAddress": "/cv/channel/5",
+      "cvRange": {
+        "min": "{defaults.cv.voltageRange.min}",
+        "max": "{defaults.cv.voltageRange.max}"
+      },
+      "signalType": "CV",
+      "rmsSettings": {
+        "windowSize": "{defaults.rms.windowSize}",
+        "smoothing": "{defaults.rms.smoothing}",
+        "scale": "{defaults.rms.scale}"
+      }
+    },
+    {
+      "id": 5,
+      "enabled": true,
+      "name": "Channel 6",
+      "description": "CV/RMS Channel 6",
+      "host": "{defaults.osc.host}",
+      "port": "{defaults.osc.port}",
+      "localPort": "{defaults.osc.localPort}",
+      "oscAddress": "/cv/channel/6",
+      "cvRange": {
+        "min": "{defaults.cv.voltageRange.min}",
+        "max": "{defaults.cv.voltageRange.max}"
+      },
+      "signalType": "CV",
+      "rmsSettings": {
+        "windowSize": "{defaults.rms.windowSize}",
+        "smoothing": "{defaults.rms.smoothing}",
+        "scale": "{defaults.rms.scale}"
+      }
+    },
+    {
+      "id": 6,
+      "enabled": true,
+      "name": "Channel 7",
+      "description": "CV/RMS Channel 7",
+      "host": "{defaults.osc.host}",
+      "port": "{defaults.osc.port}",
+      "localPort": "{defaults.osc.localPort}",
+      "oscAddress": "/cv/channel/7",
+      "cvRange": {
+        "min": "{defaults.cv.voltageRange.min}",
+        "max": "{defaults.cv.voltageRange.max}"
+      },
+      "signalType": "CV",
+      "rmsSettings": {
+        "windowSize": "{defaults.rms.windowSize}",
+        "smoothing": "{defaults.rms.smoothing}",
+        "scale": "{defaults.rms.scale}"
+      }
+    },
+    {
+      "id": 7,
+      "enabled": true,
+      "name": "Channel 8",
+      "description": "CV/RMS Channel 8",
+      "host": "{defaults.osc.host}",
+      "port": "{defaults.osc.port}",
+      "localPort": "{defaults.osc.localPort}",
+      "oscAddress": "/cv/channel/8",
+      "cvRange": {
+        "min": "{defaults.cv.voltageRange.min}",
+        "max": "{defaults.cv.voltageRange.max}"
+      },
+      "signalType": "CV",
+      "rmsSettings": {
+        "windowSize": "{defaults.rms.windowSize}",
+        "smoothing": "{defaults.rms.smoothing}",
+        "scale": "{defaults.rms.scale}"
+      }
+    }
+  ],
+  "ui": {
+    "channelFields": [
+      {
+        "name": "enabled",
+        "label": "Enabled",
+        "type": "checkbox",
+        "default": true,
+        "description": "Enable/disable this channel"
+      },
+      {
+        "name": "name",
+        "label": "Channel Name",
+        "type": "text",
+        "default": "Channel {id}",
+        "maxLength": 32,
+        "description": "Custom name for this channel"
+      },
+      {
+        "name": "host",
+        "label": "OSC Host",
+        "type": "text",
+        "default": "127.0.0.1",
+        "validation": "ipv4|hostname",
+        "description": "Target IP address or hostname for OSC messages"
+      },
+      {
+        "name": "port",
+        "label": "OSC Port",
+        "type": "number",
+        "default": 9000,
+        "min": 1024,
+        "max": 65535,
+        "description": "Target UDP/TCP port for OSC messages"
+      },
+      {
+        "name": "localPort",
+        "label": "Local Port",
+        "type": "number",
+        "default": 0,
+        "min": 0,
+        "max": 65535,
+        "description": "Local binding port (0 = auto-assign)"
+      },
+      {
+        "name": "oscAddress",
+        "label": "OSC Address",
+        "type": "text",
+        "default": "/cv/channel/{id}",
+        "pattern": "^/[a-zA-Z0-9/_-]+$",
+        "description": "OSC address pattern for this channel"
+      },
+      {
+        "name": "description",
+        "label": "Description",
+        "type": "text",
+        "default": "CV/RMS output channel",
+        "maxLength": 128,
+        "description": "Purpose or destination description"
+      },
+      {
+        "name": "signalType",
+        "label": "Signal Type",
+        "type": "select",
+        "options": ["CV", "RMS", "GATE", "TRIGGER"],
+        "default": "CV",
+        "description": "Type of signal processing for this channel"
+      }
+    ]
+  },
+  "networking": {
+    "protocols": ["UDP", "TCP"],
+    "defaultProtocol": "UDP",
+    "connectionTimeout": 5000,
+    "retryAttempts": 3,
+    "retryDelay": 1000
+  },
+  "performance": {
+    "updateRateHz": 100,
+    "bufferSize": 512,
+    "maxLatencyMs": 10,
+    "enableMetrics": true
+  }
+}

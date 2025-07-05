@@ -1,0 +1,156 @@
+--- a/src/core/OSCMixerEngine.cpp
++++ b/src/core/OSCMixerEngine.cpp
+@@ -1380,21 +1380,31 @@ bool OSCMixerEngine::createOSCReceiver(const OSCDeviceConfig& config) {
+ void OSCMixerEngine::cleanupDevice(const std::string& deviceId) {
+     std::lock_guard<std::mutex> lock(deviceMutex_);
+     
+-    // For audio devices, remove audio stream
+-    if (deviceId.find("audio_") == 0 && audioDeviceIntegration_) {
+-        audioDeviceIntegration_->removeAudioStream(deviceId);
+-        std::cout << "Cleaned up audio stream for device: " << deviceId << std::endl;
+-    } else {
+-        // Remove OSC sender
+-        auto senderIt = oscSenders_.find(deviceId);
+-        if (senderIt != oscSenders_.end()) {
+-            oscSenders_.erase(senderIt);
+-            std::cout << "Cleaned up OSC sender for device: " << deviceId << std::endl;
+-        }
+-        
+-        // Remove OSC receiver
+-        auto receiverIt = oscReceivers_.find(deviceId);
+-        if (receiverIt != oscReceivers_.end()) {
++    // Remove OSC sender
++    auto senderIt = oscSenders_.find(deviceId);
++    if (senderIt != oscSenders_.end()) {
++        // Ensure sender is properly shut down before removal
++        // This prevents hanging connections
++        senderIt->second.reset();
++        oscSenders_.erase(senderIt);
++        std::cout << "Cleaned up OSC sender for device: " << deviceId << std::endl;
++    }
++    
++    // Remove OSC receiver
++    auto receiverIt = oscReceivers_.find(deviceId);
++    if (receiverIt != oscReceivers_.end()) {
++        // Properly stop receiver before removal to avoid hang
++        if (receiverIt->second) {
+             receiverIt->second->stop();
+-            oscReceivers_.erase(receiverIt);
+-            std::cout << "Cleaned up OSC receiver for device: " << deviceId << std::endl;
+         }
++        receiverIt->second.reset();
++        oscReceivers_.erase(receiverIt);
++        std::cout << "Cleaned up OSC receiver for device: " << deviceId << std::endl;
++    }
++    
++    // For audio devices, remove audio stream
++    if ((deviceId.find("audio_") == 0 || deviceId.find("real_audio_") == 0) && audioDeviceIntegration_) {
++        audioDeviceIntegration_->removeAudioStream(deviceId);
++        std::cout << "Cleaned up audio stream for device: " << deviceId << std::endl;
+     }
+ }
+
+@@ -644,11 +654,17 @@ bool OSCMixerEngine::updateDeviceConfig(const std::string& deviceId, const OSCDe
+         return false;
+     }
+     
+-    std::lock_guard<std::mutex> lock(stateMutex_);
++    // Use unique_lock to allow manual unlock before cleanupDevice
++    std::unique_lock<std::mutex> lock(stateMutex_);
+     
+     // Find and update the device in all channels
+     bool found = false;
++    bool needsCleanup = false;
++    OSCDeviceConfig oldConfig;
++    ChannelState channelState = ChannelState::STOPPED;
++    
+     for (auto& channel : mixerState_.channels) {
++        channelState = channel->state;
+         // Check input devices
+         for (auto& device : channel->inputDevices) {
+             if (device.deviceId == deviceId) {
+-                // Clean up old configuration
+-                cleanupDevice(deviceId);
++                // Save old config
++                oldConfig = device;
++                needsCleanup = true;
+                 
+                 // Update configuration
+                 device = newConfig;
+                 device.deviceId = deviceId; // Preserve original ID
+                 
+-                // Recreate if channel is running and device is enabled
+-                if (channel->state == ChannelState::RUNNING && device.enabled) {
+-                    createOSCReceiver(device);
+-                }
+-                
+                 found = true;
+                 break;
+             }
+@@ -675,17 +691,13 @@ bool OSCMixerEngine::updateDeviceConfig(const std::string& deviceId, const OSCDe
+         // Check output devices
+         for (auto& device : channel->outputDevices) {
+             if (device.deviceId == deviceId) {
+-                // Clean up old configuration
+-                cleanupDevice(deviceId);
++                // Save old config
++                oldConfig = device;
++                needsCleanup = true;
+                 
+                 // Update configuration
+                 device = newConfig;
+                 device.deviceId = deviceId; // Preserve original ID
+                 
+-                // Recreate if channel is running and device is enabled
+-                if (channel->state == ChannelState::RUNNING && device.enabled) {
+-                    createOSCSender(device);
+-                }
+-                
+                 found = true;
+                 break;
+             }
+         }
++        
++        if (found) break;
+     }
+     
++    // Unlock before cleanup to avoid deadlock
++    lock.unlock();
++    
++    // Clean up old configuration if needed
++    if (needsCleanup) {
++        cleanupDevice(deviceId);
++        
++        // Recreate device with new configuration if channel is running
++        if (channelState == ChannelState::RUNNING && newConfig.enabled) {
++            // Determine if it's input or output based on old config
++            bool isInput = false;
++            
++            // Re-lock to check device lists
++            lock.lock();
++            for (auto& channel : mixerState_.channels) {
++                for (const auto& inputDevice : channel->inputDevices) {
++                    if (inputDevice.deviceId == deviceId) {
++                        isInput = true;
++                        break;
++                    }
++                }
++                if (isInput) break;
++            }
++            lock.unlock();
++            
++            // Small delay to ensure old connections are fully closed
++            std::this_thread::sleep_for(std::chrono::milliseconds(100));
++            
++            // Create new device connection
++            if (isInput) {
++                createOSCReceiver(newConfig);
++            } else {
++                createOSCSender(newConfig);
++            }
++        }
++    }
++    
+     if (found) {
+         std::cout << "Updated configuration for device: " << deviceId << std::endl;
+     }

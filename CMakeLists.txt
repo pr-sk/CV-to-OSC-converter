@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.12)
 
 # Get version information from Version.h or git
-if(EXISTS "${CMAKE_SOURCE_DIR}/Version.h")
-    file(READ "${CMAKE_SOURCE_DIR}/Version.h" VERSION_FILE_CONTENT)
+if(EXISTS "${CMAKE_SOURCE_DIR}/src/config/Version.h")
+    file(READ "${CMAKE_SOURCE_DIR}/src/config/Version.h" VERSION_FILE_CONTENT)
     string(REGEX MATCH "#define CV_TO_OSC_VERSION_MAJOR ([0-9]+)" _ "${VERSION_FILE_CONTENT}")
     set(PROJECT_VERSION_MAJOR "${CMAKE_MATCH_1}")
     string(REGEX MATCH "#define CV_TO_OSC_VERSION_MINOR ([0-9]+)" _ "${VERSION_FILE_CONTENT}")
@@ -68,9 +68,23 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 
 # Platform-specific settings
 if(APPLE)
-    # Only build for current architecture to avoid linking issues
-    # set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+    # Get current architecture
+    execute_process(
+        COMMAND uname -m
+        OUTPUT_VARIABLE CURRENT_ARCH
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    
+    message(STATUS "🔍 Detected architecture: ${CURRENT_ARCH}")
+    
+    # Force arm64 architecture only - no x86_64 support
+    set(CMAKE_OSX_ARCHITECTURES "arm64")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -arch arm64")
+    
+    # Add additional flags to prevent x86_64
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -arch arm64")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -arch arm64")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -arch arm64")
     
     # Find the macOS SDK
     execute_process(
@@ -157,302 +171,240 @@ else()
     set(GUI_AVAILABLE FALSE)
 endif()
 
-# Add CLI executable (always built)
-set(CLI_SOURCES
-    main.cpp
-    CVReader.cpp
-    CVWriter.cpp
-    OSCSender.cpp
-    OSCReceiver.cpp
-    OSCFormatManager.cpp
-    CommandLineInterface.cpp
-    AudioDeviceManager.cpp
-    CVCalibrator.cpp
-    PerformanceMonitor.cpp
-    Config.cpp
-    OSCSecurity.cpp
-    ErrorHandler.cpp
-    Localization.cpp
-    ExternalDeviceManager.cpp
-    DeviceManager.cpp
-    WiFiDeviceHandler.cpp
-    PluginManager.cpp
-)
+# Only build native macOS application
 
-# Add platform-specific sources
+# Add native macOS GUI executable (always available on Apple)
 if(APPLE)
-    list(APPEND CLI_SOURCES
-        MidiDeviceHandler.mm
-        MacOSPermissions.mm
-    )
-endif()
-
-add_executable(cv_to_osc_converter ${CLI_SOURCES})
-
-# Add GUI executable (if GUI libraries are available)
-if(GUI_AVAILABLE)
-    set(GUI_SOURCES
-        main_gui.cpp
-        GuiApplication.cpp
-        DragDropManager.cpp
-        CommandSystem.cpp
-        CVReader.cpp
-        CVWriter.cpp
-        OSCSender.cpp
-        OSCReceiver.cpp
-        OSCFormatManager.cpp
-        CommandLineInterface.cpp
-        AudioDeviceManager.cpp
-        CVCalibrator.cpp
-        PerformanceMonitor.cpp
-        Config.cpp
-        OSCSecurity.cpp
-        ErrorHandler.cpp
-        Localization.cpp
-        ExternalDeviceManager.cpp
-        DeviceManager.cpp
-        WiFiDeviceHandler.cpp
-        PluginManager.cpp
+    set(MACOS_SOURCES
+        src/gui/main_professional_osc_mixer.mm
+        src/gui/ProfessionalOSCMixer.mm
+        src/gui/ProfessionalMixerWindow.mm
+        src/gui/DeviceConfigurationDialogs.mm
+        src/core/OSCMixerEngine.cpp
+        src/core/AudioDeviceIntegration.cpp
+        src/core/RealAudioStream.cpp
+        src/audio/CVReader.cpp
+        src/audio/CVWriter.cpp
+        src/osc/OSCSender.cpp
+        src/osc/OSCReceiver.cpp
+        src/osc/OSCFormatManager.cpp
+        src/osc/OSCSenderEnhanced.cpp
+        src/osc/OSCTransport.cpp
+        src/osc/OSCUDPTransport.cpp
+        src/osc/OSCTCPTransport.cpp
+        src/core/Config.cpp
+        src/osc/OSCSecurity.cpp
+        src/core/ErrorHandler.cpp
+        src/core/AudioDeviceManager.cpp
+        src/audio/CVCalibrator.cpp
+        src/core/PerformanceMonitor.cpp
+        src/utils/ExternalDeviceManager.cpp
+        src/utils/ExternalDeviceMapper.cpp
+        src/core/DeviceManager.cpp
+        src/utils/WiFiDeviceHandler.cpp
+        src/utils/PluginManager.cpp
+        src/platform/MidiDeviceHandler.mm
+        src/platform/MacOSPermissions.mm
+        src/utils/Localization.cpp
     )
     
-    # Add platform-specific GUI sources
-    if(APPLE)
-        list(APPEND GUI_SOURCES
-            FileDialog.mm
-            MidiDeviceHandler.mm
-            MacOSPermissions.mm
-        )
-    endif()
-    
-    add_executable(cv_to_osc_converter_gui ${GUI_SOURCES})
+    add_executable(professional_osc_mixer ${MACOS_SOURCES})
+    set(GUI_AVAILABLE TRUE)
 endif()
 
-# Include directories  
-target_include_directories(cv_to_osc_converter PRIVATE
-    ${PORTAUDIO_INCLUDE_DIRS}
-    ${LIBLO_INCLUDE_DIRS}
-)
-
-# Add macOS-specific include paths only on macOS
+# Include directories for macOS application
 if(APPLE)
-    target_include_directories(cv_to_osc_converter PRIVATE
+    target_include_directories(professional_osc_mixer PRIVATE
+        ${CMAKE_SOURCE_DIR}/src/core
+        ${CMAKE_SOURCE_DIR}/src/audio
+        ${CMAKE_SOURCE_DIR}/src/osc
+        ${CMAKE_SOURCE_DIR}/src/gui
+        ${CMAKE_SOURCE_DIR}/src/utils
+        ${CMAKE_SOURCE_DIR}/src/platform
+        ${CMAKE_SOURCE_DIR}/src/config
+        ${PORTAUDIO_INCLUDE_DIRS}
+        ${LIBLO_INCLUDE_DIRS}
         /usr/local/Cellar/nlohmann-json/3.12.0/include
         /opt/homebrew/include
     )
 endif()
 
-# Link libraries
+# Link libraries for macOS application - force arm64 versions
 if(APPLE)
-    # On macOS, let pkg-config handle framework dependencies to avoid duplicates
-    target_link_libraries(cv_to_osc_converter PRIVATE
-        ${PORTAUDIO_LIBRARIES}
-        ${LIBLO_LIBRARIES}
-        nlohmann_json::nlohmann_json
-        "-framework Foundation"
-        "-framework AVFoundation"
-        "-framework AppKit"
-        "-framework CoreMIDI"
-    )
-elseif(WIN32)
-    # Windows-specific libraries
-    target_link_libraries(cv_to_osc_converter PRIVATE
-        ${PORTAUDIO_LIBRARIES}
-        ${LIBLO_LIBRARIES}
-        nlohmann_json::nlohmann_json
-        kernel32
-        user32
-        advapi32
-    )
-else()
-    # Linux and other Unix-like systems
-    target_link_libraries(cv_to_osc_converter PRIVATE
-        ${PORTAUDIO_LIBRARIES}
-        ${LIBLO_LIBRARIES}
-        nlohmann_json::nlohmann_json
-        dl  # Dynamic loading library for Linux
-    )
-endif()
-
-# Add version definitions
-target_compile_definitions(cv_to_osc_converter PRIVATE
-    GIT_COMMIT_HASH="${GIT_COMMIT_HASH}"
-    GIT_BRANCH="${GIT_BRANCH}"
-    BUILD_DATE="${BUILD_DATE}"
-)
-
-# Compiler flags
-target_compile_options(cv_to_osc_converter PRIVATE
-    ${PORTAUDIO_CFLAGS_OTHER}
-    ${LIBLO_CFLAGS_OTHER}
-)
-
-# Link directories
-target_link_directories(cv_to_osc_converter PRIVATE
-    ${PORTAUDIO_LIBRARY_DIRS}
-    ${LIBLO_LIBRARY_DIRS}
-)
-
-
-# Configure GUI executable if available
-if(GUI_AVAILABLE)
-    # Include directories for GUI
-    target_include_directories(cv_to_osc_converter_gui PRIVATE
-        ${PORTAUDIO_INCLUDE_DIRS}
-        ${LIBLO_INCLUDE_DIRS}
-        ${IMGUI_INCLUDE_DIRS}
-        ${IMPLOT_INCLUDE_DIRS}
-        ${GLFW3_INCLUDE_DIRS}
-        ${GLEW_INCLUDE_DIRS}
-    )
+    # Force linking to arm64 versions of libraries
+    find_library(PORTAUDIO_ARM64_LIB portaudio PATHS /opt/homebrew/lib NO_DEFAULT_PATH)
+    find_library(LIBLO_ARM64_LIB lo PATHS /opt/homebrew/lib NO_DEFAULT_PATH)
     
-    # Add macOS-specific include paths for GUI
-    if(APPLE)
-        target_include_directories(cv_to_osc_converter_gui PRIVATE
-            /usr/local/Cellar/nlohmann-json/3.12.0/include
-            /opt/homebrew/include
-        )
-    endif()
-    
-    # Link libraries for GUI
-    if(APPLE)
-        set(GUI_LIBS
-            ${PORTAUDIO_LIBRARIES}
-            ${LIBLO_LIBRARIES}
+    if(PORTAUDIO_ARM64_LIB AND LIBLO_ARM64_LIB)
+        target_link_libraries(professional_osc_mixer PRIVATE
+            ${PORTAUDIO_ARM64_LIB}
+            ${LIBLO_ARM64_LIB}
             nlohmann_json::nlohmann_json
-            ${GLFW3_LIBRARIES}
-            ${IMGUI_LIBRARY}
-            ${IMPLOT_LIBRARY}
-            ${GLEW_LIBRARIES}
             "-framework Foundation"
             "-framework AVFoundation"
             "-framework AppKit"
             "-framework CoreMIDI"
+            "-framework Cocoa"
+            "-framework QuartzCore"
+            "-framework CoreAudio"
+            "-framework AudioToolbox"
+            "-framework AudioUnit"
+            "-framework CoreFoundation"
+            "-framework CoreServices"
         )
-        if(OpenGL_FOUND)
-            list(APPEND GUI_LIBS OpenGL::GL)
-        endif()
-        target_link_libraries(cv_to_osc_converter_gui PRIVATE ${GUI_LIBS})
+        message(STATUS "Using arm64 libraries: ${PORTAUDIO_ARM64_LIB}, ${LIBLO_ARM64_LIB}")
     else()
-        set(GUI_LIBS
-            ${PORTAUDIO_LIBRARIES}
-            ${LIBLO_LIBRARIES}
+        # Fallback to system libraries if arm64 versions not found
+        target_link_libraries(professional_osc_mixer PRIVATE
+            portaudio
+            lo
             nlohmann_json::nlohmann_json
-            ${GLFW3_LIBRARIES}
-            ${IMGUI_LIBRARY}
-            ${IMPLOT_LIBRARY}
-            ${GLEW_LIBRARIES}
+            "-framework Foundation"
+            "-framework AVFoundation"
+            "-framework AppKit"
+            "-framework CoreMIDI"
+            "-framework Cocoa"
+            "-framework QuartzCore"
+            "-framework CoreAudio"
+            "-framework AudioToolbox"
+            "-framework AudioUnit"
+            "-framework CoreFoundation"
+            "-framework CoreServices"
         )
-        if(OpenGL_FOUND)
-            list(APPEND GUI_LIBS OpenGL::GL)
-        endif()
-        target_link_libraries(cv_to_osc_converter_gui PRIVATE ${GUI_LIBS})
+        message(WARNING "arm64 libraries not found in /opt/homebrew/lib, using system libraries")
     endif()
-    
-    # Add version definitions for GUI
-    target_compile_definitions(cv_to_osc_converter_gui PRIVATE
+endif()
+
+# Add version definitions for macOS app
+if(APPLE)
+    target_compile_definitions(professional_osc_mixer PRIVATE
         GIT_COMMIT_HASH="${GIT_COMMIT_HASH}"
         GIT_BRANCH="${GIT_BRANCH}"
         BUILD_DATE="${BUILD_DATE}"
     )
-    
-    # Compiler flags for GUI
-    target_compile_options(cv_to_osc_converter_gui PRIVATE
+endif()
+
+# Compiler flags for macOS app
+if(APPLE)
+    target_compile_options(professional_osc_mixer PRIVATE
         ${PORTAUDIO_CFLAGS_OTHER}
         ${LIBLO_CFLAGS_OTHER}
-        ${GLFW3_CFLAGS_OTHER}
-        ${GLEW_CFLAGS_OTHER}
     )
     
-    # Link directories for GUI
-    target_link_directories(cv_to_osc_converter_gui PRIVATE
+    # Link directories for macOS app
+    target_link_directories(professional_osc_mixer PRIVATE
         ${PORTAUDIO_LIBRARY_DIRS}
         ${LIBLO_LIBRARY_DIRS}
-        ${GLFW3_LIBRARY_DIRS}
-        ${GLEW_LIBRARY_DIRS}
+        /usr/local/lib
+        /opt/homebrew/lib
     )
-    
-    # Install GUI target
-    install(TARGETS cv_to_osc_converter_gui
-        RUNTIME DESTINATION bin
-    )
-    
-    message(STATUS "GUI version will be built as 'cv_to_osc_converter_gui'")
-else()
-    message(STATUS "Only CLI version will be built")
 endif()
 
-# Install CLI target
-install(TARGETS cv_to_osc_converter
-    RUNTIME DESTINATION bin
-)
-
-# Plugin options
-option(BUILD_VST3 "Build VST3 plugin" ON)
-option(BUILD_VST "Build VST2 plugin" ON) 
-option(BUILD_AU "Build Audio Unit plugin" ON)
-option(BUILD_PLUGINS "Build all plugins" ON)
-
-# JUCE framework for plugin development
-if(BUILD_PLUGINS OR BUILD_VST3 OR BUILD_VST OR BUILD_AU)
-    # Check if JUCE exists in project directory
-    if(EXISTS "${CMAKE_SOURCE_DIR}/JUCE/CMakeLists.txt")
-        message(STATUS "JUCE found at: ${CMAKE_SOURCE_DIR}/JUCE")
-        
-        # Include JUCE plugin configuration
-        include(plugins/JucePlugin.cmake)
-        
-        message(STATUS "Professional JUCE plugins will be built")
-        
-    else()
-        message(WARNING "JUCE not found. Plugins will not be built.")
-        message(STATUS "To build plugins, clone JUCE framework to ./JUCE/")
-        message(STATUS "Run: git clone https://github.com/juce-framework/JUCE.git")
-        set(BUILD_PLUGINS FALSE)
-        set(BUILD_VST3 FALSE)
-        set(BUILD_VST FALSE)
-        set(BUILD_AU FALSE)
-    endif()
-endif()
-
-# DMG packaging (macOS only)
+# App bundle configuration for macOS
 if(APPLE)
-    # Create app bundle for GUI version
-    if(GUI_AVAILABLE)
-        set_target_properties(cv_to_osc_converter_gui PROPERTIES
-            MACOSX_BUNDLE TRUE
-            MACOSX_BUNDLE_BUNDLE_NAME "CV to OSC Converter"
-            MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-            MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION}
-            MACOSX_BUNDLE_IDENTIFIER "com.cvtoosc.converter"
-            MACOSX_BUNDLE_GUI_IDENTIFIER "com.cvtoosc.converter"
-            MACOSX_BUNDLE_ICON_FILE "AppIcon.icns"
-            MACOSX_BUNDLE_INFO_STRING "CV to OSC Converter v${PROJECT_VERSION}"
-            MACOSX_BUNDLE_COPYRIGHT "© 2025 CV to OSC Converter"
+    set_target_properties(professional_osc_mixer PROPERTIES
+        MACOSX_BUNDLE TRUE
+        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/resources/Info.plist
+        MACOSX_BUNDLE_BUNDLE_NAME "Professional OSC Mixer"
+        MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+        MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION}
+        MACOSX_BUNDLE_IDENTIFIER "com.cvtoosc.professional-mixer"
+        MACOSX_BUNDLE_GUI_IDENTIFIER "com.cvtoosc.professional-mixer"
+        MACOSX_BUNDLE_ICON_FILE "AppIcon.icns"
+        MACOSX_BUNDLE_INFO_STRING "Professional OSC Mixer v${PROJECT_VERSION}"
+        MACOSX_BUNDLE_COPYRIGHT "© 2025 Professional OSC Mixer"
+    )
+    
+    # Install app bundle
+    install(TARGETS professional_osc_mixer
+        BUNDLE DESTINATION .
+    )
+    
+    # Install app icon if it exists
+    if(EXISTS "${CMAKE_SOURCE_DIR}/resources/AppIcon.icns")
+        install(FILES "${CMAKE_SOURCE_DIR}/resources/AppIcon.icns"
+            DESTINATION "Professional OSC Mixer.app/Contents/Resources"
         )
-        
-        # Install app bundle
-        install(TARGETS cv_to_osc_converter_gui
-            BUNDLE DESTINATION .
-        )
-        
-        # Install app icon if it exists
-        if(EXISTS "${CMAKE_SOURCE_DIR}/resources/AppIcon.icns")
-            install(FILES "${CMAKE_SOURCE_DIR}/resources/AppIcon.icns"
-                DESTINATION "CV to OSC Converter.app/Contents/Resources"
-            )
-        endif()
     endif()
     
+    message(STATUS "✅ Professional OSC Mixer will be built as native macOS app (arm64 only)")
+    message(STATUS "🚫 x86_64 architecture is explicitly disabled")
+    message(STATUS "📦 Using arm64 libraries: PortAudio and liblo from /opt/homebrew")
+else()
+    message(FATAL_ERROR "This project only supports macOS with Apple Silicon (arm64)")
+endif()
+
+# Plugin options (disabled)
+option(BUILD_VST3 "Build VST3 plugin" OFF)
+option(BUILD_VST "Build VST2 plugin" OFF) 
+option(BUILD_AU "Build Audio Unit plugin" OFF)
+option(BUILD_PLUGINS "Build all plugins" OFF)
+
+# JUCE framework disabled
+if(FALSE) # Plugins completely disabled
+    message(STATUS "Plugins are disabled")
+endif()
+
+# DMG packaging for Professional OSC Mixer
+if(APPLE)
     # Custom target for DMG creation
     add_custom_target(dmg
-        COMMAND ${CMAKE_SOURCE_DIR}/scripts/create_dmg.sh
+        COMMAND ${CMAKE_SOURCE_DIR}/scripts/create_professional_dmg.sh
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-        COMMENT "Creating DMG package"
-        DEPENDS cv_to_osc_converter
+        COMMENT "Creating Professional OSC Mixer DMG package"
+        DEPENDS professional_osc_mixer
     )
-    
-    if(GUI_AVAILABLE)
-        add_dependencies(dmg cv_to_osc_converter_gui)
-    endif()
-    
+endif()
+
+# Test executable
+add_executable(test_audio_input 
+    test_audio_input.cpp
+    src/osc/OSCSender.cpp
+    src/core/ErrorHandler.cpp
+)
+
+target_include_directories(test_audio_input PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/core
+    ${CMAKE_SOURCE_DIR}/src/audio
+    ${CMAKE_SOURCE_DIR}/src/osc
+    ${CMAKE_SOURCE_DIR}/src/gui
+    ${CMAKE_SOURCE_DIR}/src/utils
+    ${CMAKE_SOURCE_DIR}/src/platform
+    ${CMAKE_SOURCE_DIR}/src/config
+    ${PORTAUDIO_INCLUDE_DIRS}
+    ${LIBLO_INCLUDE_DIRS}
+    /usr/local/Cellar/nlohmann-json/3.12.0/include
+    /opt/homebrew/include
+)
+
+target_link_directories(test_audio_input PRIVATE
+    ${PORTAUDIO_LIBRARY_DIRS}
+    ${LIBLO_LIBRARY_DIRS}
+    /usr/local/lib
+    /opt/homebrew/lib
+)
+
+# Use arm64 libraries for test_audio_input too
+if(PORTAUDIO_ARM64_LIB AND LIBLO_ARM64_LIB)
+    target_link_libraries(test_audio_input PRIVATE
+        ${PORTAUDIO_ARM64_LIB}
+        ${LIBLO_ARM64_LIB}
+        nlohmann_json::nlohmann_json
+        "-framework CoreAudio"
+        "-framework AudioToolbox"
+        "-framework CoreFoundation"
+        "-framework CoreMIDI"
+        "-framework Cocoa"
+    )
+else()
+    target_link_libraries(test_audio_input PRIVATE
+        portaudio
+        lo
+        nlohmann_json::nlohmann_json
+        "-framework CoreAudio"
+        "-framework AudioToolbox"
+        "-framework CoreFoundation"
+        "-framework CoreMIDI"
+        "-framework Cocoa"
+    )
 endif()
